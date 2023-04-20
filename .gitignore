@@ -6,6 +6,3 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
-target/
-
-src/main/resources/META-INF/persistence.xml
