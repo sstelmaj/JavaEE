@@ -15,7 +15,7 @@
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/javaee_proyecto?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
       <property name="javax.persistence.jdbc.user" value="root"/>
       <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
-      <property name="javax.persistence.jdbc.password" value="@Stl260754087937.-"/>
+      <property name="javax.persistence.jdbc.password" value="usbw"/>
       <property name="javax.persistence.schema-generation.database.action" value="create"/>
     </properties>
   </persistence-unit>
