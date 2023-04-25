@@ -24,7 +24,9 @@ import javax.persistence.Temporal;
 @Entity
 public class Error implements Serializable {
 
-    @OneToMany(mappedBy = "error")
+
+    
+    @OneToMany
     private List<Nota> notas;
 
     @ManyToOne
