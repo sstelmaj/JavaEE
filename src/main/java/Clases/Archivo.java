@@ -5,60 +5,24 @@
 package Clases;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
 
 /**
  *
  * @author Usuario
  */
 @Entity
-public class Error implements Serializable {
-
-    @OneToMany(mappedBy = "error")
-    private List<Nota> notas;
-
-    @ManyToOne
-    private Usuario usuario;
-    
-    @OneToMany(mappedBy = "error")
-    private List<Error_Etiqueta> error_Etiquetas;
-
-    @OneToMany(mappedBy = "error")
-    private List<Error_Tecnologia> error_Tecnologias;
-    
-    @OneToMany
-    private List<Archivo> archivos;
+public class Archivo implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
-    private String titulo;
-    private String descripcion;
-    private String link;
-    private String repositorio;
-    
-    @Lob
-    @Column(name = "codigo", columnDefinition = "TEXT")
-    private String codigo;
-    
-    @Lob
-    @Column(name = "consola", columnDefinition = "TEXT")
-    private String consola;
-    
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date fechaSubida;
+    private String url;
     
 
     public Long getId() {
@@ -79,10 +43,10 @@ public class Error implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Error)) {
+        if (!(object instanceof Archivo)) {
             return false;
         }
-        Error other = (Error) object;
+        Archivo other = (Archivo) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -91,7 +55,7 @@ public class Error implements Serializable {
 
     @Override
     public String toString() {
-        return "Clases.Error[ id=" + id + " ]";
+        return "Clases.Archivo[ id=" + id + " ]";
     }
     
 }

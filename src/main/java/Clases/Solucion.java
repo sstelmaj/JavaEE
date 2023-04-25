@@ -6,6 +6,7 @@ package Clases;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 
 /**
@@ -27,6 +29,9 @@ public class Solucion implements Serializable {
     
     @ManyToOne
     private Usuario usuario;
+    
+    @OneToMany
+    private List<Archivo> archivos;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -39,8 +44,6 @@ public class Solucion implements Serializable {
     
     private String descripcion;
     private String link;
-
-    private String imagen;
     
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaSubida;
