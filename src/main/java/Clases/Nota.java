@@ -29,8 +29,6 @@ public class Nota implements Serializable {
     @Column(name = "contenido", columnDefinition = "TEXT")
     private String contenido;
     
-    @ManyToOne
-    private Error error;
     
 
     public Long getId() {
@@ -47,14 +45,6 @@ public class Nota implements Serializable {
 
     public void setContenido(String contenido) {
         this.contenido = contenido;
-    }
-
-    public Error getError() {
-        return error;
-    }
-
-    public void setError(Error error) {
-        this.error = error;
     }
     
     

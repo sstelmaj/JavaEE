@@ -6,6 +6,7 @@ package Clases;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -37,25 +38,51 @@ public class Tecnologia implements Serializable {
         this.nombre = nombre;
     }
 
+    public List<Error_Tecnologia> getError_Tecnologias() {
+        return error_Tecnologias;
+    }
+
+    public void setError_Tecnologias(List<Error_Tecnologia> error_Tecnologias) {
+        this.error_Tecnologias = error_Tecnologias;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (nombre != null ? nombre.hashCode() : 0);
+        int hash = 7;
+        hash = 73 * hash + Objects.hashCode(this.nombre);
+        hash = 73 * hash + Objects.hashCode(this.version);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the nombre fields are not set
-        if (!(object instanceof Tecnologia)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Tecnologia other = (Tecnologia) object;
-        if ((this.nombre == null && other.nombre != null) || (this.nombre != null && !this.nombre.equals(other.nombre))) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        return true;
+        final Tecnologia other = (Tecnologia) obj;
+        if (!Objects.equals(this.nombre, other.nombre)) {
+            return false;
+        }
+        return Objects.equals(this.version, other.version);
     }
+    
+    
+
+    
 
     @Override
     public String toString() {
