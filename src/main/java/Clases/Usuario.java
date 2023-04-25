@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 /**
@@ -19,9 +20,7 @@ import javax.persistence.OneToMany;
  * @author Usuario
  */
 @Entity
-//@Inheritance(strategy=InheritanceType.JOINED)
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Usuario implements Serializable {
+public class Usuario implements Serializable {
 
     @OneToMany(mappedBy = "usuario")
     private List<Error> errors;
@@ -39,6 +38,9 @@ public abstract class Usuario implements Serializable {
     private String mail;
     private String password;
     
+    @ManyToOne
+    private Perfil perfil;
+    
 
     public Long getId() {
         return id;
@@ -46,6 +48,62 @@ public abstract class Usuario implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public List<Error> getErrors() {
+        return errors;
+    }
+
+    public void setErrors(List<Error> errors) {
+        this.errors = errors;
+    }
+
+    public List<Solucion> getSolucions() {
+        return solucions;
+    }
+
+    public void setSolucions(List<Solucion> solucions) {
+        this.solucions = solucions;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Perfil getPerfil() {
+        return perfil;
+    }
+
+    public void setPerfil(Perfil perfil) {
+        this.perfil = perfil;
     }
     
     

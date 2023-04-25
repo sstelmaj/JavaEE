@@ -22,13 +22,19 @@ import javax.persistence.Temporal;
  * @author Usuario
  */
 @Entity
-public class Solucion implements Serializable {
+public class Error implements Serializable {
+
+    @OneToMany(mappedBy = "error")
+    private List<Nota> notas;
 
     @ManyToOne
-    private Error_Tecnologia error_Tecnologia;
-    
-    @ManyToOne
     private Usuario usuario;
+    
+    @OneToMany(mappedBy = "error")
+    private List<Error_Etiqueta> error_Etiquetas;
+
+    @OneToMany(mappedBy = "error")
+    private List<Error_Tecnologia> error_Tecnologias;
     
     @OneToMany
     private List<Archivo> archivos;
@@ -38,16 +44,23 @@ public class Solucion implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
+    private String titulo;
+    private String descripcion;
+    private String link;
+    private String repositorio;
+    
     @Lob
     @Column(name = "codigo", columnDefinition = "TEXT")
     private String codigo;
     
-    private String descripcion;
-    private String link;
+    @Lob
+    @Column(name = "consola", columnDefinition = "TEXT")
+    private String consola;
     
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaSubida;
     
+
     public Long getId() {
         return id;
     }
@@ -66,10 +79,10 @@ public class Solucion implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Solucion)) {
+        if (!(object instanceof Error)) {
             return false;
         }
-        Solucion other = (Solucion) object;
+        Error other = (Error) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -78,7 +91,7 @@ public class Solucion implements Serializable {
 
     @Override
     public String toString() {
-        return "Clases.Solucion[ id=" + id + " ]";
+        return "Clases.Error[ id=" + id + " ]";
     }
     
 }

@@ -5,8 +5,6 @@
 package Clases;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,24 +12,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
 
 /**
  *
  * @author Usuario
  */
 @Entity
-public class Solucion implements Serializable {
-
-    @ManyToOne
-    private Error_Tecnologia error_Tecnologia;
-    
-    @ManyToOne
-    private Usuario usuario;
-    
-    @OneToMany
-    private List<Archivo> archivos;
+public class Nota implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -39,15 +26,13 @@ public class Solucion implements Serializable {
     private Long id;
     
     @Lob
-    @Column(name = "codigo", columnDefinition = "TEXT")
-    private String codigo;
+    @Column(name = "contenido", columnDefinition = "TEXT")
+    private String contenido;
     
-    private String descripcion;
-    private String link;
+    @ManyToOne
+    private Error error;
     
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date fechaSubida;
-    
+
     public Long getId() {
         return id;
     }
@@ -55,6 +40,26 @@ public class Solucion implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public String getContenido() {
+        return contenido;
+    }
+
+    public void setContenido(String contenido) {
+        this.contenido = contenido;
+    }
+
+    public Error getError() {
+        return error;
+    }
+
+    public void setError(Error error) {
+        this.error = error;
+    }
+    
+    
+    
+    
 
     @Override
     public int hashCode() {
@@ -66,10 +71,10 @@ public class Solucion implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Solucion)) {
+        if (!(object instanceof Nota)) {
             return false;
         }
-        Solucion other = (Solucion) object;
+        Nota other = (Nota) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -78,7 +83,7 @@ public class Solucion implements Serializable {
 
     @Override
     public String toString() {
-        return "Clases.Solucion[ id=" + id + " ]";
+        return "Clases.Nota[ id=" + id + " ]";
     }
     
 }
