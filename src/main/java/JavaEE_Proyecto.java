@@ -17,6 +17,8 @@ public class JavaEE_Proyecto {
     public static void main(String[] args) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("UnidadDePersistencia");
         EntityManager em = emf.createEntityManager();
+        
+        
     }
     
     
