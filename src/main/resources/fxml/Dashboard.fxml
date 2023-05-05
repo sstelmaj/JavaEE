@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.web.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="545.0" prefWidth="1064.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="Presentacion.DashboardController">
+    <stylesheets>
+        <URL value="@/styles/dashboard.css" />
+    </stylesheets>
+   <children>
+      <AnchorPane fx:id="contentAPane" layoutX="154.0" layoutY="84.0" prefHeight="378.0" prefWidth="734.0" />
+      <ComboBox fx:id="selectorVista" layoutX="457.0" layoutY="38.0" prefWidth="150.0" promptText="Vistas" />
+   </children>
+</AnchorPane>
