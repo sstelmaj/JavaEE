@@ -56,6 +56,64 @@ public class Solucion implements Serializable {
         this.id = id;
     }
 
+    public Error_Tecnologia getError_Tecnologia() {
+        return error_Tecnologia;
+    }
+
+    public void setError_Tecnologia(Error_Tecnologia error_Tecnologia) {
+        this.error_Tecnologia = error_Tecnologia;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public List<Archivo> getArchivos() {
+        return archivos;
+    }
+
+    public void setArchivos(List<Archivo> archivos) {
+        this.archivos = archivos;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public Date getFechaSubida() {
+        return fechaSubida;
+    }
+
+    public void setFechaSubida(Date fechaSubida) {
+        this.fechaSubida = fechaSubida;
+    }
+    
+    
+
     @Override
     public int hashCode() {
         int hash = 0;

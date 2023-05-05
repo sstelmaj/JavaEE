@@ -71,6 +71,104 @@ public class Error implements Serializable {
         this.id = id;
     }
 
+    public List<Nota> getNotas() {
+        return notas;
+    }
+
+    public void setNotas(List<Nota> notas) {
+        this.notas = notas;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public List<Error_Etiqueta> getError_Etiquetas() {
+        return error_Etiquetas;
+    }
+
+    public void setError_Etiquetas(List<Error_Etiqueta> error_Etiquetas) {
+        this.error_Etiquetas = error_Etiquetas;
+    }
+
+    public List<Error_Tecnologia> getError_Tecnologias() {
+        return error_Tecnologias;
+    }
+
+    public void setError_Tecnologias(List<Error_Tecnologia> error_Tecnologias) {
+        this.error_Tecnologias = error_Tecnologias;
+    }
+
+    public List<Archivo> getArchivos() {
+        return archivos;
+    }
+
+    public void setArchivos(List<Archivo> archivos) {
+        this.archivos = archivos;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public String getRepositorio() {
+        return repositorio;
+    }
+
+    public void setRepositorio(String repositorio) {
+        this.repositorio = repositorio;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
+    public String getConsola() {
+        return consola;
+    }
+
+    public void setConsola(String consola) {
+        this.consola = consola;
+    }
+
+    public Date getFechaSubida() {
+        return fechaSubida;
+    }
+
+    public void setFechaSubida(Date fechaSubida) {
+        this.fechaSubida = fechaSubida;
+    }
+    
+    
+
     @Override
     public int hashCode() {
         int hash = 0;
