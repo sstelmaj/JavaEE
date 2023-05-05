@@ -17,7 +17,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 /**
  * 
- * @author joaco
+ * @author Joaco
  */
 public class Main extends Application { //iniciador
 
