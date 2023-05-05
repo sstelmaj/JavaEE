@@ -23,7 +23,7 @@ public class Main extends Application { //iniciador
 
     @Override
     public void start(Stage primaryStage){
-        //UI manager para darle un toque mas moderno a los componentes de swing
+        //UI manager para darle un toque mas moderno a los componentes de Swing
           try {
            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
