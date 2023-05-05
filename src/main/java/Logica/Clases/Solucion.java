@@ -1,8 +1,10 @@
+package Logica.Clases;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Clases;
+
 
 import java.io.Serializable;
 import java.util.Date;
@@ -22,21 +24,13 @@ import javax.persistence.Temporal;
  * @author Usuario
  */
 @Entity
-public class Error implements Serializable {
-
-
-    
-    @OneToMany
-    private List<Nota> notas;
+public class Solucion implements Serializable {
 
     @ManyToOne
-    private Usuario usuario;
+    private Error_Tecnologia error_Tecnologia;
     
-    @OneToMany(mappedBy = "error")
-    private List<Error_Etiqueta> error_Etiquetas;
-
-    @OneToMany(mappedBy = "error")
-    private List<Error_Tecnologia> error_Tecnologias;
+    @ManyToOne
+    private Usuario usuario;
     
     @OneToMany
     private List<Archivo> archivos;
@@ -46,23 +40,16 @@ public class Error implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
-    private String titulo;
-    private String descripcion;
-    private String link;
-    private String repositorio;
-    
     @Lob
     @Column(name = "codigo", columnDefinition = "TEXT")
     private String codigo;
     
-    @Lob
-    @Column(name = "consola", columnDefinition = "TEXT")
-    private String consola;
+    private String descripcion;
+    private String link;
     
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaSubida;
     
-
     public Long getId() {
         return id;
     }
@@ -71,12 +58,12 @@ public class Error implements Serializable {
         this.id = id;
     }
 
-    public List<Nota> getNotas() {
-        return notas;
+    public Error_Tecnologia getError_Tecnologia() {
+        return error_Tecnologia;
     }
 
-    public void setNotas(List<Nota> notas) {
-        this.notas = notas;
+    public void setError_Tecnologia(Error_Tecnologia error_Tecnologia) {
+        this.error_Tecnologia = error_Tecnologia;
     }
 
     public Usuario getUsuario() {
@@ -87,22 +74,6 @@ public class Error implements Serializable {
         this.usuario = usuario;
     }
 
-    public List<Error_Etiqueta> getError_Etiquetas() {
-        return error_Etiquetas;
-    }
-
-    public void setError_Etiquetas(List<Error_Etiqueta> error_Etiquetas) {
-        this.error_Etiquetas = error_Etiquetas;
-    }
-
-    public List<Error_Tecnologia> getError_Tecnologias() {
-        return error_Tecnologias;
-    }
-
-    public void setError_Tecnologias(List<Error_Tecnologia> error_Tecnologias) {
-        this.error_Tecnologias = error_Tecnologias;
-    }
-
     public List<Archivo> getArchivos() {
         return archivos;
     }
@@ -111,12 +82,12 @@ public class Error implements Serializable {
         this.archivos = archivos;
     }
 
-    public String getTitulo() {
-        return titulo;
+    public String getCodigo() {
+        return codigo;
     }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
 
     public String getDescripcion() {
@@ -133,30 +104,6 @@ public class Error implements Serializable {
 
     public void setLink(String link) {
         this.link = link;
-    }
-
-    public String getRepositorio() {
-        return repositorio;
-    }
-
-    public void setRepositorio(String repositorio) {
-        this.repositorio = repositorio;
-    }
-
-    public String getCodigo() {
-        return codigo;
-    }
-
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
-    }
-
-    public String getConsola() {
-        return consola;
-    }
-
-    public void setConsola(String consola) {
-        this.consola = consola;
     }
 
     public Date getFechaSubida() {
@@ -179,10 +126,10 @@ public class Error implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Error)) {
+        if (!(object instanceof Solucion)) {
             return false;
         }
-        Error other = (Error) object;
+        Solucion other = (Solucion) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -191,7 +138,7 @@ public class Error implements Serializable {
 
     @Override
     public String toString() {
-        return "Clases.Error[ id=" + id + " ]";
+        return "Clases.Solucion[ id=" + id + " ]";
     }
     
 }

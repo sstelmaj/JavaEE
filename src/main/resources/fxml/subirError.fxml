@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.web.*?>
+<?import javafx.scene.chart.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="701.0" prefWidth="1382.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentacion.SubirErrorController">
+   <children>
+      <ColorPicker layoutX="690.0" layoutY="509.0" />
+      <PointLight color="CHARTREUSE" layoutX="248.0" layoutY="343.0" lightOn="true" />
+      <AnchorPane fx:id="anchor1" layoutX="69.0" layoutY="85.0" prefHeight="297.0" prefWidth="474.0" />
+      <WebView fx:id="web1" layoutX="610.0" layoutY="25.0" prefHeight="451.0" prefWidth="699.0" />
+      <Accordion layoutX="799.0" layoutY="345.0" />
+      <DatePicker layoutX="894.0" layoutY="509.0" />
+      <Canvas height="200.0" layoutX="1068.0" layoutY="56.0" width="200.0" />
+   </children>
+</AnchorPane>
