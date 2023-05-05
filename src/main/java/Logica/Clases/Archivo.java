@@ -35,6 +35,16 @@ public class Archivo implements Serializable {
         this.id = id;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+    
+    
+
     @Override
     public int hashCode() {
         int hash = 0;

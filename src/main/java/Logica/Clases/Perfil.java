@@ -37,6 +37,40 @@ public class Perfil implements Serializable {
         this.nombre = nombre;
     }
 
+    public boolean isCrearUsuario() {
+        return crearUsuario;
+    }
+
+    public void setCrearUsuario(boolean crearUsuario) {
+        this.crearUsuario = crearUsuario;
+    }
+
+    public boolean isSubir() {
+        return subir;
+    }
+
+    public void setSubir(boolean subir) {
+        this.subir = subir;
+    }
+
+    public boolean isDesactivar() {
+        return desactivar;
+    }
+
+    public void setDesactivar(boolean desactivar) {
+        this.desactivar = desactivar;
+    }
+
+    public boolean isModificar() {
+        return modificar;
+    }
+
+    public void setModificar(boolean modificar) {
+        this.modificar = modificar;
+    }
+    
+    
+
     @Override
     public int hashCode() {
         int hash = 0;

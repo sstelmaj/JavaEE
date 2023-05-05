@@ -45,6 +45,25 @@ public class Etiqueta implements Serializable {
         this.nombre = nombre;
     }
 
+    public List<Error_Etiqueta> getError_Etiquetas() {
+        return error_Etiquetas;
+    }
+
+    public void setError_Etiquetas(List<Error_Etiqueta> error_Etiquetas) {
+        this.error_Etiquetas = error_Etiquetas;
+    }
+
+    public CATEGORIA getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(CATEGORIA categoria) {
+        this.categoria = categoria;
+    }
+    
+    
+    
+
     @Override
     public int hashCode() {
         int hash = 0;

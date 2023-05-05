@@ -37,6 +37,16 @@ public class Error_Etiqueta implements Serializable {
         this.error = error;
     }
 
+    public Etiqueta getEtiqueta() {
+        return etiqueta;
+    }
+
+    public void setEtiqueta(Etiqueta etiqueta) {
+        this.etiqueta = etiqueta;
+    }
+    
+    
+
     @Override
     public int hashCode() {
         int hash = 0;
