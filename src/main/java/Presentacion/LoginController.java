@@ -4,6 +4,7 @@
  */
 package Presentacion;
 
+import Logica.Controladores.UsuarioController;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
@@ -29,17 +30,18 @@ public class LoginController implements Initializable {
     @FXML
     private Button loginButton;
     @FXML
-    private Button cancelButton;
-    @FXML
     private Label statusLabel;
 
     @FXML
     public void login(ActionEvent event) {
-        String nombre = usernameField.getText();
-        String contrasenia = passwordField.getText();
-
-        // Aquí puedes validar las credenciales del usuario y hacer otras tareas relacionadas con el inicio de sesión
-        statusLabel.setText("Inicio de sesión exitoso!");
+        String mail = usernameField.getText();
+        String password = passwordField.getText();
+        
+        if (UsuarioController.getInstance().iniciarSesion(mail, password) == true){
+            statusLabel.setText("Has iniciado sesión !!");
+        } else {
+            statusLabel.setText("Mail o contraseña incorrectos !!");
+        }
     }
         
         
@@ -47,6 +49,6 @@ public class LoginController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         
         
-    }    
+    }  
     
 }
