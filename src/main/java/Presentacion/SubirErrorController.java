@@ -15,6 +15,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
@@ -31,6 +32,9 @@ public class SubirErrorController implements Initializable {
     @FXML
     private AnchorPane anchor1;
     private WebView web1;
+    @FXML
+    private ScrollPane scrollConsole;
+    private AnchorPane anchorConsole;
 
     /**
      * Initializes the controller class.
@@ -48,6 +52,24 @@ public class SubirErrorController implements Initializable {
        
         swingNode.setContent(iFrame);
          anchor1.getChildren().add(swingNode);
+         
+         
+        try {
+                JInternalFrame iFrameConsole = new RSTA();
+                iFrameConsole.setPreferredSize(new Dimension(550,400));
+                iFrameConsole.setSize(20, 20);
+                iFrameConsole.setVisible(true);
+                iFrameConsole.setBorder(null);
+                ((javax.swing.plaf.basic.BasicInternalFrameUI) iFrameConsole.getUI()).setNorthPane(null);
+                SwingNode swingNodeConsole = new SwingNode();
+
+                swingNodeConsole.setContent(iFrameConsole);
+                scrollConsole.setContent(swingNodeConsole);
+            } catch (Exception e) {
+                // Manejo de la excepción
+                e.printStackTrace();
+            }
+
          
 //         try {
 //            Iterator<Tecnologia> it = Conexion.getInstance().select(" FROM tecnologia", Tecnologia.class).iterator();
