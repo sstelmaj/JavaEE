@@ -25,10 +25,7 @@ import javax.swing.JInternalFrame;
 public class SubirErrorController implements Initializable {
 
     @FXML
-    private Button btnPrueba;
-    @FXML
     private AnchorPane anchor1;
-    @FXML
     private WebView web1;
 
     /**
@@ -52,12 +49,8 @@ public class SubirErrorController implements Initializable {
          
       
  
-        WebEngine webEngine = web1.getEngine();
-        webEngine.load("https://openai.com/blog/chatgpt");
+      
     }    
 
-    @FXML
-    private void click(ActionEvent event) {
-    }
     
 }
