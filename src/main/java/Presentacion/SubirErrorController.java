@@ -14,12 +14,18 @@ import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javax.swing.JInternalFrame;
+import jdk.nashorn.api.scripting.JSObject;
 
 /**
  * FXML Controller class
@@ -35,6 +41,36 @@ public class SubirErrorController implements Initializable {
     @FXML
     private ScrollPane scrollConsole;
     private AnchorPane anchorConsole;
+    @FXML
+    private WebView linkWebView;
+    @FXML
+    private TextField linkTextFieldUrl;
+    @FXML
+    private Button linkButtonVisualizar;
+    @FXML
+    private DatePicker inputFecha;
+    @FXML
+    private ComboBox<?> comboTecnologia;
+    @FXML
+    private TextField textFieldTitulo;
+    @FXML
+    private TextField textFiltradoTecnologias;
+    @FXML
+    private Button botonCrearTecnologia;
+    @FXML
+    private Button botonCancelar;
+    @FXML
+    private Button botonIngresar;
+    @FXML
+    private TitledPane titledPaneDescripcion;
+    @FXML
+    private Accordion acordion;
+    @FXML
+    private WebView linkWebView1;
+    @FXML
+    private Button linkButtonVisualizar1;
+    @FXML
+    private TextField linkTextFieldUrl1;
 
     /**
      * Initializes the controller class.
@@ -52,6 +88,8 @@ public class SubirErrorController implements Initializable {
        
         swingNode.setContent(iFrame);
          anchor1.getChildren().add(swingNode);
+         
+         acordion.setExpandedPane(titledPaneDescripcion);
          
          
         try {
@@ -86,6 +124,17 @@ public class SubirErrorController implements Initializable {
  
       
     }    
+
+    @FXML
+    private void click(ActionEvent event) {
+        System.out.println("Hola");
+         linkWebView.getEngine().load("https://github.com/");
+        String userAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 14_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Mobile/15E148 Safari/604.1";
+       
+        linkWebView.getEngine().setUserAgent(userAgent);
+        linkWebView.getEngine().setJavaScriptEnabled​(true);
+        linkWebView.setZoom(0.75);
+    }
 
     
 }

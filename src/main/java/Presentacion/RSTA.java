@@ -121,9 +121,11 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
     private void initComponents() {
 
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jPanel_CP = new javax.swing.JPanel();
         jButton4 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jComboBoxLeng = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
+        jPanel_CP = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -134,12 +136,28 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
             }
         });
 
+        jButton4.setText("Modo oscuro");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
         jButton2.setText("Paste");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
+
+        jComboBoxLeng.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ACTIONSCRIPT", "ASSEMBLER_X86", "BBCODE", "C", "CLOJURE", "CPLUSPLUS", "CSHARP", "CSS", "DELPHI", "DTD", "FORTRAN", "GROOVY", "HTACCESS", "HTML", "JAVA", "JAVASCRIPT", "JSON", "JSP", "LATEX", "LISP", "LUA", "MAKEFILE", "MXML", "NSIS", "PERL", "PHP", "PROPERTIES_FILE", "PYTHON", "RUBY", "SAS", "SCALA", "SQL", "TCL", "UNIX_SHELL", "VISUAL_BASIC", "WINDOWS_BATCH", "XML" }));
+        jComboBoxLeng.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxLengActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Lenguajes");
 
         javax.swing.GroupLayout jPanel_CPLayout = new javax.swing.GroupLayout(jPanel_CP);
         jPanel_CP.setLayout(jPanel_CPLayout);
@@ -152,29 +170,25 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
             .addGap(0, 321, Short.MAX_VALUE)
         );
 
-        jButton4.setText("Modo oscuro");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(465, 465, 465))
             .addGroup(layout.createSequentialGroup()
                 .addGap(30, 30, 30)
-                .addComponent(jPanel_CP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(40, 40, 40)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBoxLeng, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel_CP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(227, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -183,7 +197,9 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton4)
                     .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(jButton2)
+                    .addComponent(jComboBoxLeng, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel_CP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(245, 245, 245))
@@ -238,6 +254,168 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
         }
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    private void jComboBoxLengActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxLengActionPerformed
+        // TODO add your handling code here:
+        String selectedLanguage = (String)jComboBoxLeng.getSelectedItem();
+        
+        switch (selectedLanguage) {
+        case "ACTIONSCRIPT":
+            System.out.println("ActionScript");
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_ACTIONSCRIPT);
+            break;
+        case "ASSEMBLER_X86":
+            System.out.println("Assembler x86");
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_ASSEMBLER_X86);
+            break;
+        case "BBCODE":
+            System.out.println("BBCode");
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_BBCODE);
+            break;
+        case "C":
+            System.out.println("C");
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_C);
+            break;
+        case "CLOJURE":
+            System.out.println("Clojure");
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_CLOJURE);
+            break;
+        case "C++":
+            System.out.println("C++");
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS);
+            break;
+        case "CSHARP":
+            System.out.println("C#");
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_CSHARP);
+            break;
+        case "CSS":
+            System.out.println("CSS");
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_CSS);
+            break;
+        case "DELPHI":
+            System.out.println("Delphi/Pascal");
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_DELPHI);
+            break;
+        case "DTD":
+            System.out.println("DTD");
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_DTD);
+            break;
+        case "FORTRAN":
+            System.out.println("Fortran");
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_FORTRAN);
+            break;
+        case "GROOVY":
+            System.out.println("Groovy");
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_GROOVY);
+            break;
+        case "HTACCESS":
+            System.out.println(".htaccess");
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_HTACCESS);
+            break;
+        case "HTML":
+            System.out.println("HTML");
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_HTML);
+            break;
+        case "JAVA":
+            System.out.println("Java");
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
+            break;
+        case "JAVASCRIPT":
+            System.out.println("JavaScript");
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
+            break;
+        case "JSON":
+            System.out.println("JSON");
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JSON);
+            break;
+        case "JSP":
+            System.out.println("JSP");
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JSP);
+            break;
+        case "LATEX":
+            System.out.println("LaTeX");
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_LATEX);
+            break;
+        case "LISP":
+            System.out.println("Lisp");
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_LISP);
+            break;
+        case "LUA":
+            System.out.println("Lua");
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_LUA);
+            break;
+        case "MAKEFILE":
+            System.out.println("Makefile");
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_MAKEFILE);
+            break;
+
+        case "MXML":
+        System.out.println("MXML");
+        textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_MXML);
+        break;
+        
+        case "NSIS":
+            System.out.println("NSIS");
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NSIS);
+            break;
+        case "PERL":
+            System.out.println("Perl");
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_PERL);
+            break;
+        case "PHP":
+            System.out.println("PHP");
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_PHP);
+            break;
+        case "PROPERTIES_FILE":
+            System.out.println("Properties File");
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_PROPERTIES_FILE);
+            break;
+        case "PYTHON":
+            System.out.println("Python");
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_PYTHON);
+            break;
+        case "RUBY":
+            System.out.println("Ruby");
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_RUBY);
+            break;
+        case "SAS":
+            System.out.println("SAS");
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_SAS);
+            break;
+        case "SCALA":
+            System.out.println("Scala");
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_SCALA);
+            break;
+        case "SQL":
+            System.out.println("SQL");
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_SQL);
+            break;
+        case "TCL":
+            System.out.println("Tcl");
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_TCL);
+            break;
+        case "UNIX_SHELL":
+            System.out.println("UNIX Shell");
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL);
+            break;
+        case "VISUAL_BASIC":
+            System.out.println("Visual Basic");
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_VISUAL_BASIC);
+            break;
+        case "WINDOWS_BATCH":
+            System.out.println("Windows Batch");
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_WINDOWS_BATCH);
+            break;
+        case "XML":
+            System.out.println("XML");
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_XML);
+            break;
+        default:
+            // Código para el caso por defecto o cualquier otro caso
+            break;
+    }
+        
+    }//GEN-LAST:event_jComboBoxLengActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -280,6 +458,8 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton4;
+    private javax.swing.JComboBox<String> jComboBoxLeng;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel_CP;
     // End of variables declaration//GEN-END:variables
 }
