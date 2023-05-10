@@ -71,6 +71,20 @@ public class Conexion {
             em.getTransaction().rollback();
         }
     }
+    
+    public <T> List<T> select(String sql, Class <T> clase){
+        EntityManager em = getEntity();
+        List<T> resultado = null;
+        em.getTransaction().begin();
+        try {
+            resultado = em.createQuery(sql,clase).getResultList();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+        }
+        return resultado;
+    
+    }
 
     public void cerrarConexion() {
         getEntity().close();

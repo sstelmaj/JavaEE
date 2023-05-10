@@ -4,8 +4,11 @@
  */
 package Presentacion;
 
+import Logica.Clases.Tecnologia;
+import Persistencia.Conexion;
 import java.awt.Dimension;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.ResourceBundle;
 import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
@@ -23,7 +26,8 @@ import javax.swing.JInternalFrame;
  * @author joaco
  */
 public class SubirErrorController implements Initializable {
-
+    
+    
     @FXML
     private AnchorPane anchor1;
     private WebView web1;
@@ -45,8 +49,17 @@ public class SubirErrorController implements Initializable {
         swingNode.setContent(iFrame);
          anchor1.getChildren().add(swingNode);
          
-         
-         
+//         try {
+//            Iterator<Tecnologia> it = Conexion.getInstance().select(" FROM tecnologia", Tecnologia.class).iterator();
+//            while (it.hasNext()) {
+//                Tecnologia tecnologia = it.next();
+//                // hacer algo con cada objeto tecnologia, por ejemplo mostrar su nombre
+//                System.out.println(tecnologia.getNombre());
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
       
  
       

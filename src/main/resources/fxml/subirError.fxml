@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.scene.canvas.*?>
 <?import javafx.scene.web.*?>
 <?import javafx.scene.chart.*?>
@@ -11,11 +12,47 @@
 
 <AnchorPane id="AnchorPane" prefHeight="701.0" prefWidth="1382.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentacion.SubirErrorController">
    <children>
-      <ColorPicker layoutX="690.0" layoutY="509.0" />
       <PointLight color="CHARTREUSE" layoutX="248.0" layoutY="343.0" lightOn="true" />
-      <AnchorPane fx:id="anchor1" layoutX="69.0" layoutY="85.0" prefHeight="297.0" prefWidth="474.0" />
+      <AnchorPane fx:id="anchor1" layoutX="69.0" layoutY="142.0" prefHeight="385.0" prefWidth="474.0" />
       <Accordion layoutX="799.0" layoutY="345.0" />
-      <DatePicker layoutX="894.0" layoutY="509.0" />
-      <Canvas height="200.0" layoutX="1068.0" layoutY="56.0" width="200.0" />
+      <Accordion layoutX="655.0" layoutY="142.0" prefHeight="385.0" prefWidth="546.0">
+        <panes>
+          <TitledPane animated="false" prefHeight="212.0" prefWidth="402.0" text="Descripcion">
+               <content>
+                  <ScrollPane prefHeight="200.0" prefWidth="200.0">
+                     <content>
+                        <TextArea prefHeight="233.0" prefWidth="531.0" />
+                     </content>
+                  </ScrollPane>
+               </content>
+            </TitledPane>
+          <TitledPane animated="false" prefHeight="360.0" prefWidth="516.0" text="Link">
+               <content>
+                  <ScrollPane prefHeight="200.0" prefWidth="200.0">
+                     <content>
+                        <WebView prefHeight="187.0" prefWidth="540.0" />
+                     </content>
+                  </ScrollPane>
+               </content>
+            </TitledPane>
+            <TitledPane animated="false" prefHeight="200.0" prefWidth="200.0" text="Consola" />
+            <TitledPane animated="false" prefHeight="200.0" prefWidth="200.0" text="Etiquetas" />
+            <TitledPane animated="false" prefHeight="200.0" prefWidth="200.0" text="Repositorio" />
+            <TitledPane animated="false" prefHeight="200.0" prefWidth="200.0" text="Archivos adjuntos" />
+        </panes>
+      </Accordion>
+      <DatePicker layoutX="361.0" layoutY="108.0" prefHeight="25.0" prefWidth="180.0" />
+      <ComboBox layoutX="655.0" layoutY="108.0" prefHeight="25.0" prefWidth="229.0" />
+      <TextField layoutX="90.0" layoutY="108.0" prefHeight="25.0" prefWidth="260.0" />
+      <Label layoutX="459.0" layoutY="30.0" text="Subir Error">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Label>
+      <TextField layoutX="892.0" layoutY="108.0" prefHeight="25.0" prefWidth="169.0" promptText="Filtrar" />
+      <Label layoutX="655.0" layoutY="83.0" prefHeight="17.0" prefWidth="186.0" text="Tecnología" />
+      <Button layoutX="1072.0" layoutY="108.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="Crear" />
+      <Button layoutX="492.0" layoutY="544.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="88.0" text="Cancelar" />
+      <Button layoutX="603.0" layoutY="544.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="88.0" text="Ingresar" />
    </children>
 </AnchorPane>
