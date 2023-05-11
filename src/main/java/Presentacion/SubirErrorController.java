@@ -4,11 +4,13 @@
  */
 package Presentacion;
 
-import Logica.Clases.Tecnologia;
+import Logica.Clases.Etiqueta;
+import Logica.Clases.*;
 import Persistencia.Conexion;
 import java.awt.Dimension;
 import java.net.URL;
 import java.util.Iterator;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
@@ -18,6 +20,7 @@ import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
@@ -26,6 +29,7 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javax.swing.JInternalFrame;
 import jdk.nashorn.api.scripting.JSObject;
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
 /**
  * FXML Controller class
@@ -50,7 +54,7 @@ public class SubirErrorController implements Initializable {
     @FXML
     private DatePicker inputFecha;
     @FXML
-    private ComboBox<?> comboTecnologia;
+    private ComboBox<String> comboTecnologia;
     @FXML
     private TextField textFieldTitulo;
     @FXML
@@ -71,20 +75,52 @@ public class SubirErrorController implements Initializable {
     private Button linkButtonVisualizar1;
     @FXML
     private TextField linkTextFieldUrl1;
-
+    @FXML
+    private ListView<String> listaEtiquetas;
+    
+    private SwingNode swingNode;
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        
+        
+        try {
+            List<Tecnologia> tecnologias = Conexion.getInstance().listaTecnologias();
+            comboTecnologia.getItems().clear();
+            for (Tecnologia tecnologia : tecnologias) {
+                comboTecnologia.getItems().add(tecnologia.getNombre());
+            }
+        } catch (Exception e) {
+            // Manejo de la excepción
+            e.printStackTrace();
+        }
+        
+        try {
+            List<Etiqueta> etiquetas = Conexion.getInstance().listaEtiquetas();
+
+            // Limpiar los elementos existentes en el ListView
+            listaEtiquetas.getItems().clear();
+
+            // Agregar los elementos a la lista del ListView
+            for (Etiqueta etiqueta : etiquetas) {
+                listaEtiquetas.getItems().add(etiqueta.getNombre());
+            }
+        } catch (Exception e) {
+            // Manejo de la excepción
+            e.printStackTrace();
+        }
+        
+        
         JInternalFrame iFrame = new RSTA();
         iFrame.setPreferredSize(new Dimension(550,400));
         iFrame.setSize(20, 20);
         iFrame.setVisible(true);
         iFrame.setBorder(null);
         ((javax.swing.plaf.basic.BasicInternalFrameUI) iFrame.getUI()).setNorthPane(null);
-        SwingNode swingNode = new SwingNode();
+         swingNode = new SwingNode();
        
         swingNode.setContent(iFrame);
          anchor1.getChildren().add(swingNode);
@@ -135,6 +171,27 @@ public class SubirErrorController implements Initializable {
         linkWebView.getEngine().setJavaScriptEnabled​(true);
         linkWebView.setZoom(0.75);
     }
+
+    @FXML
+    private void clickIngresar(ActionEvent event) {
+    //   Logica.Clases.Error error = new Logica.Clases.Error();
+       
+    //   error.setTitulo(textFieldTitulo.getText());
+       
+       JInternalFrame internalFrame = (JInternalFrame) swingNode.getContent();
+       
+        if (internalFrame instanceof RSTA) {
+    RSTA rsta = (RSTA) internalFrame;
+    RSyntaxTextArea textArea = rsta.getTextArea();
+
+    // Ahora puedes acceder al textArea y realizar operaciones en él
+    String contenido = textArea.getText();
+    System.out.print(contenido);
+    // ... hacer algo con el contenido del textArea
+    } else {
+        // El JInternalFrame no es una instancia de RSTA, maneja el caso según tus necesidades
+    }
+        }
 
     
 }

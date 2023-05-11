@@ -94,7 +94,7 @@
             <StringItem index="2" value="BBCODE"/>
             <StringItem index="3" value="C"/>
             <StringItem index="4" value="CLOJURE"/>
-            <StringItem index="5" value="CPLUSPLUS"/>
+            <StringItem index="5" value="C++"/>
             <StringItem index="6" value="CSHARP"/>
             <StringItem index="7" value="CSS"/>
             <StringItem index="8" value="DELPHI"/>

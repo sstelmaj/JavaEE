@@ -2,6 +2,8 @@ package Persistencia;
 
 
 
+import Logica.Clases.Etiqueta;
+import Logica.Clases.Tecnologia;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -85,7 +87,32 @@ public class Conexion {
         return resultado;
     
     }
-
+    
+    public List<Tecnologia> listaTecnologias() {
+        EntityManager em = getEntity();
+        List<Tecnologia> resultado = null;
+        em.getTransaction().begin();
+        try {
+            resultado = em.createNativeQuery("SELECT * FROM tecnologia", Tecnologia.class).getResultList();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+        }
+        return resultado;
+    }
+    
+    public List<Etiqueta> listaEtiquetas() {
+    EntityManager em = getEntity();
+    List<Etiqueta> resultado = null;
+    em.getTransaction().begin();
+    try {
+        resultado = em.createNativeQuery("SELECT * FROM etiqueta", Etiqueta.class).getResultList();
+        em.getTransaction().commit();
+    } catch (Exception e) {
+        em.getTransaction().rollback();
+    }
+    return resultado;
+    }
     public void cerrarConexion() {
         getEntity().close();
     }

@@ -46,7 +46,19 @@
                   <ScrollPane fx:id="scrollConsole" prefHeight="200.0" prefWidth="200.0" />
                </content>
             </TitledPane>
-            <TitledPane animated="false" prefHeight="200.0" prefWidth="200.0" text="Etiquetas" />
+            <TitledPane animated="false" prefHeight="200.0" prefWidth="200.0" text="Etiquetas">
+               <content>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <TextField layoutX="34.0" layoutY="14.0" prefHeight="25.0" prefWidth="212.0" />
+                        <Button layoutX="348.0" layoutY="14.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="119.0" text="Crear" />
+                        <ListView layoutX="348.0" layoutY="51.0" prefHeight="155.0" prefWidth="219.0" />
+                        <ListView fx:id="listaEtiquetas" layoutX="34.0" layoutY="51.0" prefHeight="155.0" prefWidth="213.0" />
+                        <Button layoutX="264.0" layoutY="81.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="63.0" text="Agregar" />
+                        <Button layoutX="264.0" layoutY="135.0" mnemonicParsing="false" text="  Quitar  " />
+                     </children>
+                  </AnchorPane>
+               </content></TitledPane>
             <TitledPane animated="false" prefHeight="200.0" prefWidth="200.0" text="Repositorio">
                <content>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0">
@@ -77,7 +89,7 @@
       <Label layoutX="655.0" layoutY="83.0" prefHeight="17.0" prefWidth="186.0" text="Tecnología" />
       <Button fx:id="botonCrearTecnologia" layoutX="1096.0" layoutY="108.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="Crear" />
       <Button fx:id="botonCancelar" layoutX="497.0" layoutY="557.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="88.0" text="Cancelar" />
-      <Button fx:id="botonIngresar" layoutX="655.0" layoutY="557.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="88.0" text="Ingresar" />
+      <Button fx:id="botonIngresar" layoutX="655.0" layoutY="557.0" mnemonicParsing="false" onAction="#clickIngresar" prefHeight="25.0" prefWidth="88.0" text="Ingresar" />
       <Label layoutX="98.0" layoutY="83.0" prefHeight="17.0" prefWidth="186.0" text="Titulo" />
       <Label layoutX="361.0" layoutY="83.0" prefHeight="17.0" prefWidth="63.0" text="Fecha" />
    </children>
