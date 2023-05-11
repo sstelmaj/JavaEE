@@ -5,16 +5,24 @@
 package Presentacion;
 
 import Logica.Controladores.UsuarioController;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.fxml.Initializable;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -28,26 +36,30 @@ public class LoginController implements Initializable {
     @FXML
     private PasswordField passwordField;
     @FXML
-    private Button loginButton;
-    @FXML
     private Label statusLabel;
 
-    @FXML
-    public void login(ActionEvent event) {
+    public void login(ActionEvent event) throws IOException {
         String mail = usernameField.getText();
         String password = passwordField.getText();
         
         if (UsuarioController.getInstance().iniciarSesion(mail, password) == true){
-            statusLabel.setText("Has iniciado sesión !!");
+            
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Dashboard.fxml"));
+        Parent root = loader.load();
+
+        // Crea una nueva escena y asigna la escena al escenario
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setTitle("Dashboard");
+        stage.setScene(scene);
+        stage.show();
         } else {
             statusLabel.setText("Mail o contraseña incorrectos !!");
         }
     }
         
-        
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
         
     }  
     
