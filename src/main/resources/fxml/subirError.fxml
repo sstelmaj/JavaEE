@@ -18,11 +18,16 @@
         <panes>
           <TitledPane fx:id="titledPaneDescripcion" animated="false" prefHeight="212.0" prefWidth="402.0" text="Descripcion">
                <content>
-                  <ScrollPane prefHeight="200.0" prefWidth="200.0">
-                     <content>
-                        <TextArea prefHeight="233.0" prefWidth="581.0" />
-                     </content>
-                  </ScrollPane>
+                  <AnchorPane>
+                     <children>
+                        <ListView fx:id="listaCompletado" layoutX="376.0" layoutY="29.0" prefHeight="205.0" prefWidth="195.0" />
+                        <ScrollPane layoutX="14.0" layoutY="29.0" prefHeight="206.0" prefWidth="359.0">
+                           <content>
+                              <TextArea fx:id="textDescripcion" prefHeight="234.0" prefWidth="581.0" />
+                           </content>
+                        </ScrollPane>
+                     </children>
+                  </AnchorPane>
                </content>
             </TitledPane>
           <TitledPane animated="false" prefHeight="360.0" prefWidth="516.0" text="Link">
@@ -50,11 +55,11 @@
                <content>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0">
                      <children>
-                        <TextField layoutX="34.0" layoutY="14.0" prefHeight="25.0" prefWidth="212.0" />
+                        <TextField fx:id="filtroEtiquetas" layoutX="34.0" layoutY="14.0" prefHeight="25.0" prefWidth="212.0" />
                         <Button layoutX="348.0" layoutY="14.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="119.0" text="Crear" />
-                        <ListView layoutX="348.0" layoutY="51.0" prefHeight="155.0" prefWidth="219.0" />
+                        <ListView fx:id="etiquetasSeleccionadas" layoutX="348.0" layoutY="51.0" prefHeight="155.0" prefWidth="219.0" />
                         <ListView fx:id="listaEtiquetas" layoutX="34.0" layoutY="51.0" prefHeight="155.0" prefWidth="213.0" />
-                        <Button layoutX="264.0" layoutY="81.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="63.0" text="Agregar" />
+                        <Button fx:id="botonAgregarEtiqueta" layoutX="264.0" layoutY="81.0" mnemonicParsing="false" onAction="#agregarEtiqueta" prefHeight="25.0" prefWidth="63.0" text="Agregar" />
                         <Button layoutX="264.0" layoutY="135.0" mnemonicParsing="false" text="  Quitar  " />
                      </children>
                   </AnchorPane>
@@ -70,11 +75,14 @@
                         </ScrollPane>
                         <Label layoutX="21.0" layoutY="195.0" prefHeight="25.0" prefWidth="63.0" text="Url" />
                         <Button fx:id="linkButtonVisualizar1" layoutX="478.0" layoutY="195.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="88.0" text="Visualizar" />
-                        <TextField fx:id="linkTextFieldUrl1" layoutX="94.0" layoutY="195.0" prefHeight="25.0" prefWidth="374.0" />
+                        <TextField fx:id="textFieldRepositorio" layoutX="94.0" layoutY="195.0" prefHeight="25.0" prefWidth="374.0" />
                      </children>
                   </AnchorPane>
                </content></TitledPane>
-            <TitledPane animated="false" prefHeight="200.0" prefWidth="200.0" text="Archivos adjuntos" />
+            <TitledPane animated="false" prefHeight="200.0" prefWidth="200.0" text="Archivos adjuntos">
+               <content>
+                  <AnchorPane fx:id="anchorPrueba" prefHeight="200.0" prefWidth="200.0" />
+               </content></TitledPane>
         </panes>
       </Accordion>
       <DatePicker fx:id="inputFecha" layoutX="361.0" layoutY="108.0" prefHeight="25.0" prefWidth="180.0" />
@@ -90,7 +98,12 @@
       <Button fx:id="botonCrearTecnologia" layoutX="1096.0" layoutY="108.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="Crear" />
       <Button fx:id="botonCancelar" layoutX="497.0" layoutY="557.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="88.0" text="Cancelar" />
       <Button fx:id="botonIngresar" layoutX="655.0" layoutY="557.0" mnemonicParsing="false" onAction="#clickIngresar" prefHeight="25.0" prefWidth="88.0" text="Ingresar" />
-      <Label layoutX="98.0" layoutY="83.0" prefHeight="17.0" prefWidth="186.0" text="Titulo" />
+      <Label layoutX="98.0" layoutY="83.0" prefHeight="17.0" prefWidth="186.0" text="Título" />
       <Label layoutX="361.0" layoutY="83.0" prefHeight="17.0" prefWidth="63.0" text="Fecha" />
+      <AnchorPane fx:id="anchorPrueba2" layoutX="823.0" layoutY="537.0" prefHeight="160.0" prefWidth="340.0">
+         <children>
+            <TextArea fx:id="textPrueba8" layoutX="59.0" layoutY="16.0" prefHeight="127.0" prefWidth="200.0" />
+         </children></AnchorPane>
+      <TextArea fx:id="text50" layoutX="184.0" layoutY="537.0" prefHeight="160.0" prefWidth="200.0" />
    </children>
 </AnchorPane>
