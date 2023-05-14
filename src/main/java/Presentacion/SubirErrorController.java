@@ -232,6 +232,19 @@ public class SubirErrorController implements Initializable {
 //                }
 //            }
 //        });
+//        listaCompletado.setOnKeyPressed(event -> {
+//            if (event.getCode() == KeyCode.ENTER) {
+//                String selectedItem = listaCompletado.getSelectionModel().getSelectedItem();
+//                if (selectedItem != null) {
+//                    int atIndex = textDescripcion.getText().lastIndexOf("@");
+//                    if (atIndex != -1) {
+//                        String prefix = textDescripcion.getText().substring(atIndex, atIndex + 1);
+//                        String updatedSelectedItem = prefix + selectedItem;
+//                        textDescripcion.replaceText(atIndex, textDescripcion.getLength(), updatedSelectedItem);
+//                    }
+//                }
+//            }
+//        });
         listaCompletado.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 String selectedItem = listaCompletado.getSelectionModel().getSelectedItem();
@@ -239,13 +252,26 @@ public class SubirErrorController implements Initializable {
                     int atIndex = textDescripcion.getText().lastIndexOf("@");
                     if (atIndex != -1) {
                         String prefix = textDescripcion.getText().substring(atIndex, atIndex + 1);
-                        String updatedSelectedItem = prefix + selectedItem;
+                        String updatedSelectedItem = prefix + selectedItem + " "; // Agregar un espacio después del item
                         textDescripcion.replaceText(atIndex, textDescripcion.getLength(), updatedSelectedItem);
+                        textDescripcion.requestFocus();
                     }
                 }
             }
         });
-        
+        textDescripcion.setOnKeyPressed(event -> {
+            KeyCode keyCode = event.getCode();
+            if (keyCode == KeyCode.UP || keyCode == KeyCode.DOWN) {
+                event.consume(); // Evita que el evento se propague a otros componentes
+
+                if (listaCompletado.getItems().isEmpty()) {
+                    return; // Sale del método si la lista está vacía
+                }
+
+                listaCompletado.requestFocus(); // Establece el foco en el ListView
+                listaCompletado.getSelectionModel().selectFirst(); // Selecciona el primer elemento del ListView
+            }
+        });
         
         
         
