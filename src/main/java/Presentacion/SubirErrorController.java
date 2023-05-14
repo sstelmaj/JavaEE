@@ -132,6 +132,8 @@ public class SubirErrorController implements Initializable {
     private List<Tecnologia> tecnologias;
     
     private ObservableList<String> originalItems;
+    
+    private String ignoredText = "";
     /**
      * Initializes the controller class.
      */
@@ -183,7 +185,7 @@ public class SubirErrorController implements Initializable {
          
          
          
-        //para poder filtrar luego
+        //para poder filtrar luego aca obtengo el observable list para el filtrado
         try {
             List<Etiqueta> etiquetas = Conexion.getInstance().listaEtiquetas();
 
@@ -197,6 +199,8 @@ public class SubirErrorController implements Initializable {
 
             // Asignar el ObservableList al ListView
             listaEtiquetas.setItems(items);
+            //asigno a la lista en la descripcion
+            listaCompletado.setItems(items);
            
         } catch (Exception e) {
             // Manejo de la excepción
@@ -207,6 +211,43 @@ public class SubirErrorController implements Initializable {
             filterListView(listaEtiquetas, newValue, items);
         });
           
+        textDescripcion.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.contains("@")) {
+                filterListViewD(listaCompletado, newValue, items);
+            }
+             else {
+                // Restaurar la lista original cuando se borra el carácter "@"
+                listaCompletado.setItems(items);
+            }
+        });
+        
+//        listaCompletado.setOnKeyPressed(event -> {
+//            if (event.getCode() == KeyCode.ENTER) {
+//                String selectedItem = listaCompletado.getSelectionModel().getSelectedItem();
+//                if (selectedItem != null) {
+//                    int atIndex = textDescripcion.getText().lastIndexOf("@");
+//                    if (atIndex != -1) {
+//                        textDescripcion.insertText(atIndex + 1, selectedItem);
+//                    }
+//                }
+//            }
+//        });
+        listaCompletado.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                String selectedItem = listaCompletado.getSelectionModel().getSelectedItem();
+                if (selectedItem != null) {
+                    int atIndex = textDescripcion.getText().lastIndexOf("@");
+                    if (atIndex != -1) {
+                        String prefix = textDescripcion.getText().substring(atIndex, atIndex + 1);
+                        String updatedSelectedItem = prefix + selectedItem;
+                        textDescripcion.replaceText(atIndex, textDescripcion.getLength(), updatedSelectedItem);
+                    }
+                }
+            }
+        });
+        
+        
+        
         
         
         JInternalFrame iFrame = new RSTA_TEXT();
@@ -246,8 +287,9 @@ public class SubirErrorController implements Initializable {
       
         
       
-    }    
+    }  
     
+   
 
     @FXML
     private void click(ActionEvent event) {
@@ -343,6 +385,40 @@ public class SubirErrorController implements Initializable {
             e.printStackTrace();
         }
     }
+
+    
+    private void filterListViewD(ListView<String> listView, String filterText, ObservableList<String> items) {
+    // Verificar si el texto de búsqueda contiene al menos un carácter "@"
+    if (filterText.contains("@")) {
+        // Obtener la última ocurrencia del carácter "@"
+        int lastIndex = filterText.lastIndexOf("@");
+
+        // Obtener el texto después del último carácter "@" y hasta el próximo espacio (o hasta el final del texto)
+        String searchText = filterText.substring(lastIndex + 1);
+
+        // Verificar si se ingresa un espacio después del texto filtrado
+        if (searchText.endsWith(" ")) {
+            // Restaurar la lista original
+            listView.setItems(items);
+        } else {
+            // Crear un nuevo filtro utilizando el texto ingresado
+            Predicate<String> filter = item ->
+                    item.toLowerCase().contains(searchText.toLowerCase());
+
+            // Filtrar la lista de etiquetas utilizando el filtro
+            List<String> filteredList = items.filtered(filter);
+
+            // Actualizar la lista del ListView con los elementos filtrados
+            listView.setItems(FXCollections.observableArrayList(filteredList));
+        }
+    } else {
+        // Restaurar la lista original cuando no se encuentra el carácter "@"
+        listView.setItems(items);
+    }
+}
+    
+  
+   
     
     private void filterListView(ListView<String> listView, String filterText, ObservableList<String> items) {
     // Crear un nuevo filtro utilizando el texto ingresado
