@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.Initializable;
 
 import javafx.event.ActionEvent;
@@ -17,10 +18,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -37,7 +41,9 @@ public class LoginController implements Initializable {
     private PasswordField passwordField;
     @FXML
     private Label statusLabel;
-
+    @FXML
+    private ImageView imageView;
+    
     public void login(ActionEvent event) throws IOException {
         String mail = usernameField.getText();
         String password = passwordField.getText();
@@ -54,13 +60,20 @@ public class LoginController implements Initializable {
         stage.setScene(scene);
         stage.show();
         } else {
-            statusLabel.setText("Mail o contraseña incorrectos !!");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error de inicio de sesión");
+            alert.setHeaderText("Inicio de sesión fallido");
+            alert.setContentText("El usuario o la contraseña son incorrectos. Por favor, inténtelo de nuevo.");
+            alert.showAndWait();
+            
+            usernameField.setText("");
+            passwordField.setText("");
         }
     }
         
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+         
     }  
     
 }
