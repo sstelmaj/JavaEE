@@ -37,6 +37,7 @@ public class Main extends Application { //iniciador
             //Show the scene containing the root layout
             Scene scene = new Scene(ventana);
             primaryStage.setTitle("Login");
+            primaryStage.setResizable(false);
             primaryStage.setScene(scene);
             primaryStage.show();
             
