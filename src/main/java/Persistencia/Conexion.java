@@ -4,10 +4,12 @@ package Persistencia;
 
 import Logica.Clases.Etiqueta;
 import Logica.Clases.Tecnologia;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 
 
 public class Conexion {
@@ -112,6 +114,21 @@ public class Conexion {
         em.getTransaction().rollback();
     }
     return resultado;
+    }
+    
+    public List<Logica.Clases.Error> listaErrores(ArrayList valores,String unico){
+        EntityManager em = getEntity();
+        List<Logica.Clases.Error> resultado = null;
+        em.getTransaction().begin();
+        try{
+            Query q = em.createNativeQuery("SELECT * From error WHERE id = ?", Logica.Clases.Error.class);
+            q.setParameter(1, unico);
+            resultado = q.getResultList();
+            em.getTransaction().commit();
+        }catch(Exception e){
+            em.getTransaction().rollback();
+        }
+        return resultado;
     }
     public void cerrarConexion() {
         getEntity().close();

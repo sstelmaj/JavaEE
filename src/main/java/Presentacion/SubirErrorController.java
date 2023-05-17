@@ -9,14 +9,26 @@ import Logica.Clases.*;
 import Persistencia.Conexion;
 import java.awt.Dimension;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingNode;
@@ -75,14 +87,9 @@ public class SubirErrorController implements Initializable {
     private Button linkButtonVisualizar;
     @FXML
     private DatePicker inputFecha;
-    @FXML
     private ComboBox<String> comboTecnologia;
     @FXML
     private TextField textFieldTitulo;
-    @FXML
-    private TextField textFiltradoTecnologias;
-    @FXML
-    private Button botonCrearTecnologia;
     @FXML
     private Button botonCancelar;
     @FXML
@@ -95,7 +102,6 @@ public class SubirErrorController implements Initializable {
     private WebView linkWebView1;
     @FXML
     private Button linkButtonVisualizar1;
-    @FXML
     private ListView<String> listaEtiquetas;
     
     private SwingNode swingNode;
@@ -105,25 +111,16 @@ public class SubirErrorController implements Initializable {
     private TextArea textDescripcion;
     @FXML
     private TextField textFieldRepositorio;
-    @FXML
     private TextField filtroEtiquetas;
     
     private  ObservableList<String> items;
-    @FXML
-    private Button botonAgregarEtiqueta;
-    @FXML
     private ListView<String> etiquetasSeleccionadas;
-    private final String[] palabrasClave = {"auto", "automóvil", "autobús", "autopista"};
+   
     @FXML
     private ListView<String> listaCompletado;
     @FXML
     private AnchorPane anchorPrueba;
-    @FXML
     private AnchorPane anchorPrueba2;
-    @FXML
-    private TextArea textPrueba8;
-    @FXML
-    private TextArea text50;
     
     private Stage popupStage;
     
@@ -134,55 +131,102 @@ public class SubirErrorController implements Initializable {
     private ObservableList<String> originalItems;
     
     private String ignoredText = "";
+    @FXML
+    private String tipoPantalla ="-";
+    @FXML
+    private Button btn_prueba;
+    
+    @FXML
+    private Label textTitulo;
+    
+    private Logica.Clases.Error errorModificar;
+    
+    private Logica.Clases.Error error;
+    
+    private StringProperty tipoPantallaProperty = new SimpleStringProperty("");
+
+    public StringProperty tipoPantallaProperty() {
+        return tipoPantallaProperty;
+    }
+
+    public final String getTipoPantalla() {
+        return tipoPantallaProperty.get();
+    }
+
+    public final void setTipoPantalla(String tipoPantalla) {
+        tipoPantallaProperty.set(tipoPantalla);
+    }
+    
+    public final void setErrorModificar(Logica.Clases.Error error) {
+        this.errorModificar = error;
+    }
+   
     /**
-     * Initializes the controller class.
+      
+   * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-        ///Prueba de 
-//        ObservableList<String> items = FXCollections.observableArrayList(
-//                "Elemento 1",
-//                "Elemento 2",
-//                "Elemento 3"
-//        );
+         //para el primer renderizado visual
+         tipoPantallaProperty.addListener((observable, oldValue, newValue) -> {
+            if (newValue=="Modificar Error") {
+                
+               
+                System.out.println("Modificar Error");
+                tipoPantalla =newValue;
+                textTitulo.setText(newValue);
+                botonIngresar.setText("Guardar Cambios");
+               
+                if(errorModificar != null){
+                    textDescripcion.setText(errorModificar.getDescripcion());
+                    textFieldTitulo.setText(errorModificar.getTitulo());
+                     linkTextFieldUrl.setText(errorModificar.getLink());
+                     textFieldRepositorio.setText(errorModificar.getRepositorio());
+                    
+                    String fechaSubida = errorModificar.getFechaSubida().toString();
+                    if(fechaSubida != null){
+                       DateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+                        String fechaString;
+                        Date fechaDate;
+                        try {
+                            fechaDate = dateFormat.parse(fechaSubida);
+                            Instant instant = fechaDate.toInstant();
+                            ZoneId zoneId = ZoneId.systemDefault();
+                            LocalDate fechaLocalDate = instant.atZone(zoneId).toLocalDate();
+                            inputFecha.setValue(fechaLocalDate);
+                            System.out.println(fechaLocalDate); 
+                                
+                        } catch (ParseException ex) {
+                            Logger.getLogger(SubirErrorController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
 
-        // Crear el componente ListView
-//        listView = new ListView<>(items);
-        
-         text50.addEventHandler(KeyEvent.KEY_TYPED, event -> {
-            if (event.getCharacter().equals("@")) {
-            //    openPopup();
-            //    updatePopupPosition();
-                System.out.println("hola");
+                    }
+                    JInternalFrame internalFrameConsola = (JInternalFrame) swingNodeConsole.getContent();
+       
+                    //obtenemos el contenido de el internal frame
+                    if (internalFrameConsola instanceof RSTA) {
+                        RSTA rsta = (RSTA) internalFrameConsola;
+                        rsta.setTextAreaContenido(errorModificar.getConsola());
+                    }   
+                    JInternalFrame internalFrameCodigo = (JInternalFrame) swingNode.getContent();
+       
+                    //obtenemos el contenido de el internal frame
+                    if (internalFrameCodigo instanceof RSTA) {
+                        RSTA rsta = (RSTA) internalFrameCodigo;
+                        rsta.setTextAreaContenido(errorModificar.getCodigo());
+                              
+                    } 
+
+                }
+
             }
+            else if(newValue=="Subir Error"){
+                System.out.println("Subir Error");
+                tipoPantalla =newValue;
+                textTitulo.setText(newValue);
+            }
+              
         });
-
-        
-        llenarTecnologias();
-
-        
-        
-        
-        RSyntaxTextArea rsyntax = new RSyntaxTextArea(20, 60);;
-        RTextScrollPane sp = new RTextScrollPane(rsyntax);
-        SwingNode swingNodeConsole2 = new SwingNode();
-        CompletionProvider provider = createCompletionProvider();
-
-
-        AutoCompletion ac = new AutoCompletion(provider);
-        ac.setShowDescWindow(true);
-        ac.setParameterAssistanceEnabled(true);
-   
-        ac.setAutoCompleteEnabled(true);
-        ac.setAutoActivationEnabled(true);
-        ac.setAutoCompleteSingleChoices(true);
-        ac.setAutoActivationDelay(800);
-         ac.install(rsyntax);
-        swingNodeConsole2.setContent(sp);
-         anchorPrueba2.getChildren().add(swingNodeConsole2);
-         
-         
          
          
         //para poder filtrar luego aca obtengo el observable list para el filtrado
@@ -197,8 +241,6 @@ public class SubirErrorController implements Initializable {
                 items.add(etiqueta.getNombre());
             }
 
-            // Asignar el ObservableList al ListView
-            listaEtiquetas.setItems(items);
             //asigno a la lista en la descripcion
             listaCompletado.setItems(items);
            
@@ -207,12 +249,10 @@ public class SubirErrorController implements Initializable {
             e.printStackTrace();
         }
         
-       filtroEtiquetas.textProperty().addListener((observable, oldValue, newValue) -> {
-            filterListView(listaEtiquetas, newValue, items);
-        });
+      
           
         textDescripcion.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.contains("@")) {
+            if (newValue.contains("#")) {
                 filterListViewD(listaCompletado, newValue, items);
             }
              else {
@@ -221,35 +261,12 @@ public class SubirErrorController implements Initializable {
             }
         });
         
-//        listaCompletado.setOnKeyPressed(event -> {
-//            if (event.getCode() == KeyCode.ENTER) {
-//                String selectedItem = listaCompletado.getSelectionModel().getSelectedItem();
-//                if (selectedItem != null) {
-//                    int atIndex = textDescripcion.getText().lastIndexOf("@");
-//                    if (atIndex != -1) {
-//                        textDescripcion.insertText(atIndex + 1, selectedItem);
-//                    }
-//                }
-//            }
-//        });
-//        listaCompletado.setOnKeyPressed(event -> {
-//            if (event.getCode() == KeyCode.ENTER) {
-//                String selectedItem = listaCompletado.getSelectionModel().getSelectedItem();
-//                if (selectedItem != null) {
-//                    int atIndex = textDescripcion.getText().lastIndexOf("@");
-//                    if (atIndex != -1) {
-//                        String prefix = textDescripcion.getText().substring(atIndex, atIndex + 1);
-//                        String updatedSelectedItem = prefix + selectedItem;
-//                        textDescripcion.replaceText(atIndex, textDescripcion.getLength(), updatedSelectedItem);
-//                    }
-//                }
-//            }
-//        });
+
         listaCompletado.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 String selectedItem = listaCompletado.getSelectionModel().getSelectedItem();
                 if (selectedItem != null) {
-                    int atIndex = textDescripcion.getText().lastIndexOf("@");
+                    int atIndex = textDescripcion.getText().lastIndexOf("#");
                     if (atIndex != -1) {
                         String prefix = textDescripcion.getText().substring(atIndex, atIndex + 1);
                         String updatedSelectedItem = prefix + selectedItem + " "; // Agregar un espacio después del item
@@ -259,6 +276,7 @@ public class SubirErrorController implements Initializable {
                 }
             }
         });
+        
         textDescripcion.setOnKeyPressed(event -> {
             KeyCode keyCode = event.getCode();
             if (keyCode == KeyCode.UP || keyCode == KeyCode.DOWN) {
@@ -273,45 +291,14 @@ public class SubirErrorController implements Initializable {
             }
         });
         
+        //para actualizar los datos luego de instanciar
         
+        rstaCode();
         
+        rstaConsola();
         
-        JInternalFrame iFrame = new RSTA_TEXT();
-        iFrame.setPreferredSize(new Dimension(550,400));
-        iFrame.setSize(20, 20);
-        iFrame.setVisible(true);
-        iFrame.setBorder(null);
-        ((javax.swing.plaf.basic.BasicInternalFrameUI) iFrame.getUI()).setNorthPane(null);
-         swingNode = new SwingNode();
-       
-        swingNode.setContent(iFrame);
-         anchor1.getChildren().add(swingNode);
          
-         acordion.setExpandedPane(titledPaneDescripcion);
-         
-         
-        try {
-                JInternalFrame iFrameConsole = new RSTA_TEXT();
-                iFrameConsole.setPreferredSize(new Dimension(550,400));
-                iFrameConsole.setSize(20, 20);
-                iFrameConsole.setVisible(true);
-              //  iFrameConsole.setAlwaysOnTop(true);
-                iFrameConsole.setBorder(null);
-                ((javax.swing.plaf.basic.BasicInternalFrameUI) iFrameConsole.getUI()).setNorthPane(null);
-                 
-                swingNodeConsole = new SwingNode();
-
-                swingNodeConsole.setContent(iFrameConsole);
-                scrollConsole.setContent(swingNodeConsole);
-            } catch (Exception e) {
-                // Manejo de la excepción
-                e.printStackTrace();
-            }
-       
-         
-
-      
-        
+     
       
     }  
     
@@ -330,12 +317,18 @@ public class SubirErrorController implements Initializable {
 
     @FXML
     private void clickIngresar(ActionEvent event) {
-       Logica.Clases.Error error = new Logica.Clases.Error();
+      
        
        
        //buscamos el internal frame del codigo
        JInternalFrame internalFrame = (JInternalFrame) swingNode.getContent();
        
+       if(tipoPantalla.equals("Subir Error")){
+             this.error = new Logica.Clases.Error();
+       }else if(tipoPantalla.equals("Modificar Error")){
+           this.error = this.errorModificar;
+           System.out.println("Quiere Modificar");
+       }
         //obtenemos el contenido de el internal frame
         if (internalFrame instanceof RSTA) {
             RSTA rsta = (RSTA) internalFrame;
@@ -386,19 +379,7 @@ public class SubirErrorController implements Initializable {
         
     }
 
-    @FXML
-    private void agregarEtiqueta(ActionEvent event) {
-        
-        String selectedItem = listaEtiquetas.getSelectionModel().getSelectedItem();
-
-        // Verifica si se seleccionó algún elemento
-        if (selectedItem != null) {
-            // Agrega el elemento a la ListView de destino
-            etiquetasSeleccionadas.getItems().add(selectedItem);
-            
-            
-        }
-    }
+    
     private void llenarTecnologias() {
        try {
             List<Tecnologia> tecnologias = Conexion.getInstance().listaTecnologias();
@@ -412,12 +393,13 @@ public class SubirErrorController implements Initializable {
         }
     }
 
-    
+    //filtrado de las etiquetas para ingresar en la descripcion
     private void filterListViewD(ListView<String> listView, String filterText, ObservableList<String> items) {
     // Verificar si el texto de búsqueda contiene al menos un carácter "@"
-    if (filterText.contains("@")) {
+    if (filterText.contains("#")) {
+        
         // Obtener la última ocurrencia del carácter "@"
-        int lastIndex = filterText.lastIndexOf("@");
+        int lastIndex = filterText.lastIndexOf("#");
 
         // Obtener el texto después del último carácter "@" y hasta el próximo espacio (o hasta el final del texto)
         String searchText = filterText.substring(lastIndex + 1);
@@ -437,84 +419,68 @@ public class SubirErrorController implements Initializable {
             // Actualizar la lista del ListView con los elementos filtrados
             listView.setItems(FXCollections.observableArrayList(filteredList));
         }
+        
+        
     } else {
         // Restaurar la lista original cuando no se encuentra el carácter "@"
         listView.setItems(items);
     }
+    
+    
 }
     
-  
-   
+    public void rstaCode(){
+        try {
+        
+        JInternalFrame iFrame = new RSTA();
+        iFrame.setPreferredSize(new Dimension(550,400));
+        iFrame.setSize(20, 20);
+        iFrame.setVisible(true);
+        iFrame.setBorder(null);
+        ((javax.swing.plaf.basic.BasicInternalFrameUI) iFrame.getUI()).setNorthPane(null);
+         swingNode = new SwingNode();
+       
+        swingNode.setContent(iFrame);
+         anchor1.getChildren().add(swingNode);
+         
+         acordion.setExpandedPane(titledPaneDescripcion);
+         
+        }catch (Exception e) {
+              // Manejo de la excepción
+              e.printStackTrace();
+        }
     
-    private void filterListView(ListView<String> listView, String filterText, ObservableList<String> items) {
-    // Crear un nuevo filtro utilizando el texto ingresado
-    Predicate<String> filter = item ->
-            item.toLowerCase().contains(filterText.toLowerCase());
-
-    // Filtrar la lista de etiquetas utilizando el filtro
-    List<String> filteredList = items.filtered(filter);
-
-    // Actualizar la lista del ListView con los elementos filtrados
-    listView.setItems(FXCollections.observableArrayList(filteredList));
-}
     
-    private CompletionProvider createCompletionProvider() {
-
-     
-      DefaultCompletionProvider provider = new DefaultCompletionProvider();
-        provider.setAutoActivationRules(true, "@");
-
-      // Add completions for all Java keywords. A BasicCompletion is just
-      // a straightforward word completion.
-      provider.addCompletion(new BasicCompletion(provider, "abstract"));
-      provider.addCompletion(new BasicCompletion(provider, "assert"));
-      provider.addCompletion(new BasicCompletion(provider, "break"));
-      provider.addCompletion(new BasicCompletion(provider, "case"));
-      // ... etc ...
-      provider.addCompletion(new BasicCompletion(provider, "transient"));
-      provider.addCompletion(new BasicCompletion(provider, "try"));
-      provider.addCompletion(new BasicCompletion(provider, "void"));
-      provider.addCompletion(new BasicCompletion(provider, "volatile"));
-      provider.addCompletion(new BasicCompletion(provider, "while"));
-
-      // Add a couple of "shorthand" completions. These completions don't
-      // require the input text to be the same thing as the replacement text.
-      provider.addCompletion(new ShorthandCompletion(provider, "sysout",
-            "System.out.println(", "System.out.println("));
-      provider.addCompletion(new ShorthandCompletion(provider, "syserr",
-            "System.err.println(", "System.err.println("));
-
-      return provider;
-
-   }
-//    private void openPopup() {
-//        // Crear un nuevo escenario (Stage) para la ventana emergente
-//         popupStage = new Stage();
-//
-//        // Configurar el contenido de la ventana emergente (puedes usar un nuevo archivo FXML y controlador si es necesario)
-//        // Aquí se muestra un ejemplo simple de contenido usando un StackPane con una etiqueta
-//        popupStage.setAlwaysOnTop(true);
-//        StackPane popupRoot = new StackPane(listView);
-//        Scene popupScene = new Scene(popupRoot, 200, 100);
-//        popupStage.setScene(popupScene);
-//
-//        // Mostrar la ventana emergente
-//        popupStage.show();
-//    }
+    }
     
-//    private void updatePopupPosition() {
-//        int caretPosition = text50.getCaretPosition();
-//        int lineNumber = text50.getText().substring(0, caretPosition).split("\n").length;
-//        int columnIndex = caretPosition - text50.getText().lastIndexOf('\n', caretPosition - 1) - 1;
-//
-//        // Calcular las coordenadas de la ventana emergente
-//        double x = text50.localToScreen(text50.getBoundsInLocal()).getMinX() + columnIndex * 10;
-//        double y = text50.localToScreen(text50.getBoundsInLocal()).getMinY() + lineNumber * 20 + 20;
-//
-//        // Establecer la posición de la ventana emergente
-//        popupStage.setX(x);
-//        popupStage.setY(y);
-//    }
+    public void rstaConsola(){
+        try {
+                JInternalFrame iFrameConsole = new RSTA();
+                iFrameConsole.setPreferredSize(new Dimension(550,400));
+                iFrameConsole.setSize(20, 20);
+                iFrameConsole.setVisible(true);
+              //  iFrameConsole.setAlwaysOnTop(true);
+                iFrameConsole.setBorder(null);
+                ((javax.swing.plaf.basic.BasicInternalFrameUI) iFrameConsole.getUI()).setNorthPane(null);
+                 
+                swingNodeConsole = new SwingNode();
 
+                swingNodeConsole.setContent(iFrameConsole);
+                scrollConsole.setContent(swingNodeConsole);
+            } catch (Exception e) {
+                // Manejo de la excepción
+                e.printStackTrace();
+            }
+    }
+    @FXML
+     public void setPantalla(String pantalla) {
+            this.tipoPantalla=pantalla;
+            
+      }
+    @FXML
+    private void clickPrueba(ActionEvent event) {
+           System.out.println(tipoPantalla);
+
+        }      
     
 }

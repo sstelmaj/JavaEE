@@ -43,6 +43,10 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
     public RSyntaxTextArea getTextArea(){
         return this.textArea;
     }
+    
+    public void setTextAreaContenido(String contenido){
+        textArea.setText(contenido);
+    }
     public RSTA() {
         
         

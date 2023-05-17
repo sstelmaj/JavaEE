@@ -4,9 +4,12 @@
  */
 package Presentacion;
 
+import Persistencia.Conexion;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -30,6 +33,8 @@ public class DashboardController implements Initializable {
     private ComboBox<String> selectorVista;
 
     private Map<String, String> vistas = new HashMap<>(); // mapa de vistas
+    
+    private String fxml;
     /**
      * Initializes the controller class.
      */
@@ -40,7 +45,8 @@ public class DashboardController implements Initializable {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Main.class.getResource("/fxml/subirError.fxml"));
             Parent nuevaVista = loader.load();
-            
+            SubirErrorController subirErrorController = (SubirErrorController)loader.getController();
+            subirErrorController.setPantalla("modificar");
             contentAPane.getChildren().setAll(nuevaVista);
      
         }catch(IOException e){
@@ -58,12 +64,27 @@ public class DashboardController implements Initializable {
         
         // Listener para cambio de selección en el ComboBox
         selectorVista.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            String fxml = vistas.get(newValue); // Obtener ruta del fxml correspondiente al valor seleccionado
+             fxml = vistas.get(newValue); // Obtener ruta del fxml correspondiente al valor seleccionado
             try{
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(Main.class.getResource(fxml));
                 Parent nuevaVista = loader.load();
+                
+                if(fxml.equals("/fxml/subirError.fxml")){
+                    SubirErrorController subirErrorController = (SubirErrorController)loader.getController();
+                    List<Logica.Clases.Error> errores = Conexion.getInstance().listaErrores(new ArrayList(),"201");
+                if(errores != null){
+                    System.out.println("llega");
+                    subirErrorController.setErrorModificar(errores.get(0));
+                }else{
+                    System.out.println("no llega");
+                }
+                    subirErrorController.setTipoPantalla("Modificar Error");
+                }
+                
                 contentAPane.getChildren().setAll(nuevaVista);
+                
+                
             }catch(IOException e){
                 System.out.println(e.getMessage());
             }
