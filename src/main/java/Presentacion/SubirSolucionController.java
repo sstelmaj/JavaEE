@@ -70,13 +70,12 @@ import org.fife.ui.rtextarea.RTextScrollPane;
  *
  * @author joaco
  */
-public class SubirErrorController implements Initializable {
+public class SubirSolucionController implements Initializable {
     
     
     @FXML
     private AnchorPane anchor1;
     private WebView web1;
-    @FXML
     private ScrollPane scrollConsole;
     private AnchorPane anchorConsole;
     @FXML
@@ -98,10 +97,6 @@ public class SubirErrorController implements Initializable {
     private TitledPane titledPaneDescripcion;
     @FXML
     private Accordion acordion;
-    @FXML
-    private WebView linkWebView1;
-    @FXML
-    private Button linkButtonVisualizar1;
     private ListView<String> listaEtiquetas;
     
     private SwingNode swingNode;
@@ -109,7 +104,6 @@ public class SubirErrorController implements Initializable {
     private SwingNode swingNodeConsole;
     @FXML
     private TextArea textDescripcion;
-    @FXML
     private TextField textFieldRepositorio;
     private TextField filtroEtiquetas;
     
@@ -131,10 +125,7 @@ public class SubirErrorController implements Initializable {
     private ObservableList<String> originalItems;
     
     private String ignoredText = "";
-    @FXML
     private String tipoPantalla ="-";
-    @FXML
-    private Button btn_prueba;
     
     @FXML
     private Label textTitulo;
@@ -197,7 +188,7 @@ public class SubirErrorController implements Initializable {
                             System.out.println(fechaLocalDate); 
                                 
                         } catch (ParseException ex) {
-                            Logger.getLogger(SubirErrorController.class.getName()).log(Level.SEVERE, null, ex);
+                            Logger.getLogger(SubirSolucionController.class.getName()).log(Level.SEVERE, null, ex);
                         }
 
                     }
@@ -295,7 +286,7 @@ public class SubirErrorController implements Initializable {
         
         rstaCode();
         
-        rstaConsola();
+        //rstaConsola();
         
          
      
@@ -475,12 +466,10 @@ public class SubirErrorController implements Initializable {
                 e.printStackTrace();
             }
     }
-    @FXML
      public void setPantalla(String pantalla) {
             this.tipoPantalla=pantalla;
             
       }
-    @FXML
     private void clickPrueba(ActionEvent event) {
            System.out.println(tipoPantalla);
 
