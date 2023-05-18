@@ -6,6 +6,7 @@ package Presentacion;
 
 import Logica.Clases.Etiqueta;
 import Logica.Clases.*;
+import Logica.Controladores.EtiquetaController;
 import Persistencia.Conexion;
 import java.awt.Dimension;
 import java.net.URL;
@@ -87,7 +88,6 @@ public class SubirSolucionController implements Initializable {
     @FXML
     private DatePicker inputFecha;
     private ComboBox<String> comboTecnologia;
-    @FXML
     private TextField textFieldTitulo;
     @FXML
     private Button botonCancelar;
@@ -130,9 +130,13 @@ public class SubirSolucionController implements Initializable {
     @FXML
     private Label textTitulo;
     
-    private Logica.Clases.Error errorModificar;
+    private Solucion solucionModificar;
     
     private Logica.Clases.Error error;
+    
+    private SubirErrorController error_controller;
+    
+    private Solucion crear_solucion;
     
     private StringProperty tipoPantallaProperty = new SimpleStringProperty("");
 
@@ -148,8 +152,12 @@ public class SubirSolucionController implements Initializable {
         tipoPantallaProperty.set(tipoPantalla);
     }
     
-    public final void setErrorModificar(Logica.Clases.Error error) {
-        this.errorModificar = error;
+    public final void setSolucionModificar(Solucion solucion) {
+        this.solucionModificar = solucion;
+    }
+    
+    public final void setErrorController(SubirErrorController error_controller) {
+        this.error_controller = error_controller;
     }
    
     /**
@@ -160,21 +168,19 @@ public class SubirSolucionController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
          //para el primer renderizado visual
          tipoPantallaProperty.addListener((observable, oldValue, newValue) -> {
-            if (newValue=="Modificar Error") {
+            if (newValue=="Modificar Solucion") {
                 
                
-                System.out.println("Modificar Error");
+                System.out.println("Modificar Solucion");
                 tipoPantalla =newValue;
                 textTitulo.setText(newValue);
                 botonIngresar.setText("Guardar Cambios");
                
-                if(errorModificar != null){
-                    textDescripcion.setText(errorModificar.getDescripcion());
-                    textFieldTitulo.setText(errorModificar.getTitulo());
-                     linkTextFieldUrl.setText(errorModificar.getLink());
-                     textFieldRepositorio.setText(errorModificar.getRepositorio());
+                if(solucionModificar != null){
+                    textDescripcion.setText(solucionModificar.getDescripcion());
+                     linkTextFieldUrl.setText(solucionModificar.getLink());
                     
-                    String fechaSubida = errorModificar.getFechaSubida().toString();
+                    String fechaSubida = solucionModificar.getFechaSubida().toString();
                     if(fechaSubida != null){
                        DateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
                         String fechaString;
@@ -192,19 +198,13 @@ public class SubirSolucionController implements Initializable {
                         }
 
                     }
-                    JInternalFrame internalFrameConsola = (JInternalFrame) swingNodeConsole.getContent();
-       
-                    //obtenemos el contenido de el internal frame
-                    if (internalFrameConsola instanceof RSTA) {
-                        RSTA rsta = (RSTA) internalFrameConsola;
-                        rsta.setTextAreaContenido(errorModificar.getConsola());
-                    }   
+                       
                     JInternalFrame internalFrameCodigo = (JInternalFrame) swingNode.getContent();
        
                     //obtenemos el contenido de el internal frame
                     if (internalFrameCodigo instanceof RSTA) {
                         RSTA rsta = (RSTA) internalFrameCodigo;
-                        rsta.setTextAreaContenido(errorModificar.getCodigo());
+                        rsta.setTextAreaContenido(solucionModificar.getCodigo());
                               
                     } 
 
@@ -216,13 +216,19 @@ public class SubirSolucionController implements Initializable {
                 tipoPantalla =newValue;
                 textTitulo.setText(newValue);
             }
+            else if(newValue=="Solucion Asociada"){
+                System.out.println("Solucion asociada");
+                tipoPantalla =newValue;
+                textTitulo.setText(newValue);
+                botonIngresar.setText("Adjuntar");
+            }
               
         });
          
          
         //para poder filtrar luego aca obtengo el observable list para el filtrado
         try {
-            List<Etiqueta> etiquetas = Conexion.getInstance().listaEtiquetas();
+            List<Etiqueta> etiquetas = EtiquetaController.getInstance().listaEtiquetas();
 
             // Crear un ObservableList a partir de la lista existente
              items = FXCollections.observableArrayList();
@@ -315,9 +321,9 @@ public class SubirSolucionController implements Initializable {
        JInternalFrame internalFrame = (JInternalFrame) swingNode.getContent();
        
        
-             this.error = new Logica.Clases.Error();
-        if(tipoPantalla.equals("Modificar Error")){
-           this.error = this.errorModificar;
+             this.crear_solucion = new Solucion();
+        if(tipoPantalla.equals("Modificar Solucion")){
+           this.crear_solucion = this.solucionModificar;
            System.out.println("Quiere Modificar");
        }
         //obtenemos el contenido de el internal frame
@@ -330,62 +336,48 @@ public class SubirSolucionController implements Initializable {
 
             System.out.print("codigo es"+contenido);
             //seteamos el contenido
-            error.setCodigo(contenido);
+            crear_solucion.setCodigo(contenido);
         } else {
             
         }
         
-        error.setTitulo(textFieldTitulo.getText());
-     
-        JInternalFrame internalFrameConsola = (JInternalFrame) swingNodeConsole.getContent();
        
-        //obtenemos el contenido de el internal frame
-        if (internalFrameConsola instanceof RSTA) {
-            RSTA rsta = (RSTA) internalFrameConsola;
-            RSyntaxTextArea textArea = rsta.getTextArea();
-
-            // Accedemos al text area
-            String contenido = textArea.getText();
-
-            System.out.print("consola es"+contenido);
-            //seteamos el contenido
-            error.setConsola(contenido);
-        } else {
-            
-        }
     
-        error.setDescripcion(textDescripcion.getText());
+        crear_solucion.setDescripcion(textDescripcion.getText());
         
     //    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", new Locale("es")); (util para despues o capaz el input fecha lo modifica)
 
         // Formatear LocalDate a String en español
     //    String fechaFormateada = localDate.format(formatter);
-        Date date = Date.from(inputFecha.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-        System.out.println(date);
-        error.setFechaSubida(date);
-        error.setLink(linkTextFieldUrl.getText());
-        error.setRepositorio(textFieldRepositorio.getText());
-        try { 
-        Conexion.getInstance().persist(error);
-        } catch (Exception e) {
-            // Manejo de la excepción
-            e.printStackTrace();
+        if(inputFecha.getValue()!= null){
+            Date date = Date.from(inputFecha.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            System.out.println(date);
+            crear_solucion.setFechaSubida(date);
         }
+        
+        crear_solucion.setLink(linkTextFieldUrl.getText());
+        
+        if(tipoPantalla.equals("Solucion Asociada")){
+            if(this.error_controller != null){
+                error_controller.setSolucion(crear_solucion);
+                error_controller.setActualizador("recibir solucion");
+            }
+        }
+        else{
+            try { 
+            Conexion.getInstance().persist(crear_solucion);
+            } catch (Exception e) {
+                // Manejo de la excepción
+                e.printStackTrace();
+            }
+ 
+        
+        }
+            
     }
 
     
-    private void llenarTecnologias() {
-       try {
-            List<Tecnologia> tecnologias = Conexion.getInstance().listaTecnologias();
-            comboTecnologia.getItems().clear();
-            for (Tecnologia tecnologia : tecnologias) {
-                comboTecnologia.getItems().add(tecnologia.getNombre());
-            }
-        } catch (Exception e) {
-            // Manejo de la excepción
-            e.printStackTrace();
-        }
-    }
+
 
     //filtrado de las etiquetas para ingresar en la descripcion
     private void filterListViewD(ListView<String> listView, String filterText, ObservableList<String> items) {

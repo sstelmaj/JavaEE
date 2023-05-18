@@ -6,8 +6,10 @@ package Presentacion;
 
 import Logica.Clases.Etiqueta;
 import Logica.Clases.*;
+import Logica.Controladores.EtiquetaController;
 import Persistencia.Conexion;
 import java.awt.Dimension;
+import java.io.IOException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -34,6 +36,7 @@ import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.scene.Scene;
@@ -51,6 +54,7 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
@@ -131,10 +135,7 @@ public class SubirErrorController implements Initializable {
     private ObservableList<String> originalItems;
     
     private String ignoredText = "";
-    @FXML
     private String tipoPantalla ="-";
-    @FXML
-    private Button btn_prueba;
     
     @FXML
     private Label textTitulo;
@@ -143,7 +144,20 @@ public class SubirErrorController implements Initializable {
     
     private Logica.Clases.Error error;
     
+    private Solucion solucion_asociada ;
+    
     private StringProperty tipoPantallaProperty = new SimpleStringProperty("");
+    
+    private StringProperty actualizador = new SimpleStringProperty("");
+    
+    public final void setActualizador(String descripcion) {
+        actualizador.set(descripcion);
+    }
+   
+    @FXML
+    private Button botonCrearSolucion;
+    @FXML
+    private Button botonVerSolucion;
 
     public StringProperty tipoPantallaProperty() {
         return tipoPantallaProperty;
@@ -159,6 +173,10 @@ public class SubirErrorController implements Initializable {
     
     public final void setErrorModificar(Logica.Clases.Error error) {
         this.errorModificar = error;
+    }
+    
+    public final void setSolucion(Solucion solucion) {
+        this.solucion_asociada = solucion;
     }
    
     /**
@@ -176,6 +194,8 @@ public class SubirErrorController implements Initializable {
                 tipoPantalla =newValue;
                 textTitulo.setText(newValue);
                 botonIngresar.setText("Guardar Cambios");
+                botonCrearSolucion.setVisible(false);
+                botonVerSolucion.setVisible(false);
                
                 if(errorModificar != null){
                     textDescripcion.setText(errorModificar.getDescripcion());
@@ -227,11 +247,23 @@ public class SubirErrorController implements Initializable {
             }
               
         });
-         
+          actualizador.addListener((observable, oldValue, newValue) -> {
+               if (newValue!=null) {
+                   
+                   if(this.solucion_asociada != null){
+                   System.out.println("Llego la solucion asociada");
+                   }else{
+                       System.out.println("no llego");
+                   }
+               }else{
+               
+                   System.out.println("No se actualizo");
+               }
+          });
          
         //para poder filtrar luego aca obtengo el observable list para el filtrado
         try {
-            List<Etiqueta> etiquetas = Conexion.getInstance().listaEtiquetas();
+            List<Etiqueta> etiquetas = EtiquetaController.getInstance().listaEtiquetas();
 
             // Crear un ObservableList a partir de la lista existente
              items = FXCollections.observableArrayList();
@@ -374,27 +406,29 @@ public class SubirErrorController implements Initializable {
         error.setFechaSubida(date);
         error.setLink(linkTextFieldUrl.getText());
         error.setRepositorio(textFieldRepositorio.getText());
-        try { 
-        Conexion.getInstance().persist(error);
-        } catch (Exception e) {
-            // Manejo de la excepción
-            e.printStackTrace();
+        
+            try { 
+            Conexion.getInstance().persist(error);
+            } catch (Exception e) {
+                // Manejo de la excepción
+                e.printStackTrace();
+            }
+            System.out.println(tipoPantalla);
+        if(tipoPantalla.equals("Subir Error")){
+            if(this.solucion_asociada !=null){
+                try { 
+                   
+                Conexion.getInstance().persist(this.solucion_asociada);
+                System.out.println("sube la solucion adjunta");
+                } catch (Exception e) {
+                    // Manejo de la excepción
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
     
-    private void llenarTecnologias() {
-       try {
-            List<Tecnologia> tecnologias = Conexion.getInstance().listaTecnologias();
-            comboTecnologia.getItems().clear();
-            for (Tecnologia tecnologia : tecnologias) {
-                comboTecnologia.getItems().add(tecnologia.getNombre());
-            }
-        } catch (Exception e) {
-            // Manejo de la excepción
-            e.printStackTrace();
-        }
-    }
 
     //filtrado de las etiquetas para ingresar en la descripcion
     private void filterListViewD(ListView<String> listView, String filterText, ObservableList<String> items) {
@@ -475,15 +509,47 @@ public class SubirErrorController implements Initializable {
                 e.printStackTrace();
             }
     }
-    @FXML
      public void setPantalla(String pantalla) {
             this.tipoPantalla=pantalla;
             
       }
-    @FXML
     private void clickPrueba(ActionEvent event) {
            System.out.println(tipoPantalla);
 
         }      
+
+    @FXML
+    private void clickCrearSolucion(ActionEvent event) {
+        
+        try{
+            Stage crear_solucion = new Stage();
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(Main.class.getResource("/fxml/subirSolucion.fxml"));
+            
+            
+            
+            Pane ventana = (Pane) loader.load();
+            
+            //Show the scene containing the root layout
+            Scene scene = new Scene(ventana);
+            crear_solucion.setTitle("Crear Solucion");
+            crear_solucion.setResizable(false);
+            crear_solucion.setScene(scene);
+            
+            SubirSolucionController subirSolucionController = (SubirSolucionController)loader.getController();
+            if(subirSolucionController != null){
+                subirSolucionController.setTipoPantalla("Solucion Asociada");
+                subirSolucionController.setErrorController(this);
+                System.out.println("Se creo el controlador");
+            }else{
+                System.out.println("No se creo el controlador");
+            }
+            crear_solucion.show();
+            
+        }catch(IOException e){
+            System.out.println(e.getMessage());
+        
+        }
+    }
     
 }

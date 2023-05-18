@@ -83,5 +83,7 @@
       <Button fx:id="botonIngresar" layoutX="655.0" layoutY="557.0" mnemonicParsing="false" onAction="#clickIngresar" prefHeight="25.0" prefWidth="88.0" text="Ingresar" />
       <Label layoutX="98.0" layoutY="83.0" prefHeight="17.0" prefWidth="186.0" text="Título" />
       <Label layoutX="361.0" layoutY="83.0" prefHeight="17.0" prefWidth="63.0" text="Fecha" />
+      <Button fx:id="botonCrearSolucion" layoutX="139.0" layoutY="557.0" mnemonicParsing="false" onAction="#clickCrearSolucion" text="Crear Solucion" />
+      <Button fx:id="botonVerSolucion" layoutX="284.0" layoutY="557.0" mnemonicParsing="false" text="Ver solucion" />
    </children>
 </AnchorPane>
