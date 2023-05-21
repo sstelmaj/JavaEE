@@ -1,82 +1,59 @@
-package Logica.Clases;
-
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
+package Logica.Clases;
 
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  *
- * @author Usuario
+ * @author joaco
  */
 @Entity
-public class Archivo implements Serializable {
+public class Solucion_Etiqueta implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
-    private String nombre;
+    @Id
+    @ManyToOne
+    private Solucion solucion;
     
-    private String extension;
+    @Id
+    @ManyToOne
+    private Etiqueta etiqueta;
     
-    private Byte[] contenidoByte;
-    
-    private String url;
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getExtension() {
-        return extension;
-    }
-
-    public void setExtension(String extension) {
-        this.extension = extension;
-    }
-
-    public Byte[] getContenidoByte() {
-        return contenidoByte;
-    }
-
-    public void setContenidoByte(Byte[] contenidoByte) {
-        this.contenidoByte = contenidoByte;
-    }
-
-   
-
     public Long getId() {
         return id;
+    }
+
+    public Solucion getSolucion() {
+        return solucion;
+    }
+
+    public void setSolucion(Solucion solucion) {
+        this.solucion = solucion;
+    }
+
+    public Etiqueta getEtiqueta() {
+        return etiqueta;
+    }
+
+    public void setEtiqueta(Etiqueta etiqueta) {
+        this.etiqueta = etiqueta;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
-
-   
-    
-    
 
     @Override
     public int hashCode() {
@@ -88,10 +65,10 @@ public class Archivo implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Archivo)) {
+        if (!(object instanceof Solucion_Etiqueta)) {
             return false;
         }
-        Archivo other = (Archivo) object;
+        Solucion_Etiqueta other = (Solucion_Etiqueta) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -100,7 +77,7 @@ public class Archivo implements Serializable {
 
     @Override
     public String toString() {
-        return "Clases.Archivo[ id=" + id + " ]";
+        return "Logica.Clases.Solucion_Etiqueta[ id=" + id + " ]";
     }
     
 }

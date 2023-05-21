@@ -95,7 +95,7 @@ public class DetalleSolucionController implements Initializable {
             fechaSol=res.getFechaSubida();
             usosSol=res.getPuntos();
             
-            codigoErr=res.getError_Tecnologia().getError().getCodigo();
+            //codigoErr=res.getError_Tecnologia().getError().getCodigo();
         }
         
         //Frame para el codigo de error

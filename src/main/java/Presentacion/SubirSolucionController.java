@@ -119,8 +119,7 @@ public class SubirSolucionController implements Initializable {
     private Stage popupStage;
     
     private ListView<String> listView;
-    
-    private List<Tecnologia> tecnologias;
+   
     
     private ObservableList<String> originalItems;
     

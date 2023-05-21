@@ -3,7 +3,6 @@ package Persistencia;
 
 
 import Logica.Clases.Etiqueta;
-import Logica.Clases.Tecnologia;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;

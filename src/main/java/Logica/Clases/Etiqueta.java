@@ -17,9 +17,9 @@ import javax.persistence.OneToMany;
 
 
 //ESTO A LA LARGA PUEDE LLEGAR A SER UNA CLASE SI QUEREMOS AGREGAR MAS CATEGORIAS DE FORMA DINAMICA
-enum CATEGORIA{
-    
-}
+//enum CATEGORIA{
+//    
+//}
 
 /**
  *
@@ -27,15 +27,22 @@ enum CATEGORIA{
  */
 @Entity
 public class Etiqueta implements Serializable {
+
+    @OneToMany(mappedBy = "etiqueta")
+    private List<Solucion_Etiqueta> solucion_Etiquetas;
     
     @OneToMany(mappedBy = "etiqueta")
     private List<Error_Etiqueta> error_Etiquetas;
+    
+    @OneToMany
+    private List<Sub_Etiqueta> sub_etiqueta;
+    
 
     private static final long serialVersionUID = 1L;
     @Id
     private String nombre;
     
-    private CATEGORIA categoria;
+    //private CATEGORIA categoria;
 
     public String getNombre() {
         return nombre;
@@ -53,14 +60,7 @@ public class Etiqueta implements Serializable {
         this.error_Etiquetas = error_Etiquetas;
     }
 
-    public CATEGORIA getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(CATEGORIA categoria) {
-        this.categoria = categoria;
-    }
-    
+ 
     
     
 

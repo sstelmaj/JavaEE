@@ -20,7 +20,7 @@ import javax.swing.UnsupportedLookAndFeelException;
  * @author joaco
  */
 public class Main extends Application { //iniciador
-
+    private static Stage stage;
     @Override
     public void start(Stage primaryStage){
         //UI manager para darle un toque mas moderno a los componentes de swing
@@ -40,6 +40,7 @@ public class Main extends Application { //iniciador
             primaryStage.setResizable(false);
             primaryStage.setScene(scene);
             primaryStage.show();
+            this.stage = primaryStage;
             
         }catch(IOException e){
             System.out.println(e.getMessage());
@@ -50,6 +51,9 @@ public class Main extends Application { //iniciador
     public static void main(String[] args){
         launch(args);
         
+    }
+    public static Stage getStage(){
+        return stage;
     }
     
 }

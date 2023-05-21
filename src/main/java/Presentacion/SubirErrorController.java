@@ -9,8 +9,10 @@ import Logica.Clases.*;
 import Logica.Controladores.EtiquetaController;
 import Persistencia.Conexion;
 import java.awt.Dimension;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -58,6 +60,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.swing.JInternalFrame;
 import jdk.nashorn.api.scripting.JSObject;
@@ -122,15 +125,12 @@ public class SubirErrorController implements Initializable {
    
     @FXML
     private ListView<String> listaCompletado;
-    @FXML
-    private AnchorPane anchorPrueba;
     private AnchorPane anchorPrueba2;
     
     private Stage popupStage;
     
     private ListView<String> listView;
-    
-    private List<Tecnologia> tecnologias;
+   
     
     private ObservableList<String> originalItems;
     
@@ -149,6 +149,10 @@ public class SubirErrorController implements Initializable {
     private StringProperty tipoPantallaProperty = new SimpleStringProperty("");
     
     private StringProperty actualizador = new SimpleStringProperty("");
+    @FXML
+    private AnchorPane anchorFile;
+    @FXML
+    private Button botonArchivo;
     
     public final void setActualizador(String descripcion) {
         actualizador.set(descripcion);
@@ -330,7 +334,12 @@ public class SubirErrorController implements Initializable {
         rstaConsola();
         
          
-     
+        
+        
+        
+        
+        
+       //  anchorFile.getChildren().add(fileChooser);
       
     }  
     
@@ -401,9 +410,11 @@ public class SubirErrorController implements Initializable {
 
         // Formatear LocalDate a String en español
     //    String fechaFormateada = localDate.format(formatter);
-        Date date = Date.from(inputFecha.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-        System.out.println(date);
-        error.setFechaSubida(date);
+        if(inputFecha.getValue()!= null){
+            Date date = Date.from(inputFecha.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            System.out.println(date);
+            error.setFechaSubida(date);
+        }
         error.setLink(linkTextFieldUrl.getText());
         error.setRepositorio(textFieldRepositorio.getText());
         
@@ -551,5 +562,26 @@ public class SubirErrorController implements Initializable {
         
         }
     }
-    
+
+    @FXML
+    private void clickAbrir(ActionEvent event) throws IOException {
+        
+        FileChooser fileChooser = new FileChooser();
+        
+        File selectedFile = fileChooser.showOpenDialog(Main.getStage()); 
+        
+        
+        String nombre = selectedFile.getName();
+        String extension = "";
+        int i = nombre.lastIndexOf(".");
+        
+        if (i > 0) {
+        extension = nombre.substring(i + 1);
+        }
+        
+        
+        byte[] fileContent = Files.readAllBytes(selectedFile.toPath());
+        
+        System.out.println("nombre"+nombre+"exttension"+extension);
+    }
 }
