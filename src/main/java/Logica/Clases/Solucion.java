@@ -36,6 +36,14 @@ public class Solucion implements Serializable {
     
     @OneToMany
     private List<Archivo> archivos;
+
+    public List<Solucion_Etiqueta> getSolucion_Etiquetas() {
+        return solucion_Etiquetas;
+    }
+
+    public void setSolucion_Etiquetas(List<Solucion_Etiqueta> solucion_Etiquetas) {
+        this.solucion_Etiquetas = solucion_Etiquetas;
+    }
     
 
     private static final long serialVersionUID = 1L;

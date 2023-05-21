@@ -28,14 +28,34 @@ import javax.persistence.OneToMany;
 @Entity
 public class Etiqueta implements Serializable {
 
+    @ManyToOne
+    private Etiqueta etiquetaPadre;
+
     @OneToMany(mappedBy = "etiqueta")
     private List<Solucion_Etiqueta> solucion_Etiquetas;
     
     @OneToMany(mappedBy = "etiqueta")
     private List<Error_Etiqueta> error_Etiquetas;
     
-    @OneToMany
-    private List<Sub_Etiqueta> sub_etiqueta;
+    
+    @OneToMany(mappedBy = "etiquetaPadre")
+    private List<Etiqueta> sub_etiqueta;
+
+    public List<Solucion_Etiqueta> getSolucion_Etiquetas() {
+        return solucion_Etiquetas;
+    }
+
+    public void setSolucion_Etiquetas(List<Solucion_Etiqueta> solucion_Etiquetas) {
+        this.solucion_Etiquetas = solucion_Etiquetas;
+    }
+
+    public List<Etiqueta> getSub_etiqueta() {
+        return sub_etiqueta;
+    }
+
+    public void setSub_etiqueta(List<Etiqueta> sub_etiqueta) {
+        this.sub_etiqueta = sub_etiqueta;
+    }
     
 
     private static final long serialVersionUID = 1L;
