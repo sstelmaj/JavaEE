@@ -21,6 +21,8 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JOptionPane;
 import javax.swing.border.Border;
+import org.fife.ui.autocomplete.*;
+
 
 import org.fife.ui.rtextarea.*;
 import org.fife.ui.rsyntaxtextarea.*;
@@ -38,6 +40,13 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
     /**
      * Creates new form ui
      */
+    public RSyntaxTextArea getTextArea(){
+        return this.textArea;
+    }
+    
+    public void setTextAreaContenido(String contenido){
+        textArea.setText(contenido);
+    }
     public RSTA() {
         
         
@@ -58,8 +67,16 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
    //    Font font = new Font("Segoe UI", Font.PLAIN, 12);
    //     textArea.setFont(font);
         textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
+        
+        CompletionProvider provider = createCompletionProvider();
+
+ 
+        
         //para poder abrir o colapsar metodos
         textArea.setCodeFoldingEnabled(true);
+        
+        AutoCompletion ac = new AutoCompletion(provider);
+        ac.install(textArea);
         RTextScrollPane sp = new RTextScrollPane(textArea);
         jPanel_CP.add(sp);
         
@@ -121,9 +138,11 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
     private void initComponents() {
 
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jPanel_CP = new javax.swing.JPanel();
         jButton4 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jComboBoxLeng = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
+        jPanel_CP = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -134,12 +153,28 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
             }
         });
 
+        jButton4.setText("Modo oscuro");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
         jButton2.setText("Paste");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
+
+        jComboBoxLeng.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ACTIONSCRIPT", "ASSEMBLER_X86", "BBCODE", "C", "CLOJURE", "C++", "CSHARP", "CSS", "DELPHI", "DTD", "FORTRAN", "GROOVY", "HTACCESS", "HTML", "JAVA", "JAVASCRIPT", "JSON", "JSP", "LATEX", "LISP", "LUA", "MAKEFILE", "MXML", "NSIS", "PERL", "PHP", "PROPERTIES_FILE", "PYTHON", "RUBY", "SAS", "SCALA", "SQL", "TCL", "UNIX_SHELL", "VISUAL_BASIC", "WINDOWS_BATCH", "XML" }));
+        jComboBoxLeng.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxLengActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Lenguajes");
 
         javax.swing.GroupLayout jPanel_CPLayout = new javax.swing.GroupLayout(jPanel_CP);
         jPanel_CP.setLayout(jPanel_CPLayout);
@@ -152,29 +187,25 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
             .addGap(0, 321, Short.MAX_VALUE)
         );
 
-        jButton4.setText("Modo oscuro");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(465, 465, 465))
             .addGroup(layout.createSequentialGroup()
                 .addGap(30, 30, 30)
-                .addComponent(jPanel_CP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(40, 40, 40)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBoxLeng, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel_CP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(227, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -183,7 +214,9 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton4)
                     .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(jButton2)
+                    .addComponent(jComboBoxLeng, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel_CP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(245, 245, 245))
@@ -225,7 +258,7 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
             }
         }
     }//GEN-LAST:event_jButton2ActionPerformed
-
+    
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
              try {
@@ -237,6 +270,200 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
             ioe.printStackTrace();
         }
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jComboBoxLengActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxLengActionPerformed
+        // TODO add your handling code here:
+        String selectedLanguage = (String)jComboBoxLeng.getSelectedItem();
+        
+        switch (selectedLanguage) {
+        case "ACTIONSCRIPT":
+            
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_ACTIONSCRIPT);
+            break;
+        case "ASSEMBLER_X86":
+          
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_ASSEMBLER_X86);
+            break;
+        case "BBCODE":
+         
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_BBCODE);
+            break;
+        case "C":
+         
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_C);
+            break;
+        case "CLOJURE":
+            
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_CLOJURE);
+            break;
+        case "C++":
+           
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS);
+            break;
+        case "CSHARP":
+           
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_CSHARP);
+            break;
+        case "CSS":
+            
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_CSS);
+            break;
+        case "DELPHI":
+            
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_DELPHI);
+            break;
+        case "DTD":
+           
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_DTD);
+            break;
+        case "FORTRAN":
+          
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_FORTRAN);
+            break;
+        case "GROOVY":
+          
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_GROOVY);
+            break;
+        case "HTACCESS":
+         
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_HTACCESS);
+            break;
+        case "HTML":
+            
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_HTML);
+            break;
+        case "JAVA":
+           
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
+            break;
+        case "JAVASCRIPT":
+          
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
+            break;
+        case "JSON":
+           
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JSON);
+            break;
+        case "JSP":
+          
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JSP);
+            break;
+        case "LATEX":
+          
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_LATEX);
+            break;
+        case "LISP":
+           
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_LISP);
+            break;
+        case "LUA":
+           
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_LUA);
+            break;
+        case "MAKEFILE":
+           
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_MAKEFILE);
+            break;
+
+        case "MXML":
+        
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_MXML);
+        break;
+        
+        case "NSIS":
+           
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NSIS);
+            break;
+        case "PERL":
+           
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_PERL);
+            break;
+        case "PHP":
+            
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_PHP);
+            break;
+        case "PROPERTIES_FILE":
+            
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_PROPERTIES_FILE);
+            break;
+        case "PYTHON":
+       
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_PYTHON);
+            break;
+        case "RUBY":
+            
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_RUBY);
+            break;
+        case "SAS":
+           
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_SAS);
+            break;
+        case "SCALA":
+           
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_SCALA);
+            break;
+        case "SQL":
+           
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_SQL);
+            break;
+        case "TCL":
+           
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_TCL);
+            break;
+        case "UNIX_SHELL":
+            
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL);
+            break;
+        case "VISUAL_BASIC":
+           
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_VISUAL_BASIC);
+            break;
+        case "WINDOWS_BATCH":
+            
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_WINDOWS_BATCH);
+            break;
+        case "XML":
+          
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_XML);
+            break;
+        default:
+            
+            break;
+    }
+        
+    }//GEN-LAST:event_jComboBoxLengActionPerformed
+    private CompletionProvider createCompletionProvider() {
+
+      // A DefaultCompletionProvider is the simplest concrete implementation
+      // of CompletionProvider. This provider has no understanding of
+      // language semantics. It simply checks the text entered up to the
+      // caret position for a match against known completions. This is all
+      // that is needed in the majority of cases.
+      DefaultCompletionProvider provider = new DefaultCompletionProvider();
+      provider.setAutoActivationRules(true, "@");
+      // Add completions for all Java keywords. A BasicCompletion is just
+      // a straightforward word completion.
+      provider.addCompletion(new BasicCompletion(provider, "abstract"));
+      provider.addCompletion(new BasicCompletion(provider, "assert"));
+      provider.addCompletion(new BasicCompletion(provider, "break"));
+      provider.addCompletion(new BasicCompletion(provider, "case"));
+      // ... etc ...
+      provider.addCompletion(new BasicCompletion(provider, "transient"));
+      provider.addCompletion(new BasicCompletion(provider, "try"));
+      provider.addCompletion(new BasicCompletion(provider, "void"));
+      provider.addCompletion(new BasicCompletion(provider, "volatile"));
+      provider.addCompletion(new BasicCompletion(provider, "while"));
+
+      // Add a couple of "shorthand" completions. These completions don't
+      // require the input text to be the same thing as the replacement text.
+      provider.addCompletion(new ShorthandCompletion(provider, "sysout",
+            "System.out.println(", "System.out.println("));
+      provider.addCompletion(new ShorthandCompletion(provider, "syserr",
+            "System.err.println(", "System.err.println("));
+
+      return provider;
+
+   }
 
     /**
      * @param args the command line arguments
@@ -280,6 +507,8 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton4;
+    private javax.swing.JComboBox<String> jComboBoxLeng;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel_CP;
     // End of variables declaration//GEN-END:variables
 }

@@ -22,19 +22,23 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="1" attributes="0">
-              <EmptySpace max="32767" attributes="0"/>
-              <Component id="jButton4" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="jButton1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="jButton2" min="-2" pref="63" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="465" max="-2" attributes="0"/>
-          </Group>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
-              <Component id="jPanel_CP" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Component id="jButton4" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jButton2" min="-2" pref="63" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
+                      <Component id="jLabel1" min="-2" pref="62" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jComboBoxLeng" min="-2" pref="118" max="-2" attributes="0"/>
+                  </Group>
+                  <Component id="jPanel_CP" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace pref="227" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -46,6 +50,8 @@
                   <Component id="jButton4" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jComboBoxLeng" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="jPanel_CP" min="-2" max="-2" attributes="0"/>
@@ -63,6 +69,14 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
       </Events>
     </Component>
+    <Component class="javax.swing.JButton" name="jButton4">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Modo oscuro"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton4ActionPerformed"/>
+      </Events>
+    </Component>
     <Component class="javax.swing.JButton" name="jButton2">
       <Properties>
         <Property name="text" type="java.lang.String" value="Paste"/>
@@ -70,6 +84,62 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="jComboBoxLeng">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="37">
+            <StringItem index="0" value="ACTIONSCRIPT"/>
+            <StringItem index="1" value="ASSEMBLER_X86"/>
+            <StringItem index="2" value="BBCODE"/>
+            <StringItem index="3" value="C"/>
+            <StringItem index="4" value="CLOJURE"/>
+            <StringItem index="5" value="C++"/>
+            <StringItem index="6" value="CSHARP"/>
+            <StringItem index="7" value="CSS"/>
+            <StringItem index="8" value="DELPHI"/>
+            <StringItem index="9" value="DTD"/>
+            <StringItem index="10" value="FORTRAN"/>
+            <StringItem index="11" value="GROOVY"/>
+            <StringItem index="12" value="HTACCESS"/>
+            <StringItem index="13" value="HTML"/>
+            <StringItem index="14" value="JAVA"/>
+            <StringItem index="15" value="JAVASCRIPT"/>
+            <StringItem index="16" value="JSON"/>
+            <StringItem index="17" value="JSP"/>
+            <StringItem index="18" value="LATEX"/>
+            <StringItem index="19" value="LISP"/>
+            <StringItem index="20" value="LUA"/>
+            <StringItem index="21" value="MAKEFILE"/>
+            <StringItem index="22" value="MXML"/>
+            <StringItem index="23" value="NSIS"/>
+            <StringItem index="24" value="PERL"/>
+            <StringItem index="25" value="PHP"/>
+            <StringItem index="26" value="PROPERTIES_FILE"/>
+            <StringItem index="27" value="PYTHON"/>
+            <StringItem index="28" value="RUBY"/>
+            <StringItem index="29" value="SAS"/>
+            <StringItem index="30" value="SCALA"/>
+            <StringItem index="31" value="SQL"/>
+            <StringItem index="32" value="TCL"/>
+            <StringItem index="33" value="UNIX_SHELL"/>
+            <StringItem index="34" value="VISUAL_BASIC"/>
+            <StringItem index="35" value="WINDOWS_BATCH"/>
+            <StringItem index="36" value="XML"/>
+          </StringArray>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jComboBoxLengActionPerformed"/>
+      </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Lenguajes"/>
+      </Properties>
     </Component>
     <Container class="javax.swing.JPanel" name="jPanel_CP">
 
@@ -86,13 +156,5 @@
         </DimensionLayout>
       </Layout>
     </Container>
-    <Component class="javax.swing.JButton" name="jButton4">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Modo oscuro"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton4ActionPerformed"/>
-      </Events>
-    </Component>
   </SubComponents>
 </Form>
