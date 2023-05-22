@@ -8,6 +8,7 @@ package Logica.Clases;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,8 +29,7 @@ import javax.persistence.OneToMany;
 @Entity
 public class Etiqueta implements Serializable {
 
-    @ManyToOne
-    private Etiqueta etiquetaPadre;
+  
 
     @OneToMany(mappedBy = "etiqueta")
     private List<Solucion_Etiqueta> solucion_Etiquetas;
@@ -38,7 +38,7 @@ public class Etiqueta implements Serializable {
     private List<Error_Etiqueta> error_Etiquetas;
     
     
-    @OneToMany(mappedBy = "etiquetaPadre")
+    @OneToMany(cascade = CascadeType.PERSIST)
     private List<Etiqueta> sub_etiqueta;
 
     public List<Solucion_Etiqueta> getSolucion_Etiquetas() {

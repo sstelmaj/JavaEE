@@ -6,6 +6,7 @@ package Logica.Controladores;
 
 import Logica.Clases.Error;
 import Logica.Clases.Etiqueta;
+import Logica.Clases.Solucion;
 import Persistencia.Conexion;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -41,6 +42,47 @@ public class EtiquetaController {
         }
     return resultado;
     }
+    
+    public boolean existeEtiqueta(String nombre) {
+    EntityManager em = Conexion.getInstance().getEntity();
+    Object etiqueta = null;
+    boolean resultado = false;
+    em.getTransaction().begin();
+        try {
+            etiqueta=em.createNativeQuery("SELECT * FROM etiqueta WHERE nombre ='"+nombre+"'").getSingleResult();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+        }
+        if(etiqueta != null){
+            System.out.println("existe");
+            resultado = true;
+        }else{
+            System.out.println("no existe");
+        }   
+    return resultado;
+    }
+    
+    public Etiqueta obtenerEtiqueta(String nombre_etiqueta){
+        Etiqueta etiqueta=null;
+        Object resultado = null;
+        EntityManager em= Conexion.getInstance().getEntity(); ;
+        em.getTransaction().begin();
+        try{
+            Query q = em.createNativeQuery("SELECT * from etiqueta where nombre='"+nombre_etiqueta+"'", Etiqueta.class);
+            resultado=q.getSingleResult();
+            em.getTransaction().commit();  
+        }catch(Exception e){
+            em.getTransaction().rollback();
+        }
+        if(resultado!=null){
+            etiqueta = (Etiqueta) resultado;
+            System.out.println("funciona");
+        }
+      return etiqueta;  
+    }
+    
+    
     
 
 }
