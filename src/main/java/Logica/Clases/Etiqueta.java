@@ -29,7 +29,8 @@ import javax.persistence.OneToMany;
 @Entity
 public class Etiqueta implements Serializable {
 
-  
+    private String padre;
+
 
     @OneToMany(mappedBy = "etiqueta")
     private List<Solucion_Etiqueta> solucion_Etiquetas;
@@ -80,8 +81,13 @@ public class Etiqueta implements Serializable {
         this.error_Etiquetas = error_Etiquetas;
     }
 
- 
-    
+     public String getPadre() {
+        return padre;
+    }
+
+    public void setPadre(String padre) {
+        this.padre = padre;
+    }
     
 
     @Override

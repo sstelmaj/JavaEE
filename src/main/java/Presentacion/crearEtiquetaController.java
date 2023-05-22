@@ -12,6 +12,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -69,19 +70,23 @@ public class crearEtiquetaController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         
-        
-        TreeItem<String> rootItemSO = new TreeItem("Sistema Operativo");
-        TreeItem<String> branchItem1 = new TreeItem("Windows");
-        TreeItem<String> branchItem2 = new TreeItem("Linux");
-        rootItemSO.getChildren().addAll(branchItem1,branchItem2);
-        
-        TreeItem<String> rootItemFW = new TreeItem("Framework");
-        TreeItem<String> branchItem11 = new TreeItem("React");
-        TreeItem<String> branchItem22 = new TreeItem("Laravel");
-        rootItemFW.getChildren().addAll(branchItem11,branchItem22);
-        
         TreeItem<String> rootItem = new TreeItem("Etiquetas");
-        rootItem.getChildren().addAll(rootItemSO,rootItemFW);
+        List<Etiqueta> etiquetas_padre = EtiquetaController.getInstance().listaEtiquetas();
+        
+        for (Etiqueta etiqueta : etiquetas_padre) {
+            if(etiqueta.getPadre() == null){
+                TreeItem<String> item_padre = new TreeItem(etiqueta.getNombre());
+                
+                rootItem.getChildren().add(item_padre);
+                for(Etiqueta sub_etiqueta : etiqueta.getSub_etiqueta()){
+                    TreeItem<String> item_sub = new TreeItem(sub_etiqueta.getNombre());
+                    item_padre.getChildren().add(item_sub);
+                }
+            }        
+        }
+            
+        
+    //    rootItem.getChildren().addAll(rootItemSO,rootItemFW);
         arbolEtiquetas.setRoot(rootItem);
         arbolEtiquetas.setShowRoot(false);
         //arbolEtiquetas.setCellFactory(new DraggableCellFactory());  
@@ -93,37 +98,38 @@ public class crearEtiquetaController implements Initializable {
     @FXML
     private void clickIngresarEtiqueta(ActionEvent event) {
         EtiquetaController etiquetacontroller=null;
-        Etiqueta consola = new Etiqueta();
-        consola.setNombre("Consola");
-        
-        Etiqueta play5 = new Etiqueta();
-        play5.setNombre("Play 5");
-    //    Conexion.getInstance().persist(play5);
-        
-        Etiqueta xbox = new Etiqueta();
-        xbox.setNombre("Consola");
-    //    Conexion.getInstance().persist(xbox);
-        
-        Etiqueta wii = new Etiqueta();
-        wii.setNombre("Wii");
-    //    Conexion.getInstance().persist(wii);
+        Etiqueta padre = new Etiqueta();
+        padre.setNombre(textEtiquetaPadre.getText());
         
         List<Etiqueta> sub_etiquetas = new ArrayList<>();
-        
-        sub_etiquetas.add(play5);
-    //    sub_etiquetas.add(xbox);
-        sub_etiquetas.add(wii);
-        
-        consola.setSub_etiqueta(sub_etiquetas);
-        
         
         
         if(!EtiquetaController.getInstance().existeEtiqueta(textEtiquetaPadre.getText())){
             
+            ObservableList<String> items = listaSubEtiquetas.getItems();
             
+            if(items != null){
+                for (String item : items) {
+                    System.out.println(item);
+                    if(item.equals(textEtiquetaPadre.getText())){
+                        Alert alert = new Alert(AlertType.ERROR);
+                        alert.setTitle("Información");
+                        alert.setHeaderText(null);
+                        alert.setContentText("la subetiqueta: "+item+"no puede ser igual a la etiqueta padre!");
+                        alert.showAndWait();
+                    }
+                    else{
+                        Etiqueta etiq = new Etiqueta();
+                        etiq.setNombre(item);
+                        etiq.setPadre(padre.getNombre());
+                        sub_etiquetas.add(etiq);
+                    }
+                }
+            }
+            padre.setSub_etiqueta(sub_etiquetas);
             try { 
 
-            Conexion.getInstance().merge(consola);
+            Conexion.getInstance().merge(padre);
             System.out.println("sube la etiqueta con las sub etiquetas");
             } catch (Exception e) {
                 // Manejo de la excepción
@@ -136,7 +142,8 @@ public class crearEtiquetaController implements Initializable {
             alert.setContentText("¡Ya existe esa etiqueta padre!");
 
             alert.showAndWait();
-            
+       
+
         }
             
         
