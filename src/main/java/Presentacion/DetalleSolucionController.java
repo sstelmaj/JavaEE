@@ -77,126 +77,134 @@ public class DetalleSolucionController implements Initializable {
     String codigoSol,codigoErr,descripcion;
     Date fechaSol;
     int usosSol;
+    long idSol;
     List<Archivo> archivos=null;
     
     /**
      * Initializes the controller class.
+     * @param id
      */
+     public void setId(long id){
+        this.idSol=id;
+    }
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
-        
-        //Obtengo los datos de la solucion
-        List<Solucion> solucion = SolucionController.getInstance().obtenerSolucion("51");
-        for(Solucion res: solucion){
-            codigoSol=res.getCodigo();
-            descripcion=res.getDescripcion();
-            archivos=res.getArchivos();
-            fechaSol=res.getFechaSubida();
-            usosSol=res.getPuntos();
-            
-            codigoErr=res.getError_Tecnologia().getError().getCodigo();
-        }
-        
-        //Frame para el codigo de error
-        JInternalFrame iFrame = new PanelCodigoSolucion(codigoErr,SyntaxConstants.SYNTAX_STYLE_JAVA);
-        iFrame.setPreferredSize(new Dimension(550,400));
-        iFrame.setSize(20, 20);
-        iFrame.setVisible(true);
-        iFrame.setBorder(null);
-        ((javax.swing.plaf.basic.BasicInternalFrameUI) iFrame.getUI()).setNorthPane(null);
-        SwingNode swingNode = new SwingNode();
-       
-        swingNode.setContent(iFrame);
-        anchor1.getChildren().add(swingNode); 
-         
-        //Frame para el codigo de solucion
-        JInternalFrame iFrame2 = new PanelCodigoSolucion(codigoSol,SyntaxConstants.SYNTAX_STYLE_JAVA);
-        iFrame2.setPreferredSize(new Dimension(550,400));
-        iFrame2.setSize(20, 20);
-        iFrame2.setVisible(true);
-        iFrame2.setBorder(null);
-        ((javax.swing.plaf.basic.BasicInternalFrameUI) iFrame2.getUI()).setNorthPane(null);
-        SwingNode swingNode2 = new SwingNode();
-       
-        swingNode2.setContent(iFrame2);
-        optCodigo.getChildren().add(swingNode2);
-       
-       //Cargo las imagenes en el GridPane
-        for(Archivo arch:archivos){
-            if(this.checkIfFileHasExtension(arch.getUrl())){
-                ImageView imageView=new ImageView(new Image(arch.getUrl()));
-                imageView.setCursor(Cursor.HAND);
-                imageView.setPreserveRatio(true);
-                tablaArchivos.addRow(0, imageView);
-            }else{
-                WebView webView=new WebView();
-                WebEngine webEngine = webView.getEngine();
-                webEngine.load(arch.getUrl());
-                archivosWeb.getChildren().add(webView);
-            }
-        }
-        
-        
-        
-        //Cargar datos en panel de detalles
-        Text tituloDetalles=new Text("Estos son los detalles de la solucion \n");
-        Text detalles=new Text("Creado por: Persona 1 \nDescripcion: "+descripcion);
-        tituloDetalles.setFill(Color.BLACK);
-        tituloDetalles.setFont(Font.font("Helvetica", FontPosture.ITALIC, 19));
-        detalles.setFill(Color.GRAY);
-        detalles.setFont(Font.font("Calibri", FontPosture.ITALIC, 15));
-        txtFlowDetalles.getChildren().addAll(tituloDetalles,detalles);
-        tablaArchivos.setGridLinesVisible(true);
-        
-        txtUsosSolucion.setText("Usos: "+usosSol);
-        txtFechaSolucion.setText(txtFechaSolucion.getText()+fechaSol.toString());
-        
-        
-        //Creo el popup para expandir imagenes
-        for (Node node : tablaArchivos.getChildren()) {
-            if (node instanceof ImageView) {
-                ImageView imageView = (ImageView) node;
-                imageView.setOnMouseClicked(event -> {
-                    Popup popup = new Popup();
-                    ImageView popupImageView = new ImageView(imageView.getImage());
-                    popupImageView.setFitWidth(500);
-                    popupImageView.setPreserveRatio(true);
-                    popup.getContent().add(popupImageView);
-                    
-                    //Obtengo la escena para deshabilitar el click del raton
-                    Scene scene = tablaArchivos.getScene();
-                    scene.getRoot().setDisable(true);
-                    
-                    
-                    popup.show(tablaArchivos.getScene().getWindow());
-                    popup.setOnHidden(hiddenEvent -> {
-                        popup.hide();
-                        scene.getRoot().setDisable(false);
-                    });
-                });              
-            }
-        }
-
-        // Agregar un ChangeListener a la propiedad widthProperty y heightProperty del GridPane
-    tablaArchivos.widthProperty().addListener((obs, oldVal, newVal) -> {
-        for (Node node : tablaArchivos.getChildren()) {
-            if(node instanceof ImageView){
-                ImageView imageView = (ImageView) node;
-                imageView.setFitWidth(newVal.doubleValue() / 3);
-            }
-        }
-    });
-
-    tablaArchivos.heightProperty().addListener((var obs, var oldVal, var newVal) -> {
-        for (Node node : tablaArchivos.getChildren()) {
-            if(node instanceof ImageView){
-                ImageView imageView = (ImageView) node;
-                imageView.setFitHeight(newVal.doubleValue() / 3);
-            }
-        }
-    });
     }    
+    
+    public void initialize(){
+            //Obtengo los datos de la solucion
+            List<Solucion> solucion = SolucionController.getInstance().obtenerSolucion(idSol);
+            for(Solucion res: solucion){
+                codigoSol=res.getCodigo();
+                descripcion=res.getDescripcion();
+                archivos=res.getArchivos();
+                fechaSol=res.getFechaSubida();
+                usosSol=res.getPuntos();
+
+                codigoErr=res.getError_Tecnologia().getError().getCodigo();
+            }
+
+            //Frame para el codigo de error
+            JInternalFrame iFrame = new PanelCodigoSolucion(codigoErr,SyntaxConstants.SYNTAX_STYLE_JAVA);
+            iFrame.setPreferredSize(new Dimension(550,400));
+            iFrame.setSize(20, 20);
+            iFrame.setVisible(true);
+            iFrame.setBorder(null);
+            ((javax.swing.plaf.basic.BasicInternalFrameUI) iFrame.getUI()).setNorthPane(null);
+            SwingNode swingNode = new SwingNode();
+
+            swingNode.setContent(iFrame);
+            anchor1.getChildren().add(swingNode); 
+
+            //Frame para el codigo de solucion
+            JInternalFrame iFrame2 = new PanelCodigoSolucion(codigoSol,SyntaxConstants.SYNTAX_STYLE_JAVA);
+            iFrame2.setPreferredSize(new Dimension(550,400));
+            iFrame2.setSize(20, 20);
+            iFrame2.setVisible(true);
+            iFrame2.setBorder(null);
+            ((javax.swing.plaf.basic.BasicInternalFrameUI) iFrame2.getUI()).setNorthPane(null);
+            SwingNode swingNode2 = new SwingNode();
+
+            swingNode2.setContent(iFrame2);
+            optCodigo.getChildren().add(swingNode2);
+
+           //Cargo las imagenes en el GridPane
+            for(Archivo arch:archivos){
+                if(this.checkIfFileHasExtension(arch.getUrl())){
+                    ImageView imageView=new ImageView(new Image(arch.getUrl()));
+                    imageView.setCursor(Cursor.HAND);
+                    imageView.setPreserveRatio(true);
+                    tablaArchivos.addRow(0, imageView);
+                }else{
+                    WebView webView=new WebView();
+                    WebEngine webEngine = webView.getEngine();
+                    webEngine.load(arch.getUrl());
+                    archivosWeb.getChildren().add(webView);
+                }
+            }
+
+
+
+            //Cargar datos en panel de detalles
+            Text tituloDetalles=new Text("Estos son los detalles de la solucion \n");
+            Text detalles=new Text("Creado por: Persona 1 \nDescripcion: "+descripcion);
+            tituloDetalles.setFill(Color.BLACK);
+            tituloDetalles.setFont(Font.font("Helvetica", FontPosture.ITALIC, 19));
+            detalles.setFill(Color.GRAY);
+            detalles.setFont(Font.font("Calibri", FontPosture.ITALIC, 15));
+            txtFlowDetalles.getChildren().addAll(tituloDetalles,detalles);
+            tablaArchivos.setGridLinesVisible(true);
+
+            txtUsosSolucion.setText("Usos: "+usosSol);
+            txtFechaSolucion.setText(txtFechaSolucion.getText()+fechaSol.toString());
+
+
+            //Creo el popup para expandir imagenes
+            for (Node node : tablaArchivos.getChildren()) {
+                if (node instanceof ImageView) {
+                    ImageView imageView = (ImageView) node;
+                    imageView.setOnMouseClicked(event -> {
+                        Popup popup = new Popup();
+                        ImageView popupImageView = new ImageView(imageView.getImage());
+                        popupImageView.setFitWidth(500);
+                        popupImageView.setPreserveRatio(true);
+                        popup.getContent().add(popupImageView);
+
+                        //Obtengo la escena para deshabilitar el click del raton
+                        Scene scene = tablaArchivos.getScene();
+                        scene.getRoot().setDisable(true);
+
+
+                        popup.show(tablaArchivos.getScene().getWindow());
+                        popup.setOnHidden(hiddenEvent -> {
+                            popup.hide();
+                            scene.getRoot().setDisable(false);
+                        });
+                    });              
+                }
+            }
+
+            // Agregar un ChangeListener a la propiedad widthProperty y heightProperty del GridPane
+        tablaArchivos.widthProperty().addListener((obs, oldVal, newVal) -> {
+            for (Node node : tablaArchivos.getChildren()) {
+                if(node instanceof ImageView){
+                    ImageView imageView = (ImageView) node;
+                    imageView.setFitWidth(newVal.doubleValue() / 3);
+                }
+            }
+        });
+
+        tablaArchivos.heightProperty().addListener((var obs, var oldVal, var newVal) -> {
+            for (Node node : tablaArchivos.getChildren()) {
+                if(node instanceof ImageView){
+                    ImageView imageView = (ImageView) node;
+                    imageView.setFitHeight(newVal.doubleValue() / 3);
+                }
+            }
+        });
+    }
     
     private boolean checkIfFileHasExtension(String s) {
         String[] extensiones={"jpg","png","jpeg","webx"};

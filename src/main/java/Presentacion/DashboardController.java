@@ -59,9 +59,11 @@ public class DashboardController implements Initializable {
         vistas.put("Subir Error", "/fxml/subirError.fxml");
         vistas.put("Vista 2", "/fxml/Vista2.fxml");
         vistas.put("Detalle Solucion", "/fxml/detalleSolucion.fxml");
+        vistas.put("Error", "/fxml/detalleError.fxml");
+        
         
         // Agregar elementos al ComboBox
-        selectorVista.getItems().addAll("Subir Error", "Vista 2", "Detalle Solucion");
+        selectorVista.getItems().addAll("Subir Error", "Vista 2", "Detalle Solucion","Error");
         
         // Listener para cambio de selección en el ComboBox
         selectorVista.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -81,6 +83,10 @@ public class DashboardController implements Initializable {
                     System.out.println("no llega");
                 }
                     subirErrorController.setTipoPantalla("Modificar Error");
+                }
+                if(fxml.equals("/fxml/detalleError.fxml")){
+                    DetalleErrorController detalleErrorController=(DetalleErrorController)loader.getController();
+                    detalleErrorController.initialize(contentAPane);
                 }
                 
                 contentAPane.getChildren().setAll(nuevaVista);

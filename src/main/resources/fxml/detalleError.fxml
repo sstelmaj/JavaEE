@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" fx:id="anchPaneGeneral" prefHeight="701.0" prefWidth="1382.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentacion.DetalleErrorController">
+   <children>
+      <AnchorPane layoutX="66.0" layoutY="84.0" prefHeight="557.0" prefWidth="639.0">
+         <children>
+            <Accordion prefHeight="557.0" prefWidth="639.0">
+              <panes>
+                <TitledPane animated="false" text="Descripcion">
+                  <content>
+                    <AnchorPane fx:id="anchPaneDescrip" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  </content>
+                </TitledPane>
+                <TitledPane animated="false" text="Salida por consola">
+                  <content>
+                    <AnchorPane fx:id="anchPaneConsola" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  </content>
+                </TitledPane>
+                <TitledPane animated="false" text="Archivos adicionales">
+                  <content>
+                    <AnchorPane fx:id="anchPaneArchivos" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  </content>
+                </TitledPane>
+                  <TitledPane animated="false" text="Referencias externas">
+                     <content>
+                        <AnchorPane fx:id="anchPaneRefExt" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                     </content>
+                  </TitledPane>
+                  <TitledPane animated="false" text="Codigo">
+                     <content>
+                        <AnchorPane fx:id="anchPaneCodigo" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                     </content>
+                  </TitledPane>
+              </panes>
+            </Accordion>
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="828.0" layoutY="84.0" prefHeight="557.0" prefWidth="399.0">
+         <children>
+            <ScrollPane layoutY="73.0" prefHeight="478.0" prefWidth="399.0">
+              <content>
+                <AnchorPane fx:id="anchPaneLista" minHeight="0.0" minWidth="0.0" prefHeight="476.0" prefWidth="397.0">
+                     <children>
+                        <VBox fx:id="lista" prefHeight="478.0" prefWidth="399.0">
+                           <children>
+                              <AnchorPane prefHeight="90.0" prefWidth="400.0" />
+                           </children></VBox>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </ScrollPane>
+            <TextField fx:id="buscador" layoutX="14.0" layoutY="26.0" prefHeight="31.0" prefWidth="368.0" />
+         </children>
+      </AnchorPane>
+      <Text layoutX="957.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Soluciones">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Text>
+      <Text fx:id="txtTitulo" layoutX="287.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Titulo del error">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Text>
+      <Text fx:id="txtFechaModif" layoutX="66.0" layoutY="669.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ultima modificación: " />
+   </children>
+</AnchorPane>

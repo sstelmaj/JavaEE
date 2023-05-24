@@ -24,7 +24,7 @@ public class SolucionController {
         private static final Conexion con=Conexion.getInstance();
     }
     
-     public List<Solucion> obtenerSolucion(String id){
+     public List<Solucion> obtenerSolucion(long id){
         List<Solucion> resultado=null;
         EntityManager em= SolucionControllerHolder.con.getEntity();
         em.getTransaction().begin();
