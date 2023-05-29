@@ -2,11 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
  */
-package Presentacion;
+package Presentacion.Controllers;
 
 import Logica.Controladores.UsuarioController;
+import Persistencia.Sesion;
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashSet;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -47,12 +49,14 @@ public class LoginController implements Initializable {
     public void login(ActionEvent event) throws IOException {
         String mail = usernameField.getText();
         String password = passwordField.getText();
-        
+            
         if (UsuarioController.getInstance().iniciarSesion(mail, password) == true){
+            
+        Sesion.setUser(mail);
             
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Dashboard.fxml"));
         Parent root = loader.load();
-
+            
         // Crea una nueva escena y asigna la escena al escenario
         Scene scene = new Scene(root);
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -66,8 +70,8 @@ public class LoginController implements Initializable {
             alert.setContentText("El usuario o la contraseña son incorrectos. Por favor, inténtelo de nuevo.");
             alert.showAndWait();
             
-            usernameField.setText("");
-            passwordField.setText("");
+            usernameField.clear();
+            passwordField.clear();
         }
     }
         

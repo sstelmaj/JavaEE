@@ -2,12 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
  */
-package Presentacion;
+package Presentacion.Controllers;
 
 import Logica.Clases.Solucion;
 import Logica.Controladores.ErrorController;
 import Logica.Controladores.SolucionController;
-import Persistencia.Conexion;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -21,7 +20,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 
 /**
  * FXML Controller class
@@ -46,7 +44,7 @@ public class DashboardController implements Initializable {
         // TODO
           try{
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("/fxml/subirError.fxml"));
+            loader.setLocation(getClass().getResource("/fxml/subirError.fxml"));
             Parent nuevaVista = loader.load();
             SubirErrorController subirErrorController = (SubirErrorController)loader.getController();
             subirErrorController.setPantalla("Subir Error");
@@ -59,24 +57,26 @@ public class DashboardController implements Initializable {
           
           
           
+        // Agregar elementos al ComboBox
         vistas.put("Subir Error", "/fxml/subirError.fxml");
         vistas.put("Modificar Error", "/fxml/subirError.fxml");
         vistas.put("Vista 2", "/fxml/Vista2.fxml");
         vistas.put("Subir Solucion", "/fxml/subirSolucion.fxml");
         vistas.put("Modificar Solucion", "/fxml/subirSolucion.fxml");
+        vistas.put("Admin", "/fxml/AdminDashboard.fxml");
         vistas.put("Detalle Solucion", "/fxml/detalleSolucion.fxml");
         vistas.put("Crear Etiqueta", "/fxml/crearOrganizarEtiqueta.fxml");
         
         
         // Agregar elementos al ComboBox
-        selectorVista.getItems().addAll("Subir Error", "Modificar Error","Subir Solucion","Modificar Solucion","Vista 2", "Detalle Solucion","Crear Etiqueta");
+        selectorVista.getItems().addAll("Subir Error", "Modificar Error","Subir Solucion","Modificar Solucion","Vista 2", "Detalle Solucion","Crear Etiqueta", "Admin");
         
         // Listener para cambio de selección en el ComboBox
         selectorVista.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
              fxml = vistas.get(newValue); // Obtener ruta del fxml correspondiente al valor seleccionado
             try{
                 FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(Main.class.getResource(fxml));
+                loader.setLocation(getClass().getResource(fxml));
                 Parent nuevaVista = loader.load();
                 
                 if(newValue.equals("Modificar Error")){

@@ -2,17 +2,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
  */
-package Presentacion;
+package Presentacion.Controllers;
 
 import Logica.Clases.Etiqueta;
 import Logica.Clases.*;
 import Logica.Controladores.EtiquetaController;
 import Persistencia.Conexion;
+import Presentacion.RSTA;
 import java.awt.Dimension;
-import java.io.File;
-import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -38,7 +36,6 @@ import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.scene.Scene;
@@ -56,12 +53,9 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.swing.JInternalFrame;
 import jdk.nashorn.api.scripting.JSObject;
@@ -78,13 +72,12 @@ import org.fife.ui.rtextarea.RTextScrollPane;
  *
  * @author joaco
  */
-public class SubirErrorController implements Initializable {
+public class SubirSolucionController implements Initializable {
     
     
     @FXML
     private AnchorPane anchor1;
     private WebView web1;
-    @FXML
     private ScrollPane scrollConsole;
     private AnchorPane anchorConsole;
     @FXML
@@ -96,7 +89,6 @@ public class SubirErrorController implements Initializable {
     @FXML
     private DatePicker inputFecha;
     private ComboBox<String> comboTecnologia;
-    @FXML
     private TextField textFieldTitulo;
     @FXML
     private Button botonCancelar;
@@ -106,10 +98,6 @@ public class SubirErrorController implements Initializable {
     private TitledPane titledPaneDescripcion;
     @FXML
     private Accordion acordion;
-    @FXML
-    private WebView linkWebView1;
-    @FXML
-    private Button linkButtonVisualizar1;
     private ListView<String> listaEtiquetas;
     
     private SwingNode swingNode;
@@ -117,7 +105,6 @@ public class SubirErrorController implements Initializable {
     private SwingNode swingNodeConsole;
     @FXML
     private TextArea textDescripcion;
-    @FXML
     private TextField textFieldRepositorio;
     private TextField filtroEtiquetas;
     
@@ -126,6 +113,8 @@ public class SubirErrorController implements Initializable {
    
     @FXML
     private ListView<String> listaCompletado;
+    @FXML
+    private AnchorPane anchorPrueba;
     private AnchorPane anchorPrueba2;
     
     private Stage popupStage;
@@ -141,31 +130,15 @@ public class SubirErrorController implements Initializable {
     @FXML
     private Label textTitulo;
     
-    private Logica.Clases.Error errorModificar;
+    private Solucion solucionModificar;
     
     private Logica.Clases.Error error;
     
-    private Solucion solucion_asociada ;
+    private SubirErrorController error_controller;
+    
+    private Solucion crear_solucion;
     
     private StringProperty tipoPantallaProperty = new SimpleStringProperty("");
-    
-    private StringProperty actualizador = new SimpleStringProperty("");
-    @FXML
-    private AnchorPane anchorFile;
-    @FXML
-    private Button botonArchivo;
-    private Label textArchivoSeleccionado;
-    
-    public final void setActualizador(String descripcion) {
-        actualizador.set(descripcion);
-    }
-   
-    @FXML
-    private Button botonCrearSolucion;
-    @FXML
-    private Button botonVerSolucion;
-    
-    private Archivo archivo;
 
     public StringProperty tipoPantallaProperty() {
         return tipoPantallaProperty;
@@ -179,12 +152,12 @@ public class SubirErrorController implements Initializable {
         tipoPantallaProperty.set(tipoPantalla);
     }
     
-    public final void setErrorModificar(Logica.Clases.Error error) {
-        this.errorModificar = error;
+    public final void setSolucionModificar(Solucion solucion) {
+        this.solucionModificar = solucion;
     }
     
-    public final void setSolucion(Solucion solucion) {
-        this.solucion_asociada = solucion;
+    public final void setErrorController(SubirErrorController error_controller) {
+        this.error_controller = error_controller;
     }
    
     /**
@@ -195,23 +168,19 @@ public class SubirErrorController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
          //para el primer renderizado visual
          tipoPantallaProperty.addListener((observable, oldValue, newValue) -> {
-            if (newValue=="Modificar Error") {
+            if (newValue=="Modificar Solucion") {
                 
                
-                System.out.println("Modificar Error");
+                System.out.println("Modificar Solucion");
                 tipoPantalla =newValue;
                 textTitulo.setText(newValue);
                 botonIngresar.setText("Guardar Cambios");
-                botonCrearSolucion.setVisible(false);
-                botonVerSolucion.setVisible(false);
                
-                if(errorModificar != null){
-                    textDescripcion.setText(errorModificar.getDescripcion());
-                    textFieldTitulo.setText(errorModificar.getTitulo());
-                     linkTextFieldUrl.setText(errorModificar.getLink());
-                     textFieldRepositorio.setText(errorModificar.getRepositorio());
+                if(solucionModificar != null){
+                    textDescripcion.setText(solucionModificar.getDescripcion());
+                     linkTextFieldUrl.setText(solucionModificar.getLink());
                     
-                    String fechaSubida = errorModificar.getFechaSubida().toString();
+                    String fechaSubida = solucionModificar.getFechaSubida().toString();
                     if(fechaSubida != null){
                        DateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
                         String fechaString;
@@ -225,23 +194,17 @@ public class SubirErrorController implements Initializable {
                             System.out.println(fechaLocalDate); 
                                 
                         } catch (ParseException ex) {
-                            Logger.getLogger(SubirErrorController.class.getName()).log(Level.SEVERE, null, ex);
+                            Logger.getLogger(SubirSolucionController.class.getName()).log(Level.SEVERE, null, ex);
                         }
 
                     }
-                    JInternalFrame internalFrameConsola = (JInternalFrame) swingNodeConsole.getContent();
-       
-                    //obtenemos el contenido de el internal frame
-                    if (internalFrameConsola instanceof RSTA) {
-                        RSTA rsta = (RSTA) internalFrameConsola;
-                        rsta.setTextAreaContenido(errorModificar.getConsola());
-                    }   
+                       
                     JInternalFrame internalFrameCodigo = (JInternalFrame) swingNode.getContent();
        
                     //obtenemos el contenido de el internal frame
                     if (internalFrameCodigo instanceof RSTA) {
                         RSTA rsta = (RSTA) internalFrameCodigo;
-                        rsta.setTextAreaContenido(errorModificar.getCodigo());
+                        rsta.setTextAreaContenido(solucionModificar.getCodigo());
                               
                     } 
 
@@ -253,21 +216,15 @@ public class SubirErrorController implements Initializable {
                 tipoPantalla =newValue;
                 textTitulo.setText(newValue);
             }
+            else if(newValue=="Solucion Asociada"){
+                System.out.println("Solucion asociada");
+                tipoPantalla =newValue;
+                textTitulo.setText(newValue);
+                botonIngresar.setText("Adjuntar");
+            }
               
         });
-          actualizador.addListener((observable, oldValue, newValue) -> {
-               if (newValue!=null) {
-                   
-                   if(this.solucion_asociada != null){
-                   System.out.println("Llego la solucion asociada");
-                   }else{
-                       System.out.println("no llego");
-                   }
-               }else{
-               
-                   System.out.println("No se actualizo");
-               }
-          });
+         
          
         //para poder filtrar luego aca obtengo el observable list para el filtrado
         try {
@@ -335,15 +292,10 @@ public class SubirErrorController implements Initializable {
         
         rstaCode();
         
-        rstaConsola();
+        //rstaConsola();
         
          
-        
-        
-        
-        
-        
-       //  anchorFile.getChildren().add(fileChooser);
+     
       
     }  
     
@@ -369,9 +321,9 @@ public class SubirErrorController implements Initializable {
        JInternalFrame internalFrame = (JInternalFrame) swingNode.getContent();
        
        
-             this.error = new Logica.Clases.Error();
-        if(tipoPantalla.equals("Modificar Error")){
-           this.error = this.errorModificar;
+             this.crear_solucion = new Solucion();
+        if(tipoPantalla.equals("Modificar Solucion")){
+           this.crear_solucion = this.solucionModificar;
            System.out.println("Quiere Modificar");
        }
         //obtenemos el contenido de el internal frame
@@ -384,31 +336,14 @@ public class SubirErrorController implements Initializable {
 
             System.out.print("codigo es"+contenido);
             //seteamos el contenido
-            error.setCodigo(contenido);
+            crear_solucion.setCodigo(contenido);
         } else {
             
         }
         
-        error.setTitulo(textFieldTitulo.getText());
-     
-        JInternalFrame internalFrameConsola = (JInternalFrame) swingNodeConsole.getContent();
        
-        //obtenemos el contenido de el internal frame
-        if (internalFrameConsola instanceof RSTA) {
-            RSTA rsta = (RSTA) internalFrameConsola;
-            RSyntaxTextArea textArea = rsta.getTextArea();
-
-            // Accedemos al text area
-            String contenido = textArea.getText();
-
-            System.out.print("consola es"+contenido);
-            //seteamos el contenido
-            error.setConsola(contenido);
-        } else {
-            
-        }
     
-        error.setDescripcion(textDescripcion.getText());
+        crear_solucion.setDescripcion(textDescripcion.getText());
         
     //    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", new Locale("es")); (util para despues o capaz el input fecha lo modifica)
 
@@ -417,37 +352,32 @@ public class SubirErrorController implements Initializable {
         if(inputFecha.getValue()!= null){
             Date date = Date.from(inputFecha.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
             System.out.println(date);
-            error.setFechaSubida(date);
+            crear_solucion.setFechaSubida(date);
         }
-        error.setLink(linkTextFieldUrl.getText());
-        error.setRepositorio(textFieldRepositorio.getText());
-        if(this.archivo != null){
-            List<Archivo> archivos =  new ArrayList<>();
-            archivos.add(archivo);
-            error.setArchivos(archivos);
+        
+        crear_solucion.setLink(linkTextFieldUrl.getText());
+        
+        if(tipoPantalla.equals("Solucion Asociada")){
+            if(this.error_controller != null){
+                error_controller.setSolucion(crear_solucion);
+                error_controller.setActualizador("recibir solucion");
+            }
         }
+        else{
             try { 
-            Conexion.getInstance().merge(error);
+            Conexion.getInstance().persist(crear_solucion);
             } catch (Exception e) {
                 // Manejo de la excepción
                 e.printStackTrace();
             }
-            System.out.println(tipoPantalla);
-        if(tipoPantalla.equals("Subir Error")){
-            if(this.solucion_asociada !=null){
-                try { 
-                   
-                Conexion.getInstance().persist(this.solucion_asociada);
-                System.out.println("sube la solucion adjunta");
-                } catch (Exception e) {
-                    // Manejo de la excepción
-                    e.printStackTrace();
-                }
-            }
+ 
+        
         }
+            
     }
 
     
+
 
     //filtrado de las etiquetas para ingresar en la descripcion
     private void filterListViewD(ListView<String> listView, String filterText, ObservableList<String> items) {
@@ -536,69 +466,5 @@ public class SubirErrorController implements Initializable {
            System.out.println(tipoPantalla);
 
         }      
-
-    @FXML
-    private void clickCrearSolucion(ActionEvent event) {
-        
-        try{
-            Stage crear_solucion = new Stage();
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("/fxml/subirSolucion.fxml"));
-            
-            
-            
-            Pane ventana = (Pane) loader.load();
-            
-            //Show the scene containing the root layout
-            Scene scene = new Scene(ventana);
-            crear_solucion.setTitle("Crear Solucion");
-            crear_solucion.setResizable(false);
-            crear_solucion.setScene(scene);
-            
-            SubirSolucionController subirSolucionController = (SubirSolucionController)loader.getController();
-            if(subirSolucionController != null){
-                subirSolucionController.setTipoPantalla("Solucion Asociada");
-                subirSolucionController.setErrorController(this);
-                System.out.println("Se creo el controlador");
-            }else{
-                System.out.println("No se creo el controlador");
-            }
-            crear_solucion.show();
-            
-        }catch(IOException e){
-            System.out.println(e.getMessage());
-        
-        }
-    }
-
-    @FXML
-    private void clickAbrir(ActionEvent event) throws IOException {
-        
-        FileChooser fileChooser = new FileChooser();
-        Archivo archivo = new Archivo();
-        
-         File selectedFile = fileChooser.showOpenDialog(Main.getStage()); 
-        
-        if(selectedFile != null){
-            String nombre = selectedFile.getName();
-            archivo.setNombre(nombre);
-            
-            String extension = "";
-            int i = nombre.lastIndexOf(".");
-
-            if (i > 0) {
-            extension = nombre.substring(i + 1);
-            }
-            archivo.setExtension(extension);
-
-            byte[] fileContent = Files.readAllBytes(selectedFile.toPath());
-            
-            archivo.setContenidoByte(fileContent);
-            
-            System.out.println("nombre"+nombre+"exttension"+extension);
-        //    textArchivoSeleccionado.setText(nombre);
-            this.archivo = archivo;
-        }
-       
-    }
+    
 }

@@ -4,11 +4,9 @@
  */
 package Presentacion;
 
-import java.awt.GraphicsEnvironment;
 import java.io.IOException;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
-//import static javafx.application.Aplication.launch;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -24,7 +22,7 @@ public class Main extends Application { //iniciador
     @Override
     public void start(Stage primaryStage){
         //UI manager para darle un toque mas moderno a los componentes de swing
-          try {
+        try {
            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
             ex.printStackTrace();
@@ -43,8 +41,7 @@ public class Main extends Application { //iniciador
             this.stage = primaryStage;
             
         }catch(IOException e){
-            System.out.println(e.getMessage());
-        
+            e.printStackTrace();
         }
         
     }
