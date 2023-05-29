@@ -26,14 +26,25 @@ import javax.persistence.Temporal;
 @Entity
 public class Solucion implements Serializable {
 
-    @ManyToOne
-    private Error_Tecnologia error_Tecnologia;
+    @OneToMany(mappedBy = "solucion")
+    private List<Solucion_Etiqueta> solucion_Etiquetas;
+
+  
     
     @ManyToOne
     private Usuario usuario;
     
     @OneToMany
     private List<Archivo> archivos;
+
+    public List<Solucion_Etiqueta> getSolucion_Etiquetas() {
+        return solucion_Etiquetas;
+    }
+
+    public void setSolucion_Etiquetas(List<Solucion_Etiqueta> solucion_Etiquetas) {
+        this.solucion_Etiquetas = solucion_Etiquetas;
+    }
+    
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -68,13 +79,6 @@ public class Solucion implements Serializable {
     }
     
 
-    public Error_Tecnologia getError_Tecnologia() {
-        return error_Tecnologia;
-    }
-
-    public void setError_Tecnologia(Error_Tecnologia error_Tecnologia) {
-        this.error_Tecnologia = error_Tecnologia;
-    }
 
     public Usuario getUsuario() {
         return usuario;

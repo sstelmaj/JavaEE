@@ -8,6 +8,7 @@ package Logica.Clases;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,9 +18,9 @@ import javax.persistence.OneToMany;
 
 
 //ESTO A LA LARGA PUEDE LLEGAR A SER UNA CLASE SI QUEREMOS AGREGAR MAS CATEGORIAS DE FORMA DINAMICA
-enum CATEGORIA{
-    
-}
+//enum CATEGORIA{
+//    
+//}
 
 /**
  *
@@ -27,15 +28,42 @@ enum CATEGORIA{
  */
 @Entity
 public class Etiqueta implements Serializable {
+
+    private String padre;
+
+
+    @OneToMany(mappedBy = "etiqueta")
+    private List<Solucion_Etiqueta> solucion_Etiquetas;
     
     @OneToMany(mappedBy = "etiqueta")
     private List<Error_Etiqueta> error_Etiquetas;
+    
+    
+    @OneToMany(cascade = CascadeType.PERSIST)
+    private List<Etiqueta> sub_etiqueta;
+
+    public List<Solucion_Etiqueta> getSolucion_Etiquetas() {
+        return solucion_Etiquetas;
+    }
+
+    public void setSolucion_Etiquetas(List<Solucion_Etiqueta> solucion_Etiquetas) {
+        this.solucion_Etiquetas = solucion_Etiquetas;
+    }
+
+    public List<Etiqueta> getSub_etiqueta() {
+        return sub_etiqueta;
+    }
+
+    public void setSub_etiqueta(List<Etiqueta> sub_etiqueta) {
+        this.sub_etiqueta = sub_etiqueta;
+    }
+    
 
     private static final long serialVersionUID = 1L;
     @Id
     private String nombre;
     
-    private CATEGORIA categoria;
+    //private CATEGORIA categoria;
 
     public String getNombre() {
         return nombre;
@@ -53,15 +81,13 @@ public class Etiqueta implements Serializable {
         this.error_Etiquetas = error_Etiquetas;
     }
 
-    public CATEGORIA getCategoria() {
-        return categoria;
+     public String getPadre() {
+        return padre;
     }
 
-    public void setCategoria(CATEGORIA categoria) {
-        this.categoria = categoria;
+    public void setPadre(String padre) {
+        this.padre = padre;
     }
-    
-    
     
 
     @Override

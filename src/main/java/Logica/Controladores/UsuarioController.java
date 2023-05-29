@@ -6,11 +6,8 @@ package Logica.Controladores;
 
 import Logica.Clases.Usuario;
 import Persistencia.Conexion;
-import java.util.Iterator;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 public class UsuarioController {
     
@@ -39,6 +36,10 @@ public class UsuarioController {
         return resultado;
     }
     
+    public void actualizarUsuario(Usuario usuario) {
+        EntityManager em = Conexion.getInstance().getEntity();
+        em.merge(usuario);
+    }
     public boolean iniciarSesion(String mail, String password){
         List<Usuario> usuarios = UsuarioController.getInstance().obtenerUsuarios();
         for (Usuario u : usuarios) {

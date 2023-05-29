@@ -4,11 +4,9 @@
  */
 package Presentacion;
 
-import java.awt.GraphicsEnvironment;
 import java.io.IOException;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
-//import static javafx.application.Aplication.launch;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -20,18 +18,18 @@ import javax.swing.UnsupportedLookAndFeelException;
  * @author joaco
  */
 public class Main extends Application { //iniciador
-
+    private static Stage stage;
     @Override
     public void start(Stage primaryStage){
         //UI manager para darle un toque mas moderno a los componentes de swing
-          try {
+        try {
            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
             ex.printStackTrace();
         }
         try{
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("/fxml/Login.fxml"));
+            loader.setLocation(Main.class.getResource("/fxml/Dashboard.fxml"));
             Pane ventana = (Pane) loader.load();
             
             //Show the scene containing the root layout
@@ -40,16 +38,19 @@ public class Main extends Application { //iniciador
             primaryStage.setResizable(false);
             primaryStage.setScene(scene);
             primaryStage.show();
+            this.stage = primaryStage;
             
         }catch(IOException e){
-            System.out.println(e.getMessage());
-        
+            e.printStackTrace();
         }
         
     }
     public static void main(String[] args){
         launch(args);
         
+    }
+    public static Stage getStage(){
+        return stage;
     }
     
 }

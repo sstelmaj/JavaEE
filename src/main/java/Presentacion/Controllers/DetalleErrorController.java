@@ -2,12 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
  */
-package Presentacion;
+package Presentacion.Controllers;
 
 import Logica.Clases.Archivo;
 import Logica.Clases.Solucion;
 import Logica.Clases.Error;
 import Logica.Controladores.ErrorController;
+import Presentacion.PanelCodigoSolucion;
 import java.awt.Dimension;
 import java.io.IOException;
 import java.net.URL;

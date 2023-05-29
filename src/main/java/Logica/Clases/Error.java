@@ -37,8 +37,7 @@ public class Error implements Serializable {
     @OneToMany(mappedBy = "error")
     private List<Error_Etiqueta> error_Etiquetas;
 
-    @OneToMany(mappedBy = "error")
-    private List<Error_Tecnologia> error_Tecnologias;
+   
     
     @OneToMany
     private List<Archivo> archivos;
@@ -97,13 +96,7 @@ public class Error implements Serializable {
         this.error_Etiquetas = error_Etiquetas;
     }
 
-    public List<Error_Tecnologia> getError_Tecnologias() {
-        return error_Tecnologias;
-    }
-
-    public void setError_Tecnologias(List<Error_Tecnologia> error_Tecnologias) {
-        this.error_Tecnologias = error_Tecnologias;
-    }
+   
 
     public List<Archivo> getArchivos() {
         return archivos;

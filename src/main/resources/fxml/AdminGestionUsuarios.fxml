@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentacion.Controllers.AdminUsuariosController">
+   <children>
+      <Text fx:id="txtTitle" layoutX="257.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Listado Usuarios" />
+      <TableView fx:id="tableUsuarios" layoutX="20.0" layoutY="47.0" prefHeight="333.0" prefWidth="561.0">
+        <columns>
+          <TableColumn fx:id="colNombres" prefWidth="101.0" resizable="false" text="Nombre" />
+            <TableColumn fx:id="colApellidos" prefWidth="107.0" resizable="false" text="Apellido" />
+            <TableColumn fx:id="colCorreos" prefWidth="191.0" resizable="false" text="Correo" />
+            <TableColumn fx:id="colActivos" prefWidth="48.0" resizable="false" text="Activo" />
+            <TableColumn fx:id="colPerfiles" prefWidth="113.0" resizable="false" text="Perfil" />
+        </columns>
+      </TableView>
+      <Button fx:id="btnSave" layoutX="473.0" layoutY="16.0" mnemonicParsing="false" onAction="#saveChanges" text="Guardar Cambios" />
+   </children>
+</AnchorPane>

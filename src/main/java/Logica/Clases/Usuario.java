@@ -12,8 +12,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -39,6 +37,7 @@ public class Usuario implements Serializable {
     private String apellido;
     private String mail;
     private String password;
+    private Boolean active = Boolean.TRUE;
     
     @ManyToOne
     private Perfil perfil;
@@ -107,10 +106,14 @@ public class Usuario implements Serializable {
     public void setPerfil(Perfil perfil) {
         this.perfil = perfil;
     }
-    
-    
-    
-    
+
+    public Boolean isActive() {
+        return active;
+    }
+
+    public void setIsActive(Boolean active) {
+        this.active = active;
+    }
     
 
     @Override
