@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="545.0" prefWidth="1064.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="Presentacion.DashboardController">
+<AnchorPane id="AnchorPane" prefHeight="545.0" prefWidth="1064.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="Presentacion.Controllers.DashboardController">
     <stylesheets>
         <URL value="@/styles/dashboard.css" />
     </stylesheets>

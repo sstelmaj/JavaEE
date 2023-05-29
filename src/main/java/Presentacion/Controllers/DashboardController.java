@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
  */
-package Presentacion;
+package Presentacion.Controllers;
 
 import java.io.IOException;
 import java.net.URL;
@@ -15,7 +15,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 
 /**
  * FXML Controller class
@@ -38,7 +37,7 @@ public class DashboardController implements Initializable {
         // TODO
           try{
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("/fxml/subirError.fxml"));
+            loader.setLocation(getClass().getResource("/fxml/subirError.fxml"));
             Parent nuevaVista = loader.load();
             
             contentAPane.getChildren().setAll(nuevaVista);
@@ -52,16 +51,17 @@ public class DashboardController implements Initializable {
           
         vistas.put("Subir Error", "/fxml/subirError.fxml");
         vistas.put("Vista 2", "/fxml/Vista2.fxml");
+        vistas.put("Admin", "/fxml/AdminDashboard.fxml");
         
         // Agregar elementos al ComboBox
-        selectorVista.getItems().addAll("Subir Error", "Vista 2");
+        selectorVista.getItems().addAll("Subir Error", "Vista 2", "Admin");
         
         // Listener para cambio de selección en el ComboBox
         selectorVista.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             String fxml = vistas.get(newValue); // Obtener ruta del fxml correspondiente al valor seleccionado
             try{
                 FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(Main.class.getResource(fxml));
+                loader.setLocation(getClass().getResource(fxml));
                 Parent nuevaVista = loader.load();
                 contentAPane.getChildren().setAll(nuevaVista);
             }catch(IOException e){
