@@ -25,6 +25,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Accordion;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -38,6 +39,8 @@ import javafx.scene.text.TextFlow;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Popup;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 import javax.swing.JInternalFrame;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
@@ -74,18 +77,25 @@ public class DetalleSolucionController implements Initializable {
     @FXML
     private Text txtFechaSolucion;
     
-    String codigoSol,codigoErr,descripcion;
-    Date fechaSol;
-    int usosSol;
-    long idSol;
+    private String codigoSol,codigoErr,descripcion;
+    private Date fechaSol;
+    private int usosSol;
+    private long idSol;
     List<Archivo> archivos=null;
+    @FXML
+    private Button btnBack;
+    private Scene escenaPrevia;
     
     /**
      * Initializes the controller class.
      * @param id
      */
-     public void setId(long id){
+    public void setId(long id){
         this.idSol=id;
+    }
+     
+    public void setEscenaPrevia(Scene previa){
+        this.escenaPrevia=previa;
     }
     
     @Override
@@ -219,4 +229,12 @@ public class DetalleSolucionController implements Initializable {
             tablaArchivos.addRow(fil, nodes);
         }
     }*/
+
+    @FXML
+    private void regresar(ActionEvent event) {
+        if(this.escenaPrevia!=null){
+            Stage stage=(Stage)this.btnBack.getScene().getWindow();
+            stage.setScene(escenaPrevia);
+        }
+    }
 }

@@ -66,6 +66,7 @@ public class BusquedaSolucionController implements Initializable {
                 DetalleSolucionController subfileController = loader.getController();
                 
                 subfileController.setId(id);
+                subfileController.setEscenaPrevia(btnDetalle.getScene());
                 subfileController.initialize();
                 
                 Scene s=new Scene(subfileRoot);

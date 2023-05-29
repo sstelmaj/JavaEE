@@ -4,20 +4,41 @@
  */
 package Presentacion;
 
+import Logica.Clases.Archivo;
 import Logica.Clases.Solucion;
+import Logica.Clases.Error;
 import Logica.Controladores.ErrorController;
+import java.awt.Dimension;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
+import javafx.stage.Popup;
+import javax.swing.JInternalFrame;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 /**
  * FXML Controller class
@@ -50,6 +71,17 @@ public class DetalleErrorController implements Initializable {
     private Text txtFechaModif;
     
     private AnchorPane apPrincipal;
+    @FXML
+    private TextFlow txtFlowDescripcion;
+    @FXML
+    private TextFlow txtFlowConsola;
+    @FXML
+    private GridPane tablaArchivos;
+    
+    private long idError;
+    private String descripcion,codigo,consola;
+    private Date fechaModif;
+    private List<Archivo> archivos;
 
     /**
      * Initializes the controller class.
@@ -60,23 +92,136 @@ public class DetalleErrorController implements Initializable {
             
     }
     public void initialize(AnchorPane ap){
-        List<Solucion>soluciones=ErrorController.getInstance().obtenerSolucionesDelError(151);
+        List<Solucion>soluciones=ErrorController.getInstance().obtenerSolucionesDelError(151 /*idError*/);
+        List<Error> error=ErrorController.getInstance().obtenerError(151 /*idError*/);
+        for(Error e: error){
+            this.descripcion=e.getDescripcion();
+            this.codigo=e.getCodigo();
+            this.consola=e.getConsola();
+            this.archivos=e.getArchivos();
+            this.fechaModif=e.getFechaSubida();
+        }
+        
+        //Frame para el codigo de error
+        JInternalFrame iFrame = new PanelCodigoSolucion(this.codigo,SyntaxConstants.SYNTAX_STYLE_JAVA);
+        iFrame.setPreferredSize(new Dimension(550,400));
+        iFrame.setSize(20, 20);
+        iFrame.setVisible(true);
+        iFrame.setBorder(null);
+        ((javax.swing.plaf.basic.BasicInternalFrameUI) iFrame.getUI()).setNorthPane(null);
+        SwingNode swingNode = new SwingNode();
+
+        swingNode.setContent(iFrame);
+        anchPaneCodigo.getChildren().add(swingNode);
+        
+        
+        //Cargo las imagenes en el GridPane
+            for(Archivo arch:archivos){
+                if(this.checkIfFileHasExtension(arch.getUrl())){
+                    ImageView imageView=new ImageView(new Image(arch.getUrl()));
+                    imageView.setCursor(Cursor.HAND);
+                    imageView.setPreserveRatio(true);
+                    //Ver como cargar dinamicamente
+                    tablaArchivos.addRow(0, imageView);
+                }else{
+                    WebView webView=new WebView();
+                    WebEngine webEngine = webView.getEngine();
+                    webEngine.load(arch.getUrl());
+                    this.anchPaneRefExt.getChildren().add(webView);
+                }
+            }
+
+
+
+            //Cargar datos en panel de descripcion y consola
+            Text tituloDescripcion=new Text("Descripcion del error \n");
+            Text txtDescripcion=new Text("Creado por: Persona 1 \nDescripcion: "+descripcion);
+            tituloDescripcion.setFill(Color.BLACK);
+            tituloDescripcion.setFont(Font.font("Helvetica", FontPosture.ITALIC, 19));
+            txtDescripcion.setFill(Color.GRAY);
+            txtDescripcion.setFont(Font.font("Calibri", FontPosture.ITALIC, 15));
+            txtFlowDescripcion.getChildren().addAll(tituloDescripcion,txtDescripcion);
+            tablaArchivos.setGridLinesVisible(true);
+
+            Text txtConsola=new Text(this.consola);
+            txtConsola.setFill(Color.GRAY);
+            txtConsola.setFont(Font.font("Calibri", FontPosture.ITALIC, 15));
+            this.txtFlowConsola.getChildren().addAll(txtConsola);
+            
+            
+            this.txtFechaModif.setText(txtFechaModif.getText()+this.fechaModif.toString());
+
+
+            //Creo el popup para expandir imagenes
+            for (Node node : tablaArchivos.getChildren()) {
+                if (node instanceof ImageView) {
+                    ImageView imageView = (ImageView) node;
+                    imageView.setOnMouseClicked(event -> {
+                        Popup popup = new Popup();
+                        ImageView popupImageView = new ImageView(imageView.getImage());
+                        popupImageView.setFitWidth(500);
+                        popupImageView.setPreserveRatio(true);
+                        popup.getContent().add(popupImageView);
+
+                        //Obtengo la escena para deshabilitar el click del raton
+                        Scene scene = tablaArchivos.getScene();
+                        scene.getRoot().setDisable(true);
+
+
+                        popup.show(tablaArchivos.getScene().getWindow());
+                        popup.setOnHidden(hiddenEvent -> {
+                            popup.hide();
+                            scene.getRoot().setDisable(false);
+                        });
+                    });              
+                }
+            }
+
+            // Agregar un ChangeListener a la propiedad widthProperty y heightProperty del GridPane
+        tablaArchivos.widthProperty().addListener((obs, oldVal, newVal) -> {
+            for (Node node : tablaArchivos.getChildren()) {
+                if(node instanceof ImageView){
+                    ImageView imageView = (ImageView) node;
+                    imageView.setFitWidth(newVal.doubleValue() / 3);
+                }
+            }
+        });
+
+        tablaArchivos.heightProperty().addListener((var obs, var oldVal, var newVal) -> {
+            for (Node node : tablaArchivos.getChildren()) {
+                if(node instanceof ImageView){
+                    ImageView imageView = (ImageView) node;
+                    imageView.setFitHeight(newVal.doubleValue() / 3);
+                }
+            }
+        });
+    
         for(Solucion sol:soluciones){
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/busquedaSolucion.fxml"));
                 Parent subfileRoot = loader.load();
                 // Obtén el controlador del archivo subfile.fxml
                 BusquedaSolucionController subfileController = loader.getController();
-                System.out.println("Antes de setear datos");
-                subfileController.setDatos("Solucion de ejemplo", sol.getDescripcion(),sol.getId());
+                subfileController.setDatos("Solucion de ejemplo", sol.getDescripcion(), sol.getId());
                 subfileController.initialize(ap);
 
-                // Realiza cualquier configuración adicional en el subfileController si es necesario
+                
                 lista.getChildren().add(subfileRoot);
             }catch (IOException e) {
-                e.printStackTrace();
+                System.out.println(e);
             }  
         }
+        
+        //TODO: AGREGAR NOTA Y VER LAS NOTAS DEL ERROR
     
+    }
+    
+    private void setError(long id){
+        this.idError=id;
+    }
+    
+    private boolean checkIfFileHasExtension(String s) {
+        String[] extensiones={"jpg","png","jpeg","webx"};
+        return Arrays.stream(extensiones).anyMatch(entry -> s.endsWith(entry));
     }
 }
