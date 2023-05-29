@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.web.*?>
+<?import javafx.scene.chart.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="430.0" prefWidth="1112.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentacion.Controllers.crearEtiquetaController">
+    <stylesheets>
+        <URL value="@/styles/vista2.css" />
+    </stylesheets>
+   <children>
+      <ScrollPane layoutX="196.0" layoutY="68.0" prefHeight="280.0" prefWidth="264.0">
+         <content>
+            <TreeView fx:id="arbolEtiquetas" editable="true" prefHeight="278.0" prefWidth="262.0" />
+         </content>
+      </ScrollPane>
+      <Label layoutX="478.0" layoutY="24.0" text="Crear Etiqueta" />
+      <ScrollPane layoutX="512.0" layoutY="135.0" prefHeight="211.0" prefWidth="213.0">
+         <content>
+            <ListView fx:id="listaSubEtiquetas" prefHeight="208.0" prefWidth="211.0" />
+         </content>
+      </ScrollPane>
+      <Label layoutX="515.0" layoutY="68.0" text="Etiqueta" />
+      <TextField fx:id="textEtiquetaPadre" layoutX="595.0" layoutY="64.0" prefHeight="25.0" prefWidth="129.0" />
+      <Button fx:id="ingresarEtiqueta" layoutX="511.0" layoutY="358.0" mnemonicParsing="false" onAction="#clickIngresarEtiqueta" text="IngresarEtiqueta" />
+      <Label layoutX="515.0" layoutY="103.0" text="Sub Etiqueta" />
+      <TextField fx:id="textSubEtiqueta" layoutX="595.0" layoutY="99.0" prefHeight="25.0" prefWidth="129.0" />
+      <Button fx:id="agregarSubEtiqueta" layoutX="735.0" layoutY="99.0" mnemonicParsing="false" onAction="#clickAgregarSubEtiqueta" prefHeight="25.0" prefWidth="67.0" text="Agregar" />
+      <Button fx:id="verificarEtiqueta" layoutX="735.0" layoutY="64.0" mnemonicParsing="false" onAction="#clickVerificar" prefHeight="25.0" prefWidth="67.0" text="Verificar" />
+      <Button fx:id="botonQuitar" layoutX="735.0" layoutY="135.0" mnemonicParsing="false" onAction="#clickQuitar" prefHeight="25.0" prefWidth="67.0" text="Quitar" />
+      <Button layoutX="394.0" layoutY="358.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="67.0" text="Cancelar" />
+   </children>
+</AnchorPane>

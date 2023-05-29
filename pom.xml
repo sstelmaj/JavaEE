@@ -103,6 +103,12 @@
             <artifactId>javafx-media</artifactId>
             <version>11</version>
         </dependency>
+        
+        <dependency>
+            <groupId>me.davidthaler</groupId>
+            <artifactId>draggablejfxtreeview</artifactId>
+            <version>1.0</version>
+        </dependency>
 
     </dependencies>
      

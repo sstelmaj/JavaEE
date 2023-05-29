@@ -2,12 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
  */
-package Presentacion;
+package Presentacion.Controllers;
 
 import Logica.Clases.Archivo;
 import Logica.Clases.Solucion;
 import Logica.Controladores.SolucionController;
 import Persistencia.Conexion;
+import Presentacion.PanelCodigoSolucion;
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.net.URL;
@@ -95,7 +96,7 @@ public class DetalleSolucionController implements Initializable {
             fechaSol=res.getFechaSubida();
             usosSol=res.getPuntos();
             
-            codigoErr=res.getError_Tecnologia().getError().getCodigo();
+            //codigoErr=res.getError_Tecnologia().getError().getCodigo();
         }
         
         //Frame para el codigo de error

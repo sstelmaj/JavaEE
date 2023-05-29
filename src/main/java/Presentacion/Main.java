@@ -18,7 +18,7 @@ import javax.swing.UnsupportedLookAndFeelException;
  * @author joaco
  */
 public class Main extends Application { //iniciador
-
+    private static Stage stage;
     @Override
     public void start(Stage primaryStage){
         //UI manager para darle un toque mas moderno a los componentes de swing
@@ -29,7 +29,7 @@ public class Main extends Application { //iniciador
         }
         try{
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("/fxml/Login.fxml"));
+            loader.setLocation(Main.class.getResource("/fxml/Dashboard.fxml"));
             Pane ventana = (Pane) loader.load();
             
             //Show the scene containing the root layout
@@ -38,6 +38,7 @@ public class Main extends Application { //iniciador
             primaryStage.setResizable(false);
             primaryStage.setScene(scene);
             primaryStage.show();
+            this.stage = primaryStage;
             
         }catch(IOException e){
             e.printStackTrace();
@@ -47,6 +48,9 @@ public class Main extends Application { //iniciador
     public static void main(String[] args){
         launch(args);
         
+    }
+    public static Stage getStage(){
+        return stage;
     }
     
 }
