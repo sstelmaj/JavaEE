@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.shape.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentacion.Controllers.AdminDashboardController">
+   <children>
+      <Button fx:id="btnImportar" layoutX="1023.0" layoutY="35.0" mnemonicParsing="false" text="Importar Datos" />
+      <Button fx:id="btnExportar" layoutX="1148.0" layoutY="35.0" mnemonicParsing="false" text="Exportar Datos" />
+      <Button fx:id="btnUsuarios" layoutX="44.0" layoutY="35.0" mnemonicParsing="false" onAction="#gotoAdminUsuarios" text="Gestionar Usuarios" />
+      <PieChart fx:id="pieUsuarios" layoutX="65.0" layoutY="135.0" title="Actividad Usuarios" />
+      <Button fx:id="btnDescargar" layoutX="583.0" layoutY="608.0" mnemonicParsing="false" text="Descargar Graficas" />
+      <AreaChart fx:id="areaRegistros" layoutX="706.0" layoutY="135.0" title="Informe de Registros">
+        <xAxis>
+          <CategoryAxis side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis side="LEFT" />
+        </yAxis>
+      </AreaChart>
+   </children>
+</AnchorPane>
