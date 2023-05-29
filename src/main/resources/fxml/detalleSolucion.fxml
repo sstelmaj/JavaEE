@@ -63,5 +63,6 @@
       </AnchorPane>
       <Text fx:id="txtFechaSolucion" layoutX="691.0" layoutY="641.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fecha de subida: " />
       <Text fx:id="txtUsosSolucion" layoutX="1064.0" layoutY="640.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+      <Button fx:id="btnBack" layoutX="14.0" layoutY="33.0" mnemonicParsing="false" text="Volver" onAction="#regresar" />
    </children>
 </AnchorPane>

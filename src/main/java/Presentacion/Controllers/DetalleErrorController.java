@@ -6,27 +6,30 @@ package Presentacion.Controllers;
 
 import Logica.Clases.Archivo;
 import Logica.Clases.Solucion;
-import Logica.Controladores.SolucionController;
+import Logica.Clases.Error;
+import Logica.Controladores.ErrorController;
 import Presentacion.PanelCodigoSolucion;
 import java.awt.Dimension;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.embed.swing.SwingNode;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Accordion;
-import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
@@ -35,7 +38,6 @@ import javafx.scene.text.TextFlow;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Popup;
-import javafx.stage.Stage;
 import javax.swing.JInternalFrame;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
@@ -44,126 +46,111 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
  *
  * @author paulo
  */
-public class DetalleSolucionController implements Initializable {
+public class DetalleErrorController implements Initializable {
 
     @FXML
-    private AnchorPane anchor1;
+    private AnchorPane anchPaneGeneral;
     @FXML
-    private Accordion options;
+    private AnchorPane anchPaneDescrip;
     @FXML
-    private AnchorPane optCodigo;
+    private AnchorPane anchPaneConsola;
     @FXML
-    private AnchorPane optArchivos;
+    private AnchorPane anchPaneArchivos;
     @FXML
-    private AnchorPane anchorSolucion;
+    private AnchorPane anchPaneRefExt;
     @FXML
-    private AnchorPane optDetalles;
+    private AnchorPane anchPaneCodigo;
     @FXML
-    private TextFlow txtFlowDetalles;
-    private ImageView imagen1;
+    private AnchorPane anchPaneLista;
+    @FXML
+    private VBox lista;
+    @FXML
+    private TextField buscador;
+    @FXML
+    private Text txtTitulo;
+    @FXML
+    private Text txtFechaModif;
+    
+    private AnchorPane apPrincipal;
+    @FXML
+    private TextFlow txtFlowDescripcion;
+    @FXML
+    private TextFlow txtFlowConsola;
     @FXML
     private GridPane tablaArchivos;
-    private AnchorPane anchorPaneDestacado;
     
-    @FXML
-    private AnchorPane archivosWeb;
-    @FXML
-    private Text txtUsosSolucion;
-    @FXML
-    private Text txtFechaSolucion;
-    
-    private String codigoSol,codigoErr,descripcion;
-    private Date fechaSol;
-    private int usosSol;
-    private long idSol;
-    List<Archivo> archivos=null;
-    @FXML
-    private Button btnBack;
-    private Scene escenaPrevia;
-    
+    private long idError;
+    private String descripcion,codigo,consola;
+    private Date fechaModif;
+    private List<Archivo> archivos;
+
     /**
      * Initializes the controller class.
-     * @param id
      */
-    public void setId(long id){
-        this.idSol=id;
-    }
-     
-    public void setEscenaPrevia(Scene previa){
-        this.escenaPrevia=previa;
-    }
-    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-      
-    }    
-    
-    public void initialize(){
-            //Obtengo los datos de la solucion
-            List<Solucion> solucion = SolucionController.getInstance().obtenerSolucion(idSol);
-            for(Solucion res: solucion){
-                codigoSol=res.getCodigo();
-                descripcion=res.getDescripcion();
-                archivos=res.getArchivos();
-                fechaSol=res.getFechaSubida();
-                usosSol=res.getPuntos();
+        
+            
+    }
+    public void initialize(AnchorPane ap){
+        List<Solucion>soluciones=ErrorController.getInstance().obtenerSolucionesDelError(151 /*idError*/);
+        List<Error> error=ErrorController.getInstance().obtenerError(151 /*idError*/);
+        for(Error e: error){
+            this.descripcion=e.getDescripcion();
+            this.codigo=e.getCodigo();
+            this.consola=e.getConsola();
+            this.archivos=e.getArchivos();
+            this.fechaModif=e.getFechaSubida();
+        }
+        
+        //Frame para el codigo de error
+        JInternalFrame iFrame = new PanelCodigoSolucion(this.codigo,SyntaxConstants.SYNTAX_STYLE_JAVA);
+        iFrame.setPreferredSize(new Dimension(550,400));
+        iFrame.setSize(20, 20);
+        iFrame.setVisible(true);
+        iFrame.setBorder(null);
+        ((javax.swing.plaf.basic.BasicInternalFrameUI) iFrame.getUI()).setNorthPane(null);
+        SwingNode swingNode = new SwingNode();
 
-                //codigoErr=res.getError_Tecnologia().getError().getCodigo();
-            }
-
-            //Frame para el codigo de error
-            JInternalFrame iFrame = new PanelCodigoSolucion(codigoErr,SyntaxConstants.SYNTAX_STYLE_JAVA);
-            iFrame.setPreferredSize(new Dimension(550,400));
-            iFrame.setSize(20, 20);
-            iFrame.setVisible(true);
-            iFrame.setBorder(null);
-            ((javax.swing.plaf.basic.BasicInternalFrameUI) iFrame.getUI()).setNorthPane(null);
-            SwingNode swingNode = new SwingNode();
-
-            swingNode.setContent(iFrame);
-            anchor1.getChildren().add(swingNode); 
-
-            //Frame para el codigo de solucion
-            JInternalFrame iFrame2 = new PanelCodigoSolucion(codigoSol,SyntaxConstants.SYNTAX_STYLE_JAVA);
-            iFrame2.setPreferredSize(new Dimension(550,400));
-            iFrame2.setSize(20, 20);
-            iFrame2.setVisible(true);
-            iFrame2.setBorder(null);
-            ((javax.swing.plaf.basic.BasicInternalFrameUI) iFrame2.getUI()).setNorthPane(null);
-            SwingNode swingNode2 = new SwingNode();
-
-            swingNode2.setContent(iFrame2);
-            optCodigo.getChildren().add(swingNode2);
-
-           //Cargo las imagenes en el GridPane
+        swingNode.setContent(iFrame);
+        anchPaneCodigo.getChildren().add(swingNode);
+        
+        
+        //Cargo las imagenes en el GridPane
             for(Archivo arch:archivos){
                 if(this.checkIfFileHasExtension(arch.getUrl())){
                     ImageView imageView=new ImageView(new Image(arch.getUrl()));
                     imageView.setCursor(Cursor.HAND);
                     imageView.setPreserveRatio(true);
+                    //Ver como cargar dinamicamente
                     tablaArchivos.addRow(0, imageView);
                 }else{
                     WebView webView=new WebView();
                     WebEngine webEngine = webView.getEngine();
                     webEngine.load(arch.getUrl());
-                    archivosWeb.getChildren().add(webView);
+                    this.anchPaneRefExt.getChildren().add(webView);
                 }
             }
 
 
 
-            //Cargar datos en panel de detalles
-            Text tituloDetalles=new Text("Estos son los detalles de la solucion \n");
-            Text detalles=new Text("Creado por: Persona 1 \nDescripcion: "+descripcion);
-            tituloDetalles.setFill(Color.BLACK);
-            tituloDetalles.setFont(Font.font("Helvetica", FontPosture.ITALIC, 19));
-            detalles.setFill(Color.GRAY);
-            detalles.setFont(Font.font("Calibri", FontPosture.ITALIC, 15));
-            txtFlowDetalles.getChildren().addAll(tituloDetalles,detalles);
+            //Cargar datos en panel de descripcion y consola
+            Text tituloDescripcion=new Text("Descripcion del error \n");
+            Text txtDescripcion=new Text("Creado por: Persona 1 \nDescripcion: "+descripcion);
+            tituloDescripcion.setFill(Color.BLACK);
+            tituloDescripcion.setFont(Font.font("Helvetica", FontPosture.ITALIC, 19));
+            txtDescripcion.setFill(Color.GRAY);
+            txtDescripcion.setFont(Font.font("Calibri", FontPosture.ITALIC, 15));
+            txtFlowDescripcion.getChildren().addAll(tituloDescripcion,txtDescripcion);
             tablaArchivos.setGridLinesVisible(true);
 
-            txtUsosSolucion.setText("Usos: "+usosSol);
-            txtFechaSolucion.setText(txtFechaSolucion.getText()+fechaSol.toString());
+            Text txtConsola=new Text(this.consola);
+            txtConsola.setFill(Color.GRAY);
+            txtConsola.setFont(Font.font("Calibri", FontPosture.ITALIC, 15));
+            this.txtFlowConsola.getChildren().addAll(txtConsola);
+            
+            
+            this.txtFechaModif.setText(txtFechaModif.getText()+this.fechaModif.toString());
 
 
             //Creo el popup para expandir imagenes
@@ -209,27 +196,33 @@ public class DetalleSolucionController implements Initializable {
                 }
             }
         });
+    
+        for(Solucion sol:soluciones){
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/busquedaSolucion.fxml"));
+                Parent subfileRoot = loader.load();
+                // Obtén el controlador del archivo subfile.fxml
+                BusquedaSolucionController subfileController = loader.getController();
+                subfileController.setDatos("Solucion de ejemplo", sol.getDescripcion(), sol.getId());
+                subfileController.initialize(ap);
+
+                
+                lista.getChildren().add(subfileRoot);
+            }catch (IOException e) {
+                System.out.println(e);
+            }  
+        }
+        
+        //TODO: AGREGAR NOTA Y VER LAS NOTAS DEL ERROR
+    
+    }
+    
+    private void setError(long id){
+        this.idError=id;
     }
     
     private boolean checkIfFileHasExtension(String s) {
         String[] extensiones={"jpg","png","jpeg","webx"};
         return Arrays.stream(extensiones).anyMatch(entry -> s.endsWith(entry));
-    }
-    
-    /*private void agregarArchivoATabla(){
-        int fil =tablaArchivos.getRowCount();
-        int col = tablaArchivos.getColumnCount();
-        int espacios= fil*col;
-        if(espacios==tablaArchivos.getChildren().size()){
-            tablaArchivos.addRow(fil, nodes);
-        }
-    }*/
-
-    @FXML
-    private void regresar(ActionEvent event) {
-        if(this.escenaPrevia!=null){
-            Stage stage=(Stage)this.btnBack.getScene().getWindow();
-            stage.setScene(escenaPrevia);
-        }
     }
 }

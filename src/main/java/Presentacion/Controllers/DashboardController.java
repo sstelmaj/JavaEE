@@ -65,11 +65,11 @@ public class DashboardController implements Initializable {
         vistas.put("Modificar Solucion", "/fxml/subirSolucion.fxml");
         vistas.put("Admin", "/fxml/AdminDashboard.fxml");
         vistas.put("Detalle Solucion", "/fxml/detalleSolucion.fxml");
+        vistas.put("Error", "/fxml/detalleError.fxml");
         vistas.put("Crear Etiqueta", "/fxml/crearOrganizarEtiqueta.fxml");
         
-        
         // Agregar elementos al ComboBox
-        selectorVista.getItems().addAll("Subir Error", "Modificar Error","Subir Solucion","Modificar Solucion","Vista 2", "Detalle Solucion","Crear Etiqueta", "Admin");
+        selectorVista.getItems().addAll("Subir Error", "Modificar Error","Subir Solucion","Modificar Solucion","Vista 2", "Detalle Solucion","Crear Etiqueta", "Admin", "Error");
         
         // Listener para cambio de selección en el ComboBox
         selectorVista.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -91,7 +91,7 @@ public class DashboardController implements Initializable {
                     subirErrorController.setTipoPantalla("Modificar Error");
                 }else if(newValue.equals("Modificar Solucion")){
                     SubirSolucionController subirSolucionController = (SubirSolucionController)loader.getController();
-                    List<Solucion> soluciones = SolucionController.getInstance().obtenerSolucion("101");
+                    List<Solucion> soluciones = SolucionController.getInstance().obtenerSolucion(101);
                     if(soluciones != null){
                         System.out.println("llega");
                         subirSolucionController.setSolucionModificar(soluciones.get(0));
@@ -100,6 +100,10 @@ public class DashboardController implements Initializable {
                     }
                     subirSolucionController.setTipoPantalla("Modificar Solucion");
                 
+                }
+                if(fxml.equals("/fxml/detalleError.fxml")){
+                    DetalleErrorController detalleErrorController=(DetalleErrorController)loader.getController();
+                    detalleErrorController.initialize(contentAPane);
                 }
                 
                 contentAPane.getChildren().setAll(nuevaVista);
