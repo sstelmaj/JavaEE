@@ -5,6 +5,7 @@
 package Logica.Clases;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,10 +19,7 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Solucion_Etiqueta implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private static final long serialVersionUID = 1L; 
     
     @Id
     @ManyToOne
@@ -31,9 +29,7 @@ public class Solucion_Etiqueta implements Serializable {
     @ManyToOne
     private Etiqueta etiqueta;
     
-    public Long getId() {
-        return id;
-    }
+    
 
     public Solucion getSolucion() {
         return solucion;
@@ -51,33 +47,33 @@ public class Solucion_Etiqueta implements Serializable {
         this.etiqueta = etiqueta;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        int hash = 3;
+        hash = 97 * hash + Objects.hashCode(this.solucion);
+        hash = 97 * hash + Objects.hashCode(this.etiqueta);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Solucion_Etiqueta)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Solucion_Etiqueta other = (Solucion_Etiqueta) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        return true;
+        final Solucion_Etiqueta other = (Solucion_Etiqueta) obj;
+        return Objects.equals(this.etiqueta, other.etiqueta);
     }
 
-    @Override
-    public String toString() {
-        return "Logica.Clases.Solucion_Etiqueta[ id=" + id + " ]";
-    }
+    
+
+   
+
+    
     
 }

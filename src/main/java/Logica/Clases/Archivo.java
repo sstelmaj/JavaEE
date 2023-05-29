@@ -20,15 +20,15 @@ import javax.persistence.Id;
 public class Archivo implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
+    
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+    @Id
     private String nombre;
     
     private String extension;
     
-    private Byte[] contenidoByte;
+    private byte[] contenidoByte;
     
     private String url;
 
@@ -56,11 +56,11 @@ public class Archivo implements Serializable {
         this.extension = extension;
     }
 
-    public Byte[] getContenidoByte() {
+    public byte[] getContenidoByte() {
         return contenidoByte;
     }
 
-    public void setContenidoByte(Byte[] contenidoByte) {
+    public void setContenidoByte(byte[] contenidoByte) {
         this.contenidoByte = contenidoByte;
     }
 

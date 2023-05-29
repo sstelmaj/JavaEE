@@ -56,6 +56,7 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebEngine;
@@ -153,6 +154,7 @@ public class SubirErrorController implements Initializable {
     private AnchorPane anchorFile;
     @FXML
     private Button botonArchivo;
+    private Label textArchivoSeleccionado;
     
     public final void setActualizador(String descripcion) {
         actualizador.set(descripcion);
@@ -162,6 +164,8 @@ public class SubirErrorController implements Initializable {
     private Button botonCrearSolucion;
     @FXML
     private Button botonVerSolucion;
+    
+    private Archivo archivo;
 
     public StringProperty tipoPantallaProperty() {
         return tipoPantallaProperty;
@@ -417,9 +421,13 @@ public class SubirErrorController implements Initializable {
         }
         error.setLink(linkTextFieldUrl.getText());
         error.setRepositorio(textFieldRepositorio.getText());
-        
+        if(this.archivo != null){
+            List<Archivo> archivos =  new ArrayList<>();
+            archivos.add(archivo);
+            error.setArchivos(archivos);
+        }
             try { 
-            Conexion.getInstance().persist(error);
+            Conexion.getInstance().merge(error);
             } catch (Exception e) {
                 // Manejo de la excepción
                 e.printStackTrace();
@@ -567,21 +575,30 @@ public class SubirErrorController implements Initializable {
     private void clickAbrir(ActionEvent event) throws IOException {
         
         FileChooser fileChooser = new FileChooser();
+        Archivo archivo = new Archivo();
         
-        File selectedFile = fileChooser.showOpenDialog(Main.getStage()); 
+         File selectedFile = fileChooser.showOpenDialog(Main.getStage()); 
         
-        
-        String nombre = selectedFile.getName();
-        String extension = "";
-        int i = nombre.lastIndexOf(".");
-        
-        if (i > 0) {
-        extension = nombre.substring(i + 1);
+        if(selectedFile != null){
+            String nombre = selectedFile.getName();
+            archivo.setNombre(nombre);
+            
+            String extension = "";
+            int i = nombre.lastIndexOf(".");
+
+            if (i > 0) {
+            extension = nombre.substring(i + 1);
+            }
+            archivo.setExtension(extension);
+
+            byte[] fileContent = Files.readAllBytes(selectedFile.toPath());
+            
+            archivo.setContenidoByte(fileContent);
+            
+            System.out.println("nombre"+nombre+"exttension"+extension);
+        //    textArchivoSeleccionado.setText(nombre);
+            this.archivo = archivo;
         }
-        
-        
-        byte[] fileContent = Files.readAllBytes(selectedFile.toPath());
-        
-        System.out.println("nombre"+nombre+"exttension"+extension);
+       
     }
 }
