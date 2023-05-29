@@ -40,4 +40,18 @@ public class UsuarioController {
         EntityManager em = Conexion.getInstance().getEntity();
         em.merge(usuario);
     }
+    public boolean iniciarSesion(String mail, String password){
+        List<Usuario> usuarios = UsuarioController.getInstance().obtenerUsuarios();
+        for (Usuario u : usuarios) {
+            if (u.getMail().equals(mail)){
+                if (u.getPassword().equals(password)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    
+
 }

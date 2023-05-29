@@ -46,6 +46,7 @@ public class Solucion implements Serializable {
     
     private String descripcion;
     private String link;
+    private int puntos;
     
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaSubida;
@@ -57,6 +58,15 @@ public class Solucion implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public int getPuntos() {
+        return puntos;
+    }
+
+    public void setPuntos(int puntos) {
+        this.puntos = puntos;
+    }
+    
 
     public Error_Tecnologia getError_Tecnologia() {
         return error_Tecnologia;

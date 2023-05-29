@@ -13,7 +13,7 @@
         <URL value="@/styles/dashboard.css" />
     </stylesheets>
    <children>
-      <AnchorPane fx:id="contentAPane" layoutX="154.0" layoutY="84.0" prefHeight="378.0" prefWidth="734.0" />
-      <ComboBox fx:id="selectorVista" layoutX="457.0" layoutY="38.0" prefWidth="150.0" promptText="Vistas" />
+      <AnchorPane fx:id="contentAPane" layoutX="154.0" layoutY="60.0" prefHeight="444.0" prefWidth="873.0" />
+      <ComboBox fx:id="selectorVista" layoutX="457.0" layoutY="14.0" prefWidth="150.0" promptText="Vistas" />
    </children>
 </AnchorPane>

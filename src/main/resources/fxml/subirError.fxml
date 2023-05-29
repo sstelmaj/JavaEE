@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.scene.canvas.*?>
 <?import javafx.scene.web.*?>
 <?import javafx.scene.chart.*?>
@@ -11,12 +12,76 @@
 
 <AnchorPane id="AnchorPane" prefHeight="701.0" prefWidth="1382.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentacion.Controllers.SubirErrorController">
    <children>
-      <ColorPicker layoutX="690.0" layoutY="509.0" />
       <PointLight color="CHARTREUSE" layoutX="248.0" layoutY="343.0" lightOn="true" />
-      <AnchorPane fx:id="anchor1" layoutX="69.0" layoutY="85.0" prefHeight="297.0" prefWidth="474.0" />
-      <WebView fx:id="web1" layoutX="610.0" layoutY="25.0" prefHeight="451.0" prefWidth="699.0" />
-      <Accordion layoutX="799.0" layoutY="345.0" />
-      <DatePicker layoutX="894.0" layoutY="509.0" />
-      <Canvas height="200.0" layoutX="1068.0" layoutY="56.0" width="200.0" />
+      <AnchorPane fx:id="anchor1" layoutX="69.0" layoutY="142.0" prefHeight="385.0" prefWidth="474.0" />
+      <Accordion fx:id="acordion" layoutX="655.0" layoutY="142.0" prefHeight="385.0" prefWidth="569.0">
+        <panes>
+          <TitledPane fx:id="titledPaneDescripcion" animated="false" prefHeight="212.0" prefWidth="402.0" text="Descripcion">
+               <content>
+                  <AnchorPane>
+                     <children>
+                        <ListView fx:id="listaCompletado" layoutX="376.0" layoutY="29.0" prefHeight="205.0" prefWidth="195.0" />
+                        <ScrollPane layoutX="14.0" layoutY="29.0" prefHeight="206.0" prefWidth="359.0">
+                           <content>
+                              <TextArea fx:id="textDescripcion" prefHeight="234.0" prefWidth="581.0" />
+                           </content>
+                        </ScrollPane>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </TitledPane>
+          <TitledPane animated="false" prefHeight="360.0" prefWidth="516.0" text="Link">
+               <content>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <ScrollPane layoutX="14.0" layoutY="9.0" prefHeight="178.0" prefWidth="547.0">
+                           <content>
+                              <WebView fx:id="linkWebView" prefHeight="177.0" prefWidth="535.0" />
+                           </content>
+                        </ScrollPane>
+                        <TextField fx:id="linkTextFieldUrl" layoutX="84.0" layoutY="207.0" prefHeight="25.0" prefWidth="374.0" />
+                        <Button fx:id="linkButtonVisualizar" layoutX="473.0" layoutY="207.0" mnemonicParsing="false" onAction="#click" prefHeight="25.0" prefWidth="88.0" text="Visualizar" />
+                        <Label layoutX="14.0" layoutY="207.0" prefHeight="25.0" prefWidth="63.0" text="Url" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </TitledPane>
+            <TitledPane animated="false" prefHeight="200.0" prefWidth="200.0" text="Consola">
+               <content>
+                  <ScrollPane fx:id="scrollConsole" prefHeight="200.0" prefWidth="200.0" />
+               </content>
+            </TitledPane>
+            <TitledPane animated="false" prefHeight="200.0" prefWidth="200.0" text="Repositorio">
+               <content>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <ScrollPane layoutX="13.0" layoutY="14.0" prefHeight="167.0" prefWidth="554.0">
+                           <content>
+                              <WebView fx:id="linkWebView1" prefHeight="165.0" prefWidth="542.0" />
+                           </content>
+                        </ScrollPane>
+                        <Label layoutX="21.0" layoutY="195.0" prefHeight="25.0" prefWidth="63.0" text="Url" />
+                        <Button fx:id="linkButtonVisualizar1" layoutX="478.0" layoutY="195.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="88.0" text="Visualizar" />
+                        <TextField fx:id="textFieldRepositorio" layoutX="94.0" layoutY="195.0" prefHeight="25.0" prefWidth="374.0" />
+                     </children>
+                  </AnchorPane>
+               </content></TitledPane>
+            <TitledPane animated="false" prefHeight="200.0" prefWidth="200.0" text="Archivos adjuntos">
+               <content>
+                  <AnchorPane fx:id="anchorPrueba" prefHeight="200.0" prefWidth="200.0" />
+               </content></TitledPane>
+        </panes>
+      </Accordion>
+      <DatePicker fx:id="inputFecha" layoutX="361.0" layoutY="108.0" prefHeight="25.0" prefWidth="180.0" />
+      <TextField fx:id="textFieldTitulo" layoutX="98.0" layoutY="108.0" prefHeight="25.0" prefWidth="251.0" />
+      <Label fx:id="textTitulo" layoutX="514.0" layoutY="30.0" text="Subir Error">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Label>
+      <Button fx:id="botonCancelar" layoutX="497.0" layoutY="557.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="88.0" text="Cancelar" />
+      <Button fx:id="botonIngresar" layoutX="655.0" layoutY="557.0" mnemonicParsing="false" onAction="#clickIngresar" prefHeight="25.0" prefWidth="88.0" text="Ingresar" />
+      <Label layoutX="98.0" layoutY="83.0" prefHeight="17.0" prefWidth="186.0" text="Título" />
+      <Label layoutX="361.0" layoutY="83.0" prefHeight="17.0" prefWidth="63.0" text="Fecha" />
    </children>
 </AnchorPane>
