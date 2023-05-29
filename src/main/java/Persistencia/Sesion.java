@@ -9,15 +9,27 @@ package Persistencia;
  * @author Usuario
  */
 public class Sesion {
-    private static String user;
+    private static Sesion instancia;
+    private String user;
 
-    public static String getUser() {
+    private Sesion() {
+        // Constructor privado para evitar instanciación directa
+    }
+
+    public static Sesion getInstance() {
+        if (instancia == null) {
+            instancia = new Sesion();
+        }
+        return instancia;
+    }
+
+    public String getUser() {
         return user;
     }
 
-    public static void setUser(String user) {
-        Sesion.user = user;
+    public void setUser(String user) {
+        this.user = user;
     }
 
-    // agregar mas metodos si es necesario
+    // Agrega más métodos si es necesario
 }

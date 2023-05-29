@@ -52,7 +52,7 @@ public class LoginController implements Initializable {
             
         if (UsuarioController.getInstance().iniciarSesion(mail, password) == true){
             
-        Sesion.setUser(mail);
+        Sesion.getInstance().setUser(mail);
             
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Dashboard.fxml"));
         Parent root = loader.load();
