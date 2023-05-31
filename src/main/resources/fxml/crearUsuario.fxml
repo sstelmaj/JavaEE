@@ -1,11 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentacion.Controllers.CrearUsuarioController">
-    
+
+<AnchorPane id="AnchorPane" prefHeight="701.0" prefWidth="1382.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="Presentacion.Controllers.CrearUsuarioController">
+   <children>
+      <Label layoutX="562.0" layoutY="62.0" text="Crear Usuario">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Label>
+      <Label layoutX="383.0" layoutY="151.0" text="Correo" />
+      <Label layoutX="380.0" layoutY="198.0" text="Nombre" />
+      <Label layoutX="380.0" layoutY="246.0" text="Apellido" />
+      <Label layoutX="372.0" layoutY="292.0" text="Contraseña" />
+      <Label layoutX="329.0" layoutY="342.0" text="Repetir Contraseña" />
+      <TextField fx:id="textCorreo" layoutX="448.0" layoutY="147.0" prefHeight="25.0" prefWidth="183.0" />
+      <TextField fx:id="textNombre" layoutX="448.0" layoutY="194.0" prefHeight="25.0" prefWidth="183.0" />
+      <TextField fx:id="textApellido" layoutX="448.0" layoutY="242.0" prefHeight="25.0" prefWidth="183.0" />
+      <TextField fx:id="textPass" layoutX="448.0" layoutY="288.0" prefHeight="25.0" prefWidth="183.0" />
+      <TextField fx:id="textPass2" layoutX="448.0" layoutY="338.0" prefHeight="25.0" prefWidth="183.0" />
+      <TableView fx:id="tablaPerfiles" layoutX="708.0" layoutY="170.0" prefHeight="238.0" prefWidth="546.0">
+        <columns>
+          <TableColumn fx:id="colNombre" editable="false" prefWidth="186.0" text="nombre" />
+          <TableColumn fx:id="colCrear" editable="false" prefWidth="100.0" text="crearUsuario" />
+            <TableColumn fx:id="colSubir" editable="false" prefWidth="76.0" text="subir" />
+            <TableColumn fx:id="colDesactivar" editable="false" prefWidth="92.0" text="desactivar" />
+            <TableColumn fx:id="colModificar" editable="false" prefWidth="89.0" text="modificar" />
+        </columns>
+      </TableView>
+      <Label layoutX="402.0" layoutY="387.0" text="Perfil" />
+      <TextField fx:id="textPerfil" editable="false" layoutX="448.0" layoutY="383.0" prefHeight="25.0" prefWidth="183.0" />
+      <Button fx:id="botonCancelar" layoutX="488.0" layoutY="439.0" mnemonicParsing="false" text="Cancelar" />
+      <Button fx:id="botonAceptar" layoutX="574.0" layoutY="439.0" mnemonicParsing="false" onAction="#crearUsuario" text="Aceptar" />
+      <Label layoutX="886.0" layoutY="134.0" text="Perfiles">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Button fx:id="botonSeleccionarPerfil" layoutX="935.0" layoutY="439.0" mnemonicParsing="false" onAction="#seleccionarPerfil" text="Seleccionar Perfil" />
+   </children>
 </AnchorPane>

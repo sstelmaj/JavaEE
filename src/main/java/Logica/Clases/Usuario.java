@@ -8,6 +8,7 @@ package Logica.Clases;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,17 +30,18 @@ public class Usuario implements Serializable {
     private List<Solucion> solucions;
 
     private static final long serialVersionUID = 1L;
-    @Id
+    
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
     private String nombre;
     private String apellido;
+    @Id
     private String mail;
     private String password;
     private Boolean active = Boolean.TRUE;
     
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Perfil perfil;
     
 

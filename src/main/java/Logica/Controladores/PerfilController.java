@@ -31,9 +31,9 @@ public class PerfilController {
         return instance;
     }
     
-    public List<Etiqueta> listaPerfiles() {
+    public List<Perfil> listaPerfiles() {
     EntityManager em = Conexion.getInstance().getEntity();
-    List<Etiqueta> resultado = null;
+    List<Perfil> resultado = null;
     em.getTransaction().begin();
         try {
             resultado = em.createNativeQuery("SELECT * FROM perfil", Perfil.class).getResultList();

@@ -85,10 +85,11 @@ public class DashboardController implements Initializable {
         vistas.put("Crear Etiqueta", "/fxml/crearOrganizarEtiqueta.fxml");
         vistas.put("Crear Perfil", "/fxml/crearPerfil.fxml");
         vistas.put("Modificar Perfil", "/fxml/crearPerfil.fxml");
+        vistas.put("Crear Usuario", "/fxml/crearUsuario.fxml");
         
         // Agregar elementos al ComboBox
         selectorVista.getItems().addAll("Subir Error", "Modificar Error","Subir Solucion","Modificar Solucion",
-                "Vista 2", "Detalle Solucion","Crear Etiqueta", "Admin", "Error","Crear Perfil","Modificar Perfil");
+                "Vista 2", "Detalle Solucion","Crear Etiqueta", "Admin", "Error","Crear Perfil","Modificar Perfil","Crear Usuario");
         
         // Listener para cambio de selección en el ComboBox
         selectorVista.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
