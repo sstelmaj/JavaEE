@@ -5,10 +5,12 @@
 package Presentacion.Controllers;
 
 import Logica.Clases.Perfil;
+import Logica.Controladores.ErrorController;
 import Logica.Controladores.EtiquetaController;
 import Logica.Controladores.PerfilController;
 import Persistencia.Conexion;
 import Presentacion.RSTA;
+import java.io.IOException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -16,7 +18,9 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -25,7 +29,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -64,6 +70,12 @@ public class CrearPerfilController implements Initializable {
     private Perfil perfilModificar;
     @FXML
     private Label textTitulo;
+    
+    private DashboardController dash;
+    
+    public void setDashboard(DashboardController dash){
+        this.dash = dash;
+    }
     
     public StringProperty tipoPantallaProperty() {
         return tipoPantallaProperty;
@@ -175,5 +187,7 @@ public class CrearPerfilController implements Initializable {
             
             }
     }
+
+    
     
 }

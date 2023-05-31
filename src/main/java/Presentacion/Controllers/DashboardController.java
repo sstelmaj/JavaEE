@@ -39,6 +39,18 @@ public class DashboardController implements Initializable {
 
     private Map<String, String> vistas = new HashMap<>(); // mapa de vistas
     
+    private static PerfilController instance = null;
+
+    
+    public void setVista(String nombreVista){
+        this.selectorVista.setValue(nombreVista);
+    }
+    
+    public void setContenido(Parent vista ){
+        
+         contentAPane.getChildren().setAll(vista);
+         
+    }
     private String fxml;
     /**
      * Initializes the controller class.
@@ -117,6 +129,7 @@ public class DashboardController implements Initializable {
                         System.out.println("no llega");
                     }
                     crearPerfilController.setTipoPantalla("Modificar Perfil");
+                    crearPerfilController.setDashboard(this);
                 }
                 
                 

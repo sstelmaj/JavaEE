@@ -223,9 +223,13 @@ public class SubirErrorController implements Initializable {
                     textFieldTitulo.setText(errorModificar.getTitulo());
                      linkTextFieldUrl.setText(errorModificar.getLink());
                      textFieldRepositorio.setText(errorModificar.getRepositorio());
+                     
                     
-                    String fechaSubida = errorModificar.getFechaSubida().toString();
-                    if(fechaSubida != null){
+                           
+                     
+                   
+                    if(errorModificar.getFechaSubida() != null){
+                        String fechaSubida = errorModificar.getFechaSubida().toString();;
                        DateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
                         String fechaString;
                         Date fechaDate;
@@ -247,15 +251,18 @@ public class SubirErrorController implements Initializable {
                     //obtenemos el contenido de el internal frame
                     if (internalFrameConsola instanceof RSTA) {
                         RSTA rsta = (RSTA) internalFrameConsola;
-                        rsta.setTextAreaContenido(errorModificar.getConsola());
+                        if(errorModificar.getConsola()!=null){
+                            rsta.setTextAreaContenido(errorModificar.getConsola());
+                        }
                     }   
                     JInternalFrame internalFrameCodigo = (JInternalFrame) swingNode.getContent();
        
                     //obtenemos el contenido de el internal frame
                     if (internalFrameCodigo instanceof RSTA) {
                         RSTA rsta = (RSTA) internalFrameCodigo;
+                         if(errorModificar.getCodigo()!=null){
                         rsta.setTextAreaContenido(errorModificar.getCodigo());
-                              
+                         } 
                     } 
 
                 }
