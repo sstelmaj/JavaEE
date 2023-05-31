@@ -26,10 +26,17 @@ import javax.persistence.Temporal;
 @Entity
 public class Solucion implements Serializable {
 
+  
+   
+
     @OneToMany(mappedBy = "solucion")
     private List<Solucion_Etiqueta> solucion_Etiquetas;
 
-  
+    
+    @ManyToOne
+    private Error error;
+
+    
     
     @ManyToOne
     private Usuario usuario;
@@ -127,8 +134,16 @@ public class Solucion implements Serializable {
     public void setFechaSubida(Date fechaSubida) {
         this.fechaSubida = fechaSubida;
     }
+
+    public Error getError() {
+        return error;
+    }
+
+    public void setError(Error error) {
+        this.error = error;
+    }
     
-    
+   
 
     @Override
     public int hashCode() {

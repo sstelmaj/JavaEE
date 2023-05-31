@@ -26,17 +26,24 @@ import javax.persistence.Temporal;
 @Entity
 public class Error implements Serializable {
 
+    @OneToMany(mappedBy = "error")
+    private List<Solucion> soluciones;
+
 
     
     @OneToMany
     private List<Nota> notas;
-
+    
+   
+    
+    
     @ManyToOne
     private Usuario usuario;
     
     @OneToMany(mappedBy = "error")
     private List<Error_Etiqueta> error_Etiquetas;
 
+    
    
     
     @OneToMany
@@ -62,6 +69,14 @@ public class Error implements Serializable {
     
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaSubida;
+
+    public List<Solucion> getSoluciones() {
+        return soluciones;
+    }
+
+    public void setSoluciones(List<Solucion> soluciones) {
+        this.soluciones = soluciones;
+    }
     
 
     public Long getId() {
@@ -162,6 +177,7 @@ public class Error implements Serializable {
         this.fechaSubida = fechaSubida;
     }
     
+   
     
 
     @Override

@@ -72,9 +72,20 @@
                   <AnchorPane fx:id="anchorFile" prefHeight="200.0" prefWidth="200.0">
                      <children>
                         <Button fx:id="botonArchivo" layoutX="105.0" layoutY="209.0" mnemonicParsing="false" onAction="#clickAbrir" text="Seleccionar archivo" />
-                        <Label layoutX="247.0" layoutY="213.0" text="Ningun archivo seleccionado" />
-                        <Button layoutX="487.0" layoutY="65.0" mnemonicParsing="false" text="Agregar" />
+                        <Label fx:id="textArchivoSeleccionado" layoutX="247.0" layoutY="213.0" text="Ningun archivo seleccionado" />
+                        <Button layoutX="487.0" layoutY="95.0" mnemonicParsing="false" text="Agregar" />
                         <Button layoutX="487.0" layoutY="141.0" mnemonicParsing="false" text="Quitar" />
+                        <ScrollPane layoutX="23.0" layoutY="22.0" prefHeight="171.0" prefWidth="442.0">
+                           <content>
+                              <TableView fx:id="tablaArchivos" prefHeight="169.0" prefWidth="440.0">
+                                <columns>
+                                  <TableColumn fx:id="columnArchivo" prefWidth="201.0" text="Archivo" />
+                                  <TableColumn fx:id="columnExt" minWidth="0.0" prefWidth="197.0" text="Extension" />
+                                </columns>
+                              </TableView>
+                           </content>
+                        </ScrollPane>
+                        <Button fx:id="botonVer" layoutX="486.0" layoutY="51.0" mnemonicParsing="false" text="Ver" />
                      </children></AnchorPane>
                </content></TitledPane>
         </panes>

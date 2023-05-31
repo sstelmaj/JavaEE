@@ -4,8 +4,12 @@
  */
 package Presentacion.Controllers;
 
+import Logica.Clases.Etiqueta;
+import Logica.Clases.Perfil;
 import Logica.Clases.Solucion;
 import Logica.Controladores.ErrorController;
+import Logica.Controladores.EtiquetaController;
+import Logica.Controladores.PerfilController;
 import Logica.Controladores.SolucionController;
 import java.io.IOException;
 import java.net.URL;
@@ -67,9 +71,12 @@ public class DashboardController implements Initializable {
         vistas.put("Detalle Solucion", "/fxml/detalleSolucion.fxml");
         vistas.put("Error", "/fxml/detalleError.fxml");
         vistas.put("Crear Etiqueta", "/fxml/crearOrganizarEtiqueta.fxml");
+        vistas.put("Crear Perfil", "/fxml/crearPerfil.fxml");
+        vistas.put("Modificar Perfil", "/fxml/crearPerfil.fxml");
         
         // Agregar elementos al ComboBox
-        selectorVista.getItems().addAll("Subir Error", "Modificar Error","Subir Solucion","Modificar Solucion","Vista 2", "Detalle Solucion","Crear Etiqueta", "Admin", "Error");
+        selectorVista.getItems().addAll("Subir Error", "Modificar Error","Subir Solucion","Modificar Solucion",
+                "Vista 2", "Detalle Solucion","Crear Etiqueta", "Admin", "Error","Crear Perfil","Modificar Perfil");
         
         // Listener para cambio de selección en el ComboBox
         selectorVista.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -100,7 +107,22 @@ public class DashboardController implements Initializable {
                     }
                     subirSolucionController.setTipoPantalla("Modificar Solucion");
                 
+                }else if(newValue.equals("Modificar Perfil")){
+                    CrearPerfilController crearPerfilController = (CrearPerfilController)loader.getController();
+                    Perfil perfil = PerfilController.getInstance().obtenerPerfil("Admin");
+                    if(perfil != null){
+                        System.out.println("llega");
+                        crearPerfilController.setPerfilModificar(perfil);
+                    }else{
+                        System.out.println("no llega");
+                    }
+                    crearPerfilController.setTipoPantalla("Modificar Perfil");
                 }
+                
+                
+                
+                
+                
                 if(fxml.equals("/fxml/detalleError.fxml")){
                     DetalleErrorController detalleErrorController=(DetalleErrorController)loader.getController();
                     detalleErrorController.initialize(contentAPane);

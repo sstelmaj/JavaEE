@@ -4,11 +4,10 @@
  */
 package Presentacion.Controllers;
 
+import Logica.Clases.Etiqueta;
 import Logica.Clases.*;
 import Logica.Controladores.EtiquetaController;
 import Persistencia.Conexion;
-import Presentacion.Main;
-import Presentacion.RSTA;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
@@ -20,14 +19,18 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -37,26 +40,43 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
 import javafx.scene.Scene;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.swing.JInternalFrame;
+import jdk.nashorn.api.scripting.JSObject;
+import org.fife.ui.autocomplete.AutoCompletion;
+import org.fife.ui.autocomplete.BasicCompletion;
+import org.fife.ui.autocomplete.CompletionProvider;
+import org.fife.ui.autocomplete.DefaultCompletionProvider;
+import org.fife.ui.autocomplete.ShorthandCompletion;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-
+import org.fife.ui.rtextarea.RTextScrollPane;
+import Presentacion.RSTA;
+import Presentacion.Main;
 /**
  * FXML Controller class
  *
@@ -138,7 +158,16 @@ public class SubirErrorController implements Initializable {
     private AnchorPane anchorFile;
     @FXML
     private Button botonArchivo;
+    @FXML
     private Label textArchivoSeleccionado;
+    @FXML
+    private TableView<Archivo> tablaArchivos;
+    @FXML
+    private TableColumn <Archivo, String> columnArchivo;
+    @FXML
+    private TableColumn <Archivo, String> columnExt;
+    
+    private ObservableList<Archivo> archivos_;
     
     public final void setActualizador(String descripcion) {
         actualizador.set(descripcion);
@@ -273,7 +302,12 @@ public class SubirErrorController implements Initializable {
             e.printStackTrace();
         }
         
-      
+        archivos_ = FXCollections.observableArrayList();
+        //asocia las columnas con el tituo
+        this.columnArchivo.setCellValueFactory(new PropertyValueFactory("nombre"));
+        this.columnExt.setCellValueFactory(new PropertyValueFactory("extension"));
+        
+        
           
         textDescripcion.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.contains("#")) {
@@ -405,9 +439,23 @@ public class SubirErrorController implements Initializable {
         }
         error.setLink(linkTextFieldUrl.getText());
         error.setRepositorio(textFieldRepositorio.getText());
+        
+        
+         List<Archivo> archivos =  new ArrayList<>();
+        if(this.archivos_ != null){
+                for (Archivo archivo : this.archivos_) {
+                    archivos.add(archivo);
+                    System.out.println(archivo.getNombre());
+                }
+            }
+        
+        
         if(this.archivo != null){
-            List<Archivo> archivos =  new ArrayList<>();
-            archivos.add(archivo);
+           
+        //    archivos.add(archivo);
+            
+            
+            
             error.setArchivos(archivos);
         }
             try { 
@@ -565,7 +613,7 @@ public class SubirErrorController implements Initializable {
         
         if(selectedFile != null){
             String nombre = selectedFile.getName();
-            archivo.setNombre(nombre);
+            
             
             String extension = "";
             int i = nombre.lastIndexOf(".");
@@ -574,13 +622,16 @@ public class SubirErrorController implements Initializable {
             extension = nombre.substring(i + 1);
             }
             archivo.setExtension(extension);
-
+            archivo.setNombre(nombre.substring(0, i));
             byte[] fileContent = Files.readAllBytes(selectedFile.toPath());
             
             archivo.setContenidoByte(fileContent);
             
             System.out.println("nombre"+nombre+"exttension"+extension);
-        //    textArchivoSeleccionado.setText(nombre);
+            textArchivoSeleccionado.setText(nombre);
+            
+            this.archivos_.add(archivo);
+            this.tablaArchivos.setItems(archivos_);
             this.archivo = archivo;
         }
        
