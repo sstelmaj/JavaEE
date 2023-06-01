@@ -28,9 +28,11 @@ public class Solucion implements Serializable {
 
     @OneToMany(mappedBy = "solucion")
     private List<Solucion_Etiqueta> solucion_Etiquetas;
+    
+    @ManyToOne
+    private Error error;
 
   
-    
     @ManyToOne
     private Usuario usuario;
     
@@ -61,6 +63,16 @@ public class Solucion implements Serializable {
     
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaSubida;
+
+    public Error getError() {
+        return error;
+    }
+
+    public void setError(Error error) {
+        this.error = error;
+    }
+    
+    
     
     public Long getId() {
         return id;

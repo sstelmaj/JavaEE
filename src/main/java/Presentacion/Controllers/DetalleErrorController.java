@@ -7,6 +7,8 @@ package Presentacion.Controllers;
 import Logica.Clases.Archivo;
 import Logica.Clases.Solucion;
 import Logica.Clases.Error;
+import Logica.Clases.Error_Etiqueta;
+import Logica.Clases.Etiqueta;
 import Logica.Controladores.ErrorController;
 import Presentacion.PanelCodigoSolucion;
 import java.awt.Dimension;
@@ -29,6 +31,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -83,6 +86,12 @@ public class DetalleErrorController implements Initializable {
     private String descripcion,codigo,consola;
     private Date fechaModif;
     private List<Archivo> archivos;
+    private List<Error_Etiqueta> etiquetas;
+    DashboardController dashboard;
+    @FXML
+    private AnchorPane apEtiquetas;
+    @FXML
+    private HBox hBoxEtiquetas;
 
     /**
      * Initializes the controller class.
@@ -92,16 +101,16 @@ public class DetalleErrorController implements Initializable {
         
             
     }
-    public void initialize(AnchorPane ap){
-        List<Solucion>soluciones=ErrorController.getInstance().obtenerSolucionesDelError(151 /*idError*/);
-        List<Error> error=ErrorController.getInstance().obtenerError(151 /*idError*/);
-        for(Error e: error){
-            this.descripcion=e.getDescripcion();
-            this.codigo=e.getCodigo();
-            this.consola=e.getConsola();
-            this.archivos=e.getArchivos();
-            this.fechaModif=e.getFechaSubida();
-        }
+    public void initialize(){
+        //List<Solucion>soluciones=ErrorController.getInstance().obtenerSolucionesDelError(151 /*idError*/);
+        Error error=ErrorController.getInstance().obtenerError(151 /*idError*/);
+        List<Solucion>soluciones=error.getSoluciones();
+            this.descripcion=error.getDescripcion();
+            this.codigo=error.getCodigo();
+            this.consola=error.getConsola();
+            this.archivos=error.getArchivos();
+            this.fechaModif=error.getFechaSubida();
+            this.etiquetas=error.getError_Etiquetas();
         
         //Frame para el codigo de error
         JInternalFrame iFrame = new PanelCodigoSolucion(this.codigo,SyntaxConstants.SYNTAX_STYLE_JAVA);
@@ -142,6 +151,12 @@ public class DetalleErrorController implements Initializable {
             txtDescripcion.setFill(Color.GRAY);
             txtDescripcion.setFont(Font.font("Calibri", FontPosture.ITALIC, 15));
             txtFlowDescripcion.getChildren().addAll(tituloDescripcion,txtDescripcion);
+            hBoxEtiquetas.setSpacing(10);
+            for(Error_Etiqueta e:etiquetas){
+                Text etiqueta=new Text(e.getEtiqueta().getNombre());
+                etiqueta.setFill(Color.BLACK);
+                hBoxEtiquetas.getChildren().add(etiqueta);
+            }
             tablaArchivos.setGridLinesVisible(true);
 
             Text txtConsola=new Text(this.consola);
@@ -203,8 +218,8 @@ public class DetalleErrorController implements Initializable {
                 Parent subfileRoot = loader.load();
                 // Obtén el controlador del archivo subfile.fxml
                 BusquedaSolucionController subfileController = loader.getController();
-                subfileController.setDatos("Solucion de ejemplo", sol.getDescripcion(), sol.getId());
-                subfileController.initialize(ap);
+                subfileController.setDatos("Solucion de ejemplo", sol.getDescripcion(), sol.getId(), this.dashboard, sol.getSolucion_Etiquetas());
+                subfileController.initialize();
 
                 
                 lista.getChildren().add(subfileRoot);
@@ -219,6 +234,9 @@ public class DetalleErrorController implements Initializable {
     
     private void setError(long id){
         this.idError=id;
+    }
+    public void setDashboard(DashboardController dash){
+        this.dashboard=dash;
     }
     
     private boolean checkIfFileHasExtension(String s) {

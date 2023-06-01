@@ -100,16 +100,14 @@ public class DetalleSolucionController implements Initializable {
     
     public void initialize(){
             //Obtengo los datos de la solucion
-            List<Solucion> solucion = SolucionController.getInstance().obtenerSolucion(idSol);
-            for(Solucion res: solucion){
-                codigoSol=res.getCodigo();
-                descripcion=res.getDescripcion();
-                archivos=res.getArchivos();
-                fechaSol=res.getFechaSubida();
-                usosSol=res.getPuntos();
+            Solucion solucion = SolucionController.getInstance().obtenerSolucion(idSol);
+                codigoSol=solucion.getCodigo();
+                descripcion=solucion.getDescripcion();
+                archivos=solucion.getArchivos();
+                fechaSol=solucion.getFechaSubida();
+                usosSol=solucion.getPuntos();
 
-                //codigoErr=res.getError_Tecnologia().getError().getCodigo();
-            }
+                codigoErr=solucion.getError().getCodigo();
 
             //Frame para el codigo de error
             JInternalFrame iFrame = new PanelCodigoSolucion(codigoErr,SyntaxConstants.SYNTAX_STYLE_JAVA);
