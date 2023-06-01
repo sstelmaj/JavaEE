@@ -7,10 +7,12 @@ package Presentacion.Controllers;
 import Logica.Clases.Etiqueta;
 import Logica.Clases.Perfil;
 import Logica.Clases.Solucion;
+import Logica.Clases.Usuario;
 import Logica.Controladores.ErrorController;
 import Logica.Controladores.EtiquetaController;
 import Logica.Controladores.PerfilController;
 import Logica.Controladores.SolucionController;
+import Logica.Controladores.UsuarioController;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -86,10 +88,11 @@ public class DashboardController implements Initializable {
         vistas.put("Crear Perfil", "/fxml/crearPerfil.fxml");
         vistas.put("Modificar Perfil", "/fxml/crearPerfil.fxml");
         vistas.put("Crear Usuario", "/fxml/crearUsuario.fxml");
+        vistas.put("Modificar Usuario", "/fxml/crearUsuario.fxml");
         
         // Agregar elementos al ComboBox
         selectorVista.getItems().addAll("Subir Error", "Modificar Error","Subir Solucion","Modificar Solucion",
-                "Vista 2", "Detalle Solucion","Crear Etiqueta", "Admin", "Error","Crear Perfil","Modificar Perfil","Crear Usuario");
+                "Vista 2", "Detalle Solucion","Crear Etiqueta", "Admin", "Error","Crear Perfil","Modificar Perfil","Crear Usuario","Modificar Usuario");
         
         // Listener para cambio de selección en el ComboBox
         selectorVista.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -131,6 +134,19 @@ public class DashboardController implements Initializable {
                     }
                     crearPerfilController.setTipoPantalla("Modificar Perfil");
                     crearPerfilController.setDashboard(this);
+                }
+                else if(newValue.equals("Modificar Usuario")){
+                    CrearUsuarioController crearUsuarioController = (CrearUsuarioController)loader.getController();
+                    Usuario usuario = UsuarioController.getInstance().obtenerUsuario("martinperez@gmail.com");
+                    if(usuario != null){
+                        System.out.println("llega");
+                        crearUsuarioController.setUsuarioModificar(usuario);
+                    }else{
+                        System.out.println("no llega");
+                    }
+                    crearUsuarioController.setTipoPantalla("Modificar Usuario");
+                    
+                    crearUsuarioController.setDashboard(this);
                 }
                 
                 

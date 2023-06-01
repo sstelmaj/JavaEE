@@ -7,10 +7,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="701.0" prefWidth="1382.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="Presentacion.Controllers.CrearUsuarioController">
+<AnchorPane id="AnchorPane" prefHeight="701.0" prefWidth="1382.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentacion.Controllers.CrearUsuarioController">
    <children>
-      <Label layoutX="562.0" layoutY="62.0" text="Crear Usuario">
+      <Label fx:id="textTitulo" layoutX="562.0" layoutY="62.0" text="Crear Usuario">
          <font>
             <Font size="36.0" />
          </font>

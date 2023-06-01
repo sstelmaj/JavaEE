@@ -41,7 +41,7 @@ public class Usuario implements Serializable {
     private String password;
     private Boolean active = Boolean.TRUE;
     
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Perfil perfil;
     
 

@@ -15,12 +15,14 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -69,7 +71,38 @@ public class CrearUsuarioController implements Initializable {
     @FXML
     private Button botonSeleccionarPerfil;
    
+    private StringProperty tipoPantallaProperty = new SimpleStringProperty("");
     
+    private String tipoPantalla ="-";
+    
+    private Usuario usuarioModificar;
+    
+    @FXML
+    private Label textTitulo;
+    
+    private DashboardController dash;
+    
+    public void setDashboard(DashboardController dash){
+        this.dash = dash;
+    }
+    
+    public StringProperty tipoPantallaProperty() {
+        return tipoPantallaProperty;
+    }
+
+    public final String getTipoPantalla() {
+        return tipoPantallaProperty.get();
+    }
+
+    public final void setTipoPantalla(String tipoPantalla) {
+        tipoPantallaProperty.set(tipoPantalla);
+    }
+    
+    public final void setUsuarioModificar(Usuario usuario) {
+        this.usuarioModificar = usuario;
+    }
+    
+    private Long idtemporal;
     
 
     /**
@@ -107,6 +140,44 @@ public class CrearUsuarioController implements Initializable {
                 return new SimpleStringProperty(texto);
             });
         }
+        
+        
+        
+         tipoPantallaProperty.addListener((observable, oldValue, newValue) -> {
+            if (newValue=="Modificar Usuario") {
+                
+               
+                System.out.println("Modificar Usuario");
+                tipoPantalla =newValue;
+                textTitulo.setText(newValue);
+                botonAceptar.setText("Guardar Cambios");
+                
+               
+                if(usuarioModificar != null){
+                    
+                    textNombre.setText(usuarioModificar.getNombre());
+                    textApellido.setText(usuarioModificar.getApellido());
+                    textCorreo.setText(usuarioModificar.getMail());
+                    textCorreo.setEditable(false);
+                    textPass.setText(usuarioModificar.getPassword());
+                    if(usuarioModificar.getPerfil()!=null){
+                        textPerfil.setText(usuarioModificar.getPerfil().getNombre());
+                        this.perfil_seleccionado= usuarioModificar.getPerfil();
+                    }
+                    idtemporal = usuarioModificar.getId();
+                    
+                
+
+                }
+
+            }
+            else if(newValue=="Crear Usuario"){
+                System.out.println("Crear Usuario");
+                tipoPantalla =newValue;
+                textTitulo.setText(newValue);
+            }
+              
+        });
     }    
     
     //utilidad para cambiar los valores de true y false a si y no
@@ -137,12 +208,27 @@ public class CrearUsuarioController implements Initializable {
         if(this.perfil_seleccionado !=null){
             usuario.setPerfil(perfil_seleccionado);
         }
-         try { 
+        
+        if(tipoPantalla.equals("Modificar Usuario")){
+            System.out.println("Modifica el usuario");
+            usuario.setId(idtemporal);
+            try { 
+                Conexion.getInstance().merge(usuario);
+                } catch (Exception e) {
+                    // Manejo de la excepción
+                    e.printStackTrace();
+                }
+        }else{
+        
+            try { 
                 Conexion.getInstance().persist(usuario);
                 } catch (Exception e) {
                     // Manejo de la excepción
                     e.printStackTrace();
                 }
+        
+        }
+         
     }
 
     @FXML
