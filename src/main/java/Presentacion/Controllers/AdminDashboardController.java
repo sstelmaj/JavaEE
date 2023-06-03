@@ -54,7 +54,7 @@ public class AdminDashboardController implements Initializable {
     @FXML
     private void gotoAdminUsuarios(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AdminGestionUsuarios.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AdminGestionarUsuarios.fxml"));
             Parent nuevaVista = loader.load();
             
             Scene scene = new Scene(nuevaVista);
