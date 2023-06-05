@@ -52,35 +52,25 @@ public class AdminDashboardController implements Initializable {
             
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+        btnExportar.setOnAction(event -> mostrarVentanaExportar());
+    }
+    
+    private void mostrarVentanaExportar() {
         try {
-            // Cargar el archivo FXML de la ventana emergente
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("exportarDatos.fxml"));
-            VBox popupRoot = fxmlLoader.load();
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/exportarDatos.fxml"));
+            Parent popupRoot = fxmlLoader.load();
             ExportarDatosController exportarDatosController = fxmlLoader.getController();
-            
-            // Obtener el Stage de cualquier nodo de la escena actual
-            Stage primaryStage = (Stage) popupRoot.getScene().getWindow();
 
-            // Crear una nueva ventana emergente y configurarla
             Stage popupStage = new Stage();
             popupStage.initModality(Modality.APPLICATION_MODAL);
-            popupStage.initOwner(primaryStage);
-            popupStage.setTitle("Seleccionar tablas");
+            popupStage.initOwner(btnExportar.getScene().getWindow());
+            popupStage.setTitle("Exportar...");
             Scene scene = new Scene(popupRoot);
             popupStage.setScene(scene);
-
-            // Mostrar la ventana emergente cuando se haga clic en el botón "Exportar"
-            Button exportButton = new Button("Exportar");
-            exportButton.setOnAction(event -> popupStage.showAndWait());
-
-            primaryStage.setScene(new Scene(new StackPane(exportButton), 400, 300));
-            primaryStage.show();
-
+            popupStage.showAndWait();
         } catch (IOException ex) {
             Logger.getLogger(AdminDashboardController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
     }
     
     @FXML
