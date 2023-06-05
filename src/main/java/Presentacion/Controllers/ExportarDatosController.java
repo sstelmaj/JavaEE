@@ -14,6 +14,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -47,6 +48,9 @@ public class ExportarDatosController implements Initializable {
     @FXML
     private AnchorPane container;
     
+    private SimpleDateFormat formatter = new SimpleDateFormat("d-M-yyyy"); 
+    
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         btnError.setOnAction(event -> exportErrores());
@@ -72,6 +76,7 @@ public class ExportarDatosController implements Initializable {
         headerRow.createCell(5).setCellValue("Link");
         headerRow.createCell(6).setCellValue("Repositorio");
         headerRow.createCell(7).setCellValue("Titulo");
+        headerRow.createCell(8).setCellValue("Usuario_ID");
         // Lleno las filas
         int rowNum = 1;
         for (Logica.Clases.Error error : errores) {
@@ -80,10 +85,11 @@ public class ExportarDatosController implements Initializable {
             row.createCell(1).setCellValue(error.getCodigo());
             row.createCell(2).setCellValue(error.getConsola());
             row.createCell(3).setCellValue(error.getDescripcion());
-            row.createCell(4).setCellValue(error.getFechaSubida().toString());
+            row.createCell(4).setCellValue(formatter.format(error.getFechaSubida()));
             row.createCell(5).setCellValue(error.getLink());
             row.createCell(6).setCellValue(error.getRepositorio());
             row.createCell(7).setCellValue(error.getTitulo());
+            row.createCell(8).setCellValue(error.getUsuario().getId());
         }
         // Guardar archivo excel
             FileChooser fileChooser = new FileChooser();
@@ -140,16 +146,17 @@ public class ExportarDatosController implements Initializable {
         headerRow.createCell(5).setCellValue("Puntos");
         headerRow.createCell(6).setCellValue("Usuario");
         // Lleno las filas
+         
         int rowNum = 1;
         for (Solucion solucion : soluciones) {
             Row row = sheet.createRow(rowNum++);
             row.createCell(0).setCellValue(solucion.getId());
             row.createCell(1).setCellValue(solucion.getCodigo());
             row.createCell(2).setCellValue(solucion.getDescripcion());
-            row.createCell(3).setCellValue(solucion.getFechaSubida().toString());
+            row.createCell(3).setCellValue(formatter.format(solucion.getFechaSubida()));
             row.createCell(4).setCellValue(solucion.getLink());
             row.createCell(5).setCellValue(solucion.getPuntos());
-            row.createCell(6).setCellValue(solucion.getUsuario().getMail());
+            row.createCell(6).setCellValue(solucion.getUsuario().getId());
         }
         // Guardar archivo excel
             FileChooser fileChooser = new FileChooser();
