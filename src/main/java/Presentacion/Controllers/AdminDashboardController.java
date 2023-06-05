@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -18,6 +19,9 @@ import javafx.scene.Scene;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
@@ -49,6 +53,34 @@ public class AdminDashboardController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
+        try {
+            // Cargar el archivo FXML de la ventana emergente
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("exportarDatos.fxml"));
+            VBox popupRoot = fxmlLoader.load();
+            ExportarDatosController exportarDatosController = fxmlLoader.getController();
+            
+            // Obtener el Stage de cualquier nodo de la escena actual
+            Stage primaryStage = (Stage) popupRoot.getScene().getWindow();
+
+            // Crear una nueva ventana emergente y configurarla
+            Stage popupStage = new Stage();
+            popupStage.initModality(Modality.APPLICATION_MODAL);
+            popupStage.initOwner(primaryStage);
+            popupStage.setTitle("Seleccionar tablas");
+            Scene scene = new Scene(popupRoot);
+            popupStage.setScene(scene);
+
+            // Mostrar la ventana emergente cuando se haga clic en el botón "Exportar"
+            Button exportButton = new Button("Exportar");
+            exportButton.setOnAction(event -> popupStage.showAndWait());
+
+            primaryStage.setScene(new Scene(new StackPane(exportButton), 400, 300));
+            primaryStage.show();
+
+        } catch (IOException ex) {
+            Logger.getLogger(AdminDashboardController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
     
     @FXML
@@ -67,6 +99,8 @@ public class AdminDashboardController implements Initializable {
             Logger.getLogger(AdminDashboardController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    
     
     /*
     * 
