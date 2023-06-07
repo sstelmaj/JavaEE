@@ -77,6 +77,19 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rtextarea.RTextScrollPane;
 import Presentacion.RSTA;
 import Presentacion.Main;
+import java.awt.Insets;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleBinding;
+import javafx.beans.binding.NumberBinding;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.paint.Color;
 /**
  * FXML Controller class
  *
@@ -169,6 +182,61 @@ public class SubirErrorController implements Initializable {
     
     private ObservableList<Archivo> archivos_;
     
+    List<Etiqueta> etiquetas_error = new ArrayList<>();
+    
+    Map<String, Etiqueta> mapEtiquetas = new HashMap<>();
+    
+    List<Etiqueta> etiquetas;
+    
+    private AnchorPane panelContent;
+    @FXML
+    private AnchorPane anchorError;
+    @FXML
+    private Button botonVer;
+    @FXML
+    private Pane paneButtons;
+    @FXML
+    private Button botonEliminarSolucion;
+    @FXML
+    private Button botonImprimirEtiqueta;
+    
+   
+    
+    public void setPanelContent(AnchorPane pane){
+        this.panelContent = pane;
+        //anclamos el anchor de la vista al anchor content por el tema de la jerarquia
+        panelContent.setRightAnchor(anchorError,0.0);
+        panelContent.setLeftAnchor(anchorError,0.0);
+        panelContent.setTopAnchor(anchorError,0.0);
+        panelContent.setBottomAnchor(anchorError,0.0);
+    //   anchor1.setPrefWidth(900);
+       BackgroundFill backgroundFill = new BackgroundFill(Color.LIGHTGREEN, null, null);
+            Background background = new Background(backgroundFill);
+            anchor1.setBackground(background);
+      //    double maxRightAnchor = 500;
+
+            anchorError.setRightAnchor(botonIngresar, 500.0);
+        //    anchorError.setLeftAnchor(botonIngresar, botonIngresar.getLayoutX());
+        //    anchorError.setTopAnchor(botonIngresar, botonIngresar.getLayoutY());
+         //   anchorError.setLeftAnchor(acordion,acordion.getLayoutX() );
+         
+         //   anchorError.setLeftAnchor(acordion,anchor1.getLayoutX()+ 500.0 );
+           
+
+   //         botonIngresar.maxWidthProperty().bind(anchorError.widthProperty().subtract(maxRightAnchor));
+//      botonIngresar.minWidth(100.0);
+//         anchorError.widthProperty().addListener((observable, oldValue, newValue) -> {
+//                Double newWidth = (double) newValue;
+//               String widthString = String.valueOf(newWidth);
+//               anchorError.setLeftAnchor(acordion,anchor1.getWidth()+200.0 );
+//              
+//           });
+      
+
+      
+        
+    }
+    
     public final void setActualizador(String descripcion) {
         actualizador.set(descripcion);
     }
@@ -198,6 +266,8 @@ public class SubirErrorController implements Initializable {
     
     public final void setSolucion(Solucion solucion) {
         this.solucion_asociada = solucion;
+        botonEliminarSolucion.setVisible(true);
+        botonVerSolucion.setVisible(true);
     }
    
     /**
@@ -207,6 +277,8 @@ public class SubirErrorController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
          //para el primer renderizado visual
+         botonEliminarSolucion.setVisible(false);
+         botonVerSolucion.setVisible(false);
          tipoPantallaProperty.addListener((observable, oldValue, newValue) -> {
             if (newValue=="Modificar Error") {
                 
@@ -291,7 +363,7 @@ public class SubirErrorController implements Initializable {
          
         //para poder filtrar luego aca obtengo el observable list para el filtrado
         try {
-            List<Etiqueta> etiquetas = EtiquetaController.getInstance().listaEtiquetas();
+             etiquetas = EtiquetaController.getInstance().listaEtiquetas();
 
             // Crear un ObservableList a partir de la lista existente
              items = FXCollections.observableArrayList();
@@ -299,6 +371,7 @@ public class SubirErrorController implements Initializable {
             // Agregar los elementos a la lista ObservableList
             for (Etiqueta etiqueta : etiquetas) {
                 items.add(etiqueta.getNombre());
+                mapEtiquetas.put(etiqueta.getNombre().toUpperCase(), etiqueta);
             }
 
             //asigno a la lista en la descripcion
@@ -433,7 +506,7 @@ public class SubirErrorController implements Initializable {
             
         }
     
-        error.setDescripcion(textDescripcion.getText());
+       
         
     //    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", new Locale("es")); (util para despues o capaz el input fecha lo modifica)
 
@@ -465,6 +538,8 @@ public class SubirErrorController implements Initializable {
             
             error.setArchivos(archivos);
         }
+        obtenerEtiquetasDescripcion();
+         error.setDescripcion(textDescripcion.getText());
             try { 
             Conexion.getInstance().merge(error);
             } catch (Exception e) {
@@ -473,6 +548,8 @@ public class SubirErrorController implements Initializable {
             }
             System.out.println(tipoPantalla);
         if(tipoPantalla.equals("Subir Error")){
+            
+            
             if(this.solucion_asociada !=null){
                 try { 
                    
@@ -528,7 +605,7 @@ public class SubirErrorController implements Initializable {
         try {
         
         JInternalFrame iFrame = new RSTA();
-        iFrame.setPreferredSize(new Dimension(550,400));
+        iFrame.setPreferredSize(new Dimension(500,400));
         iFrame.setSize(20, 20);
         iFrame.setVisible(true);
         iFrame.setBorder(null);
@@ -537,6 +614,10 @@ public class SubirErrorController implements Initializable {
        
         swingNode.setContent(iFrame);
          anchor1.getChildren().add(swingNode);
+         anchor1.setRightAnchor(swingNode,0.0);
+         anchor1.setLeftAnchor(swingNode,0.0);
+         anchor1.setTopAnchor(swingNode,0.0);
+         anchor1.setBottomAnchor(swingNode,0.0);
          
          acordion.setExpandedPane(titledPaneDescripcion);
          
@@ -642,5 +723,81 @@ public class SubirErrorController implements Initializable {
             this.archivo = archivo;
         }
        
+    }
+
+    @FXML
+    private void clickImprimirEtiqueta(ActionEvent event) {
+         String patron = "#\\w+\\s";
+
+        // Compilar el patrón en un objeto Pattern
+        Pattern pattern = Pattern.compile(patron);
+
+        // Crear un objeto Matcher para buscar coincidencias en el texto
+        Matcher matcher = pattern.matcher(textDescripcion.getText());
+        
+        // Recorrer las coincidencias encontradas
+        for (String item : this.items) {
+               System.out.println(item);
+            }
+        while (matcher.find()) {
+            String item = matcher.group();
+             if (item.length() > 1) {
+                String subItem = item.substring(1).trim();
+                System.out.println(subItem);
+                if(this.items.contains(subItem)){
+                    System.out.println("la etiqueta existe");
+                }
+                else{
+                    System.out.println("la etiqueta no existe");
+                }
+            }
+        }
+    }
+    
+    private void obtenerEtiquetasDescripcion(){
+       // String patron = "#\\w+\\s";
+       String patron ="#\\w+\\s|#\\w+$";
+        List<String> etiquetasAEliminar = new ArrayList();
+        // Compilar el patrón en un objeto Pattern
+        Pattern pattern = Pattern.compile(patron);
+
+        // Crear un objeto Matcher para buscar coincidencias en el texto
+        Matcher matcher = pattern.matcher(textDescripcion.getText());
+        
+        // Recorrer las coincidencias encontradas
+        
+        while (matcher.find()) {
+            String item = matcher.group();
+             if (item.length() > 1) {
+                String subItem = item.substring(1).trim();
+                System.out.println(subItem);
+                  
+                boolean containsIgnoreCase = items.stream()
+                .anyMatch(item2 -> item2.equalsIgnoreCase(subItem));
+        
+        System.out.println(containsIgnoreCase);
+        
+        
+                if(containsIgnoreCase){
+                    System.out.println("la etiqueta existe");
+                    Etiqueta etiqueta = mapEtiquetas.get(subItem.toUpperCase());
+                    this.etiquetas_error.add(etiqueta);
+                }
+                else{
+                    System.out.println("la etiqueta no existe");
+                    etiquetasAEliminar.add(item);
+                }
+            }
+        }
+       this.error.setEtiquetas(etiquetas_error);
+       String descContenido= textDescripcion.getText(); 
+        for (String etiq : etiquetasAEliminar) {
+               System.out.println(etiq);
+               System.out.println(descContenido);
+               descContenido = descContenido.replace(etiq, "");
+               
+            }
+         System.out.println("sin etiquetas erroneas"+descContenido);
+         textDescripcion.setText(descContenido);
     }
 }

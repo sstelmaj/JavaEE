@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -29,26 +30,23 @@ import javax.persistence.OneToMany;
 @Entity
 public class Etiqueta implements Serializable {
 
+    @ManyToMany(mappedBy = "etiquetas")
+    private List<Solucion> solucions;
+
+    @ManyToMany(mappedBy = "etiquetas")
+    private List<Error> errors;
+
     private String padre;
 
 
-    @OneToMany(mappedBy = "etiqueta")
-    private List<Solucion_Etiqueta> solucion_Etiquetas;
+
     
-    @OneToMany(mappedBy = "etiqueta")
-    private List<Error_Etiqueta> error_Etiquetas;
     
     
     @OneToMany(cascade = CascadeType.PERSIST)
     private List<Etiqueta> sub_etiqueta;
 
-    public List<Solucion_Etiqueta> getSolucion_Etiquetas() {
-        return solucion_Etiquetas;
-    }
-
-    public void setSolucion_Etiquetas(List<Solucion_Etiqueta> solucion_Etiquetas) {
-        this.solucion_Etiquetas = solucion_Etiquetas;
-    }
+    
 
     public List<Etiqueta> getSub_etiqueta() {
         return sub_etiqueta;
@@ -73,13 +71,7 @@ public class Etiqueta implements Serializable {
         this.nombre = nombre;
     }
 
-    public List<Error_Etiqueta> getError_Etiquetas() {
-        return error_Etiquetas;
-    }
-
-    public void setError_Etiquetas(List<Error_Etiqueta> error_Etiquetas) {
-        this.error_Etiquetas = error_Etiquetas;
-    }
+  
 
      public String getPadre() {
         return padre;
@@ -87,6 +79,22 @@ public class Etiqueta implements Serializable {
 
     public void setPadre(String padre) {
         this.padre = padre;
+    }
+
+    public List<Solucion> getSolucions() {
+        return solucions;
+    }
+
+    public void setSolucions(List<Solucion> solucions) {
+        this.solucions = solucions;
+    }
+
+    public List<Error> getErrors() {
+        return errors;
+    }
+
+    public void setErrors(List<Error> errors) {
+        this.errors = errors;
     }
     
 

@@ -15,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
@@ -27,11 +28,9 @@ import javax.persistence.Temporal;
 public class Solucion implements Serializable {
 
   
-   
-
-    @OneToMany(mappedBy = "solucion")
-    private List<Solucion_Etiqueta> solucion_Etiquetas;
-
+    
+    @ManyToMany
+    private List<Etiqueta> etiquetas;
     
     @ManyToOne
     private Error error;
@@ -44,14 +43,7 @@ public class Solucion implements Serializable {
     @OneToMany
     private List<Archivo> archivos;
 
-    public List<Solucion_Etiqueta> getSolucion_Etiquetas() {
-        return solucion_Etiquetas;
-    }
-
-    public void setSolucion_Etiquetas(List<Solucion_Etiqueta> solucion_Etiquetas) {
-        this.solucion_Etiquetas = solucion_Etiquetas;
-    }
-    
+   
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -83,6 +75,14 @@ public class Solucion implements Serializable {
 
     public void setPuntos(int puntos) {
         this.puntos = puntos;
+    }
+
+    public List<Etiqueta> getEtiquetas() {
+        return etiquetas;
+    }
+
+    public void setEtiquetas(List<Etiqueta> etiquetas) {
+        this.etiquetas = etiquetas;
     }
     
 

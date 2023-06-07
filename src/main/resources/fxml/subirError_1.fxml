@@ -11,20 +11,20 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" fx:id="anchorError" prefHeight="701.0" prefWidth="1382.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentacion.Controllers.SubirErrorController">
+<AnchorPane id="AnchorPane" prefHeight="900.0" prefWidth="1936.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentacion.Controllers.SubirErrorController">
    <children>
       <PointLight color="CHARTREUSE" layoutX="248.0" layoutY="343.0" lightOn="true" />
-      <AnchorPane fx:id="anchor1" layoutX="69.0" layoutY="142.0" prefHeight="385.0" prefWidth="656.0" AnchorPane.bottomAnchor="174.0" AnchorPane.leftAnchor="69.0" AnchorPane.rightAnchor="657.0" AnchorPane.topAnchor="142.0" />
-      <Accordion fx:id="acordion" layoutX="655.0" layoutY="142.0" prefHeight="385.0" prefWidth="569.0" AnchorPane.bottomAnchor="174.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="142.0">
+      <AnchorPane fx:id="anchor1" layoutX="69.0" layoutY="142.0" prefHeight="535.0" prefWidth="755.0" />
+      <Accordion fx:id="acordion" layoutX="923.0" layoutY="142.0" prefHeight="535.0" prefWidth="911.0">
         <panes>
-          <TitledPane fx:id="titledPaneDescripcion" animated="false" prefHeight="212.0" prefWidth="402.0" text="Descripcion">
+          <TitledPane fx:id="titledPaneDescripcion" animated="false" prefHeight="300.0" prefWidth="766.0" text="Descripcion">
                <content>
                   <AnchorPane>
                      <children>
-                        <ListView fx:id="listaCompletado" layoutX="373.0" layoutY="27.0" prefHeight="205.0" prefWidth="195.0" AnchorPane.rightAnchor="23.0" />
-                        <ScrollPane layoutX="33.6" layoutY="29.0" prefHeight="206.0" prefWidth="321.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="236.39999999999998">
+                        <ListView fx:id="listaCompletado" layoutX="376.0" layoutY="29.0" prefHeight="205.0" prefWidth="195.0" />
+                        <ScrollPane layoutX="14.0" layoutY="29.0" prefHeight="206.0" prefWidth="359.0">
                            <content>
-                              <TextArea fx:id="textDescripcion" prefHeight="234.0" prefWidth="320.0" />
+                              <TextArea fx:id="textDescripcion" prefHeight="234.0" prefWidth="581.0" />
                            </content>
                         </ScrollPane>
                      </children>
@@ -66,8 +66,7 @@
                         <TextField fx:id="textFieldRepositorio" layoutX="94.0" layoutY="195.0" prefHeight="25.0" prefWidth="374.0" />
                      </children>
                   </AnchorPane>
-               </content>
-            </TitledPane>
+               </content></TitledPane>
             <TitledPane animated="false" prefHeight="200.0" prefWidth="200.0" text="Archivos adjuntos">
                <content>
                   <AnchorPane fx:id="anchorFile" prefHeight="200.0" prefWidth="200.0">
@@ -87,31 +86,23 @@
                            </content>
                         </ScrollPane>
                         <Button fx:id="botonVer" layoutX="486.0" layoutY="51.0" mnemonicParsing="false" text="Ver" />
-                     </children>
-                  </AnchorPane>
-               </content>
-            </TitledPane>
+                     </children></AnchorPane>
+               </content></TitledPane>
         </panes>
       </Accordion>
       <DatePicker fx:id="inputFecha" layoutX="361.0" layoutY="108.0" prefHeight="25.0" prefWidth="180.0" />
       <TextField fx:id="textFieldTitulo" layoutX="98.0" layoutY="108.0" prefHeight="25.0" prefWidth="251.0" />
-      <Label fx:id="textTitulo" layoutX="514.0" layoutY="30.0" text="Subir Error">
+      <Label fx:id="textTitulo" layoutX="798.0" layoutY="39.0" text="Subir Error">
          <font>
             <Font size="36.0" />
          </font>
       </Label>
+      <Button fx:id="botonCancelar" layoutX="929.0" layoutY="729.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="88.0" text="Cancelar" />
+      <Button fx:id="botonIngresar" layoutX="1087.0" layoutY="729.0" mnemonicParsing="false" onAction="#clickIngresar" prefHeight="25.0" prefWidth="88.0" text="Ingresar" />
       <Label layoutX="98.0" layoutY="83.0" prefHeight="17.0" prefWidth="186.0" text="Título" />
       <Label layoutX="361.0" layoutY="83.0" prefHeight="17.0" prefWidth="63.0" text="Fecha" />
+      <Button fx:id="botonCrearSolucion" layoutX="571.0" layoutY="729.0" mnemonicParsing="false" onAction="#clickCrearSolucion" text="Crear Solucion" />
+      <Button fx:id="botonVerSolucion" layoutX="716.0" layoutY="729.0" mnemonicParsing="false" text="Ver solucion" />
       <AnchorPane layoutX="813.0" layoutY="541.0" />
-      <Pane fx:id="paneButtons" layoutX="318.0" layoutY="553.0" prefHeight="43.0" prefWidth="731.0" AnchorPane.bottomAnchor="30.0">
-         <children>
-            <Button fx:id="botonCancelar" layoutX="403.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="88.0" text="Cancelar" />
-            <Button fx:id="botonIngresar" layoutX="515.0" layoutY="10.0" maxWidth="110.0" minWidth="100.0" mnemonicParsing="false" onAction="#clickIngresar" prefHeight="25.0" prefWidth="88.0" text="Ingresar" />
-            <Button fx:id="botonCrearSolucion" layoutX="14.0" layoutY="10.0" mnemonicParsing="false" onAction="#clickCrearSolucion" text="Crear Solucion" />
-            <Button fx:id="botonVerSolucion" layoutX="130.0" layoutY="10.0" mnemonicParsing="false" text="Ver solucion" />
-            <Button fx:id="botonEliminarSolucion" layoutX="230.0" layoutY="9.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="110.0" text="Eliminar solucion" />
-            <Button fx:id="botonImprimirEtiqueta" layoutX="649.0" layoutY="9.0" mnemonicParsing="false" onAction="#clickImprimirEtiqueta" text="print E" />
-         </children>
-      </Pane>
    </children>
 </AnchorPane>

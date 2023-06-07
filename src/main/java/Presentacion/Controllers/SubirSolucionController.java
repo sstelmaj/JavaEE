@@ -45,6 +45,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.scene.Scene;
 import javafx.scene.control.Accordion;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -164,6 +165,8 @@ public class SubirSolucionController implements Initializable {
     private Button botonVer;
     
     private Archivo archivo;
+    @FXML
+    private Button mostrarError;
 
     public StringProperty tipoPantallaProperty() {
         return tipoPantallaProperty;
@@ -246,6 +249,7 @@ public class SubirSolucionController implements Initializable {
                 tipoPantalla =newValue;
                 textTitulo.setText(newValue);
                 botonIngresar.setText("Adjuntar");
+                mostrarError.setVisible(false);
             }
               
         });
@@ -398,9 +402,21 @@ public class SubirSolucionController implements Initializable {
         crear_solucion.setLink(linkTextFieldUrl.getText());
         
         if(tipoPantalla.equals("Solucion Asociada")){
-            if(this.error_controller != null){
+            if(textDescripcion.getText().equals("")){
+                   Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Información");
+                        alert.setHeaderText(null);
+                        alert.setContentText("la descripcion no puede estar vacía!");
+                        alert.showAndWait();
+            }
+            else if(this.error_controller != null){
                 error_controller.setSolucion(crear_solucion);
                 error_controller.setActualizador("recibir solucion");
+                
+                Stage stage = (Stage) textDescripcion.getScene().getWindow();
+
+                // Cerrar la ventana actual
+                stage.close();
             }
         }
         else{

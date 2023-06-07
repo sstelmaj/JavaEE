@@ -20,12 +20,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * FXML Controller class
@@ -42,7 +53,33 @@ public class DashboardController implements Initializable {
     private Map<String, String> vistas = new HashMap<>(); // mapa de vistas
     
     private static PerfilController instance = null;
-
+    
+    private boolean existeMainStage;
+    
+    private double newWidth;
+    
+    private double newHeight;
+    
+    private Stage mainStage;
+    @FXML
+    private Button botonActualizar;
+    @FXML
+    private Label textResAncho;
+    @FXML
+    private Label textResAlto;
+    @FXML
+    private Button botonPredeterminada;
+    @FXML
+    private Button botonMedidaContent;
+    @FXML
+    private AnchorPane anchorDash;
+    
+    public void setPrimaryStage(Stage mainStage){
+        this.mainStage = mainStage;
+        System.out.println("se setea"+ mainStage.getWidth());
+        initializeWidthChangeListener();
+       System.out.println(mainStage.widthProperty().toString());
+    }
     
     public void setVista(String nombreVista){
         this.selectorVista.setValue(nombreVista);
@@ -66,13 +103,28 @@ public class DashboardController implements Initializable {
             Parent nuevaVista = loader.load();
             SubirErrorController subirErrorController = (SubirErrorController)loader.getController();
             subirErrorController.setPantalla("Subir Error");
+            subirErrorController.setPanelContent(contentAPane);
             contentAPane.getChildren().setAll(nuevaVista);
-     
+            BackgroundFill backgroundFill = new BackgroundFill(Color.LIGHTBLUE, null, null);
+            Background background = new Background(backgroundFill);
+            contentAPane.setBackground(background);
+            anchorDash.setRightAnchor(contentAPane,100.0);
+            anchorDash.setLeftAnchor(contentAPane,contentAPane.getLayoutX());
+            anchorDash.setTopAnchor(contentAPane,contentAPane.getLayoutY());
+            anchorDash.setBottomAnchor(contentAPane,80.0);
+        //    contentAPane.maxWidth(100.0);
         }catch(IOException e){
             System.out.println(e.getMessage());
         
         }
           
+          
+       
+           
+        
+            
+         
+      
           
           
         // Agregar elementos al ComboBox
@@ -170,8 +222,51 @@ public class DashboardController implements Initializable {
           
           
     }    
+
+    @FXML
+    private void actualizar(ActionEvent event) {
+      String widthString = String.valueOf(mainStage.getWidth());
+        textResAncho.setText(widthString);
+        String heightString = String.valueOf(mainStage.getHeight());
+                textResAlto.setText(heightString);
+    }
     
-    
+    private void initializeWidthChangeListener() {
+        if (mainStage != null) {
+            mainStage.widthProperty().addListener((observable, oldValue, newValue) -> {
+                 this.newWidth = (double) newValue;
+                String widthString = String.valueOf(newWidth);
+                textResAncho.setText(widthString);
+                
+                contentAPane.setPrefWidth( (newWidth - 1552.0) + 1552.0) ;
+            });
+            mainStage.heightProperty().addListener((observable, oldValue, newValue) -> {
+                this.newHeight = (double) newValue;
+                String heightString = String.valueOf(newHeight);
+                textResAlto.setText(heightString);
+                double nuevoAlto = (newHeight - 800.0) + 700.0;
+                if(nuevoAlto > 900.0){
+                    nuevoAlto = 900.0;
+                }
+                contentAPane.setPrefHeight( nuevoAlto  );
+                
+            });
+            
+            
+        }
+    }
+
+    @FXML
+    private void actionPredeterminada(ActionEvent event) {
+        this.mainStage.setHeight(800.0 );
+        this.mainStage.setWidth(1552.0) ;
+    }
+
+    @FXML
+    private void verContent(ActionEvent event) {
+        System.out.println(contentAPane.getWidth());
+        System.out.println(contentAPane.getHeight());
+    }
         
     
 }

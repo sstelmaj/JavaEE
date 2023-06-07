@@ -9,12 +9,14 @@ package Logica.Clases;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
@@ -31,18 +33,17 @@ public class Error implements Serializable {
 
 
     
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Nota> notas;
     
-   
     
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Etiqueta> etiquetas;
     
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Usuario usuario;
     
-    @OneToMany(mappedBy = "error")
-    private List<Error_Etiqueta> error_Etiquetas;
-
+   
     
    
     
@@ -103,14 +104,16 @@ public class Error implements Serializable {
         this.usuario = usuario;
     }
 
-    public List<Error_Etiqueta> getError_Etiquetas() {
-        return error_Etiquetas;
+    public List<Etiqueta> getEtiquetas() {
+        return etiquetas;
     }
 
-    public void setError_Etiquetas(List<Error_Etiqueta> error_Etiquetas) {
-        this.error_Etiquetas = error_Etiquetas;
+    public void setEtiquetas(List<Etiqueta> etiquetas) {
+        this.etiquetas = etiquetas;
     }
 
+    
+  
    
 
     public List<Archivo> getArchivos() {

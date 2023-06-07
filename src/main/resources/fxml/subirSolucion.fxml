@@ -83,6 +83,6 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Button layoutX="934.0" layoutY="108.0" mnemonicParsing="false" text="Mostrar Error Asociado" />
+      <Button fx:id="mostrarError" layoutX="934.0" layoutY="108.0" mnemonicParsing="false" text="Mostrar Error Asociado" />
    </children>
 </AnchorPane>

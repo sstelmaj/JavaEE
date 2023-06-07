@@ -4,11 +4,14 @@
  */
 package Presentacion;
 
+import Presentacion.Controllers.DashboardController;
+import Presentacion.Controllers.SubirErrorController;
 import java.io.IOException;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javax.swing.UIManager;
@@ -30,14 +33,21 @@ public class Main extends Application { //iniciador
         try{
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Main.class.getResource("/fxml/Dashboard.fxml"));
-            Pane ventana = (Pane) loader.load();
+            AnchorPane ventana = (AnchorPane) loader.load();
+            DashboardController dashboardController = (DashboardController)loader.getController();
             
             //Show the scene containing the root layout
             Scene scene = new Scene(ventana);
             primaryStage.setTitle("Login");
-            primaryStage.setResizable(false);
+            primaryStage.setResizable(true);
+            primaryStage.setMinHeight(800.0);
+            primaryStage.setMinWidth(1552.0);
             primaryStage.setScene(scene);
+        //    primaryStage.setFullScreen(true);
+            //se le pasa el primary stage para poder controlar las resoluciones
+            
             primaryStage.show();
+        //    dashboardController.setPrimaryStage(primaryStage);
             this.stage = primaryStage;
             
         }catch(IOException e){
@@ -52,5 +62,7 @@ public class Main extends Application { //iniciador
     public static Stage getStage(){
         return stage;
     }
+    
+    
     
 }
