@@ -38,7 +38,16 @@ public class Etiqueta implements Serializable {
 
     private String padre;
 
+    private Boolean active = Boolean.TRUE;
 
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+    
 
     
     

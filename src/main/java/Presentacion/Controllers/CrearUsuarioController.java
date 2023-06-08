@@ -10,10 +10,13 @@ import Logica.Clases.Perfil;
 import Logica.Clases.Usuario;
 import Logica.Controladores.EtiquetaController;
 import Logica.Controladores.PerfilController;
+import Logica.Controladores.UsuarioController;
 import Persistencia.Conexion;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -21,13 +24,16 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Duration;
 
 /**
  * FXML Controller class
@@ -81,6 +87,10 @@ public class CrearUsuarioController implements Initializable {
     private Label textTitulo;
     
     private DashboardController dash;
+    @FXML
+    private Tooltip toolPass1;
+    @FXML
+    private Tooltip toolPass2;
     
     public void setDashboard(DashboardController dash){
         this.dash = dash;
@@ -111,7 +121,9 @@ public class CrearUsuarioController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        
+         toolPass1.setShowDelay(Duration.millis(0));
+         toolPass2.setShowDelay(Duration.millis(0));
+         
         //inicializar la tabla de perfiles
          perfiles_ = FXCollections.observableArrayList();
         //asocia las columnas con el tituo
@@ -209,11 +221,91 @@ public class CrearUsuarioController implements Initializable {
             usuario.setPerfil(perfil_seleccionado);
         }
         
+        //patron para el correo
+        String patron = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+
+        // Compilar el patrón en un objeto Pattern
+        Pattern pattern = Pattern.compile(patron);
+
+        // Crear un objeto Matcher para buscar coincidencias en el texto
+        Matcher matcher = pattern.matcher(textCorreo.getText());
+
+        // Verificar si el correo cumple con el patrón
+        if (matcher.matches()) {
+            System.out.println("El correo es válido.");
+        } else {
+            System.out.println("El correo no es válido.");
+             Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Información");
+                        alert.setHeaderText(null);
+                        alert.setContentText("El correo no es valido!");
+                        alert.showAndWait();
+              textCorreo.requestFocus();
+            return;
+        }
+        
+        if(UsuarioController.getInstance().existeUsuario(textCorreo.getText())){
+             Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Información");
+                        alert.setHeaderText(null);
+                        alert.setContentText("El usuario con ese correo ya existe!");
+                        alert.showAndWait();
+              textCorreo.requestFocus();
+            return;
+        }
+        
+        if(textPass.getText().equals(textPass2.getText())){
+            String patronPass = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{6,10}$";
+           
+
+            // Verificar si la contraseña cumple con el patrón
+            if (textPass.getText().matches(patronPass)) {
+                System.out.println("La contraseña cumple con los requisitos.");
+            } else {
+                 Alert alert = new Alert(Alert.AlertType.WARNING);
+                       alert.setTitle("Información");
+                       alert.setHeaderText(null);
+                       alert.setContentText("Una de las contraseñas no cumple con los requisitos!");
+                       alert.showAndWait();
+                    textPass.requestFocus();
+                   return;
+            }
+        }
+        else{
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+                       alert.setTitle("Información");
+                       alert.setHeaderText(null);
+                       alert.setContentText("Las contraseñas no coinciden!");
+                       alert.showAndWait();
+             textPass.requestFocus();
+            return;
+        }
+        
+        if(textPerfil.getText().equals("")){
+             Alert alert = new Alert(Alert.AlertType.WARNING);
+                       alert.setTitle("Información");
+                       alert.setHeaderText(null);
+                       alert.setContentText("Debe asignar un perfil!");
+                       alert.showAndWait();
+             textPass.requestFocus();
+             return;
+        }
+        
+        
+        
+        
+        
+        
         if(tipoPantalla.equals("Modificar Usuario")){
             System.out.println("Modifica el usuario");
             usuario.setId(idtemporal);
             try { 
                 Conexion.getInstance().merge(usuario);
+                  Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("Información");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Se ha modificado el usuario con exito!");
+                        alert.showAndWait();
                 } catch (Exception e) {
                     // Manejo de la excepción
                     e.printStackTrace();
@@ -221,7 +313,12 @@ public class CrearUsuarioController implements Initializable {
         }else{
         
             try { 
-                Conexion.getInstance().persist(usuario);
+                Conexion.getInstance().merge(usuario);
+                  Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("Información");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Se ha creado el usuario con exito!");
+                        alert.showAndWait();
                 } catch (Exception e) {
                     // Manejo de la excepción
                     e.printStackTrace();

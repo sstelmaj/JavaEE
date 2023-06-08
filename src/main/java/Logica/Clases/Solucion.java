@@ -58,6 +58,8 @@ public class Solucion implements Serializable {
     private String link;
     private int puntos;
     
+    private Boolean active = Boolean.TRUE;
+    
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaSubida;
     
@@ -84,6 +86,15 @@ public class Solucion implements Serializable {
     public void setEtiquetas(List<Etiqueta> etiquetas) {
         this.etiquetas = etiquetas;
     }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+    
     
 
 

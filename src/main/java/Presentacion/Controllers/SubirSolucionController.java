@@ -422,6 +422,11 @@ public class SubirSolucionController implements Initializable {
         else{
             try { 
             Conexion.getInstance().persist(crear_solucion);
+              Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("Información");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Se ha creado la solucion con exito!");
+                        alert.showAndWait();
             } catch (Exception e) {
                 // Manejo de la excepción
                 e.printStackTrace();

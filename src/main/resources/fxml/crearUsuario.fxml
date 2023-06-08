@@ -22,8 +22,14 @@
       <TextField fx:id="textCorreo" layoutX="309.0" layoutY="165.0" prefHeight="25.0" prefWidth="183.0" />
       <TextField fx:id="textNombre" layoutX="309.0" layoutY="212.0" prefHeight="25.0" prefWidth="183.0" />
       <TextField fx:id="textApellido" layoutX="309.0" layoutY="260.0" prefHeight="25.0" prefWidth="183.0" />
-      <TextField fx:id="textPass" layoutX="309.0" layoutY="306.0" prefHeight="25.0" prefWidth="183.0" />
-      <TextField fx:id="textPass2" layoutX="309.0" layoutY="356.0" prefHeight="25.0" prefWidth="183.0" />
+      <TextField fx:id="textPass" layoutX="309.0" layoutY="306.0" prefHeight="25.0" prefWidth="183.0">
+         <tooltip>
+            <Tooltip fx:id="toolPass1" text="La contraseña debe tener al menos una letra minuscula y mayuscula, un numero y debe tener entre 6 y 10 digitos" />
+         </tooltip></TextField>
+      <TextField fx:id="textPass2" layoutX="309.0" layoutY="356.0" prefHeight="25.0" prefWidth="183.0">
+         <tooltip>
+            <Tooltip fx:id="toolPass2" text="La contraseña debe tener al menos una letra minuscula y mayuscula, un numero y debe tener entre 6 y 10 digitos" />
+         </tooltip></TextField>
       <TableView fx:id="tablaPerfiles" layoutX="569.0" layoutY="188.0" prefHeight="238.0" prefWidth="546.0">
         <columns>
           <TableColumn fx:id="colNombre" editable="false" prefWidth="186.0" text="nombre" />

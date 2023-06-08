@@ -137,14 +137,17 @@ public class DashboardController implements Initializable {
         vistas.put("Detalle Solucion", "/fxml/detalleSolucion.fxml");
         vistas.put("Error", "/fxml/detalleError.fxml");
         vistas.put("Crear Etiqueta", "/fxml/crearOrganizarEtiqueta.fxml");
+        vistas.put("Modificar Etiqueta", "/fxml/crearOrganizarEtiqueta.fxml");
         vistas.put("Crear Perfil", "/fxml/crearPerfil.fxml");
         vistas.put("Modificar Perfil", "/fxml/crearPerfil.fxml");
         vistas.put("Crear Usuario", "/fxml/crearUsuario.fxml");
         vistas.put("Modificar Usuario", "/fxml/crearUsuario.fxml");
+        vistas.put("Prueba Filtrado", "/fxml/pruebaFiltrado.fxml");
+        
         
         // Agregar elementos al ComboBox
         selectorVista.getItems().addAll("Subir Error", "Modificar Error","Subir Solucion","Modificar Solucion",
-                "Vista 2", "Detalle Solucion","Crear Etiqueta", "Admin", "Error","Crear Perfil","Modificar Perfil","Crear Usuario","Modificar Usuario");
+                "Vista 2", "Detalle Solucion","Crear Etiqueta","Modificar Etiqueta", "Admin", "Error","Crear Perfil","Modificar Perfil","Crear Usuario","Modificar Usuario","Prueba Filtrado");
         
         // Listener para cambio de selección en el ComboBox
         selectorVista.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -199,6 +202,19 @@ public class DashboardController implements Initializable {
                     crearUsuarioController.setTipoPantalla("Modificar Usuario");
                     
                     crearUsuarioController.setDashboard(this);
+                }
+                else if(newValue.equals("Modificar Etiqueta")){
+                    crearEtiquetaController crearEtiquetaController = (crearEtiquetaController)loader.getController();
+                    Etiqueta etiqueta = EtiquetaController.getInstance().obtenerEtiqueta("SO");
+                    if(etiqueta != null){
+                        System.out.println("llega");
+                        crearEtiquetaController.setEtiquetaModificar(etiqueta);
+                    }else{
+                        System.out.println("no llega");
+                    }
+                    crearEtiquetaController.setTipoPantalla("Modificar Etiqueta");
+                    
+                    //crearEtiquetaController.setDashboard(this);
                 }
                 
                 

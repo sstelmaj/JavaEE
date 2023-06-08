@@ -60,6 +60,8 @@ public class Error implements Serializable {
     private String link;
     private String repositorio;
     
+    private Boolean active = Boolean.TRUE;
+    
     @Lob
     @Column(name = "codigo", columnDefinition = "TEXT")
     private String codigo;
@@ -112,6 +114,15 @@ public class Error implements Serializable {
         this.etiquetas = etiquetas;
     }
 
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    
     
   
    

@@ -6,6 +6,7 @@ package Presentacion.Controllers;
 
 import Logica.Clases.Etiqueta;
 import Logica.Clases.*;
+import Logica.Controladores.ErrorController;
 import Logica.Controladores.EtiquetaController;
 import Persistencia.Conexion;
 import java.awt.Dimension;
@@ -87,6 +88,7 @@ import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.NumberBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
@@ -363,7 +365,7 @@ public class SubirErrorController implements Initializable {
          
         //para poder filtrar luego aca obtengo el observable list para el filtrado
         try {
-             etiquetas = EtiquetaController.getInstance().listaEtiquetas();
+             etiquetas = EtiquetaController.getInstance().listaEtiquetasActivas();
 
             // Crear un ObservableList a partir de la lista existente
              items = FXCollections.observableArrayList();
@@ -542,9 +544,20 @@ public class SubirErrorController implements Initializable {
          error.setDescripcion(textDescripcion.getText());
             try { 
             Conexion.getInstance().merge(error);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("Información");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Se ha creado el error con exito!");
+                        alert.showAndWait();
             } catch (Exception e) {
                 // Manejo de la excepción
                 e.printStackTrace();
+                 Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText(null);
+                        
+                        alert.setContentText("Ha ocurrido un error en la base de datos");
+                        alert.showAndWait();
             }
             System.out.println(tipoPantalla);
         if(tipoPantalla.equals("Subir Error")){
@@ -727,30 +740,21 @@ public class SubirErrorController implements Initializable {
 
     @FXML
     private void clickImprimirEtiqueta(ActionEvent event) {
-         String patron = "#\\w+\\s";
-
-        // Compilar el patrón en un objeto Pattern
-        Pattern pattern = Pattern.compile(patron);
-
-        // Crear un objeto Matcher para buscar coincidencias en el texto
-        Matcher matcher = pattern.matcher(textDescripcion.getText());
+        ArrayList<String> valores = new ArrayList<>();
+        valores.add("Angular");
+        valores.add("React");
+        valores.add("Yii");
         
-        // Recorrer las coincidencias encontradas
-        for (String item : this.items) {
-               System.out.println(item);
+        List<Logica.Clases.Error> erroresFiltrados = ErrorController.getInstance().filtradoErroresPorEtiquetas(valores);
+        
+        if(erroresFiltrados != null){
+            System.out.println("llegaron los errores"+erroresFiltrados.size());
+            for (Logica.Clases.Error error : erroresFiltrados) {
+               System.out.println(error.getTitulo());
+               
+               
             }
-        while (matcher.find()) {
-            String item = matcher.group();
-             if (item.length() > 1) {
-                String subItem = item.substring(1).trim();
-                System.out.println(subItem);
-                if(this.items.contains(subItem)){
-                    System.out.println("la etiqueta existe");
-                }
-                else{
-                    System.out.println("la etiqueta no existe");
-                }
-            }
+            
         }
     }
     

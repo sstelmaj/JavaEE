@@ -43,6 +43,19 @@ public class EtiquetaController {
     return resultado;
     }
     
+    public List<Etiqueta> listaEtiquetasActivas() {
+    EntityManager em = Conexion.getInstance().getEntity();
+    List<Etiqueta> resultado = null;
+    em.getTransaction().begin();
+        try {
+            resultado = em.createNativeQuery("SELECT * FROM etiqueta WHERE active =1", Etiqueta.class).getResultList();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+        }
+    return resultado;
+    }
+    
     public boolean existeEtiqueta(String nombre) {
     EntityManager em = Conexion.getInstance().getEntity();
     Object etiqueta = null;

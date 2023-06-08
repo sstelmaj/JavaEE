@@ -31,7 +31,7 @@ public class Nota implements Serializable {
     @Column(name = "contenido", columnDefinition = "TEXT")
     private String contenido;
     
-    
+    private Boolean active = Boolean.TRUE;
 
     public Long getId() {
         return id;
@@ -47,6 +47,14 @@ public class Nota implements Serializable {
 
     public void setContenido(String contenido) {
         this.contenido = contenido;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
     
     

@@ -158,6 +158,11 @@ public class CrearPerfilController implements Initializable {
 
              try { 
                 Conexion.getInstance().merge(perfil);
+                  Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("Información");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Se ha creado el perfil con exito!");
+                        alert.showAndWait();
                 } catch (Exception e) {
                     // Manejo de la excepción
                     e.printStackTrace();

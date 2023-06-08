@@ -19,7 +19,7 @@
             <TreeView fx:id="arbolEtiquetas" editable="true" prefHeight="278.0" prefWidth="262.0" />
          </content>
       </ScrollPane>
-      <Label layoutX="478.0" layoutY="24.0" text="Crear Etiqueta" />
+      <Label fx:id="textTitulo" layoutX="478.0" layoutY="24.0" text="Crear Etiqueta" />
       <ScrollPane layoutX="512.0" layoutY="135.0" prefHeight="211.0" prefWidth="213.0">
          <content>
             <ListView fx:id="listaSubEtiquetas" prefHeight="208.0" prefWidth="211.0" />
