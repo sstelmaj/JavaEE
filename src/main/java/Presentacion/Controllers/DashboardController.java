@@ -167,7 +167,6 @@ public class DashboardController implements Initializable {
         vistas.put("Subir Solucion", "/fxml/subirSolucion.fxml");
         vistas.put("Modificar Solucion", "/fxml/subirSolucion.fxml");
         vistas.put("Admin", "/fxml/AdminDashboard.fxml");
-        vistas.put("Detalle Solucion", "/fxml/detalleSolucion.fxml");
         vistas.put("Error", "/fxml/detalleError.fxml");
         vistas.put("Crear Etiqueta", "/fxml/crearOrganizarEtiqueta.fxml");
         vistas.put("Modificar Etiqueta", "/fxml/crearOrganizarEtiqueta.fxml");
@@ -202,10 +201,10 @@ public class DashboardController implements Initializable {
                     subirErrorController.setTipoPantalla("Modificar Error");
                 }else if(newValue.equals("Modificar Solucion")){
                     SubirSolucionController subirSolucionController = (SubirSolucionController)loader.getController();
-                    List<Solucion> soluciones = SolucionController.getInstance().obtenerSolucion(101);
+                    Solucion soluciones = SolucionController.getInstance().obtenerSolucion(101);
                     if(soluciones != null){
                         System.out.println("llega");
-                        subirSolucionController.setSolucionModificar(soluciones.get(0));
+                        subirSolucionController.setSolucionModificar(soluciones);
                     }else{
                         System.out.println("no llega");
                     }
@@ -236,6 +235,12 @@ public class DashboardController implements Initializable {
                     
                     crearUsuarioController.setDashboard(this);
                 }
+
+                if(fxml.equals("/fxml/detalleError.fxml")){
+                    DetalleErrorController detalleErrorController=(DetalleErrorController)loader.getController();
+                    detalleErrorController.setDashboard(this);
+                    detalleErrorController.initialize();
+
                 else if(newValue.equals("Modificar Etiqueta")){
                     crearEtiquetaController crearEtiquetaController = (crearEtiquetaController)loader.getController();
                     Etiqueta etiqueta = EtiquetaController.getInstance().obtenerEtiqueta("SO");
@@ -271,6 +276,11 @@ public class DashboardController implements Initializable {
           
           
     }    
+    public void setVista(Parent nuevaVista){
+        contentAPane.getChildren().setAll(nuevaVista);
+    }
+    
+
 
     @FXML
     private void actualizar(ActionEvent event) {
@@ -364,6 +374,7 @@ public class DashboardController implements Initializable {
     @FXML
     private void clickAjustes(ActionEvent event) {
     }
+
         
     
 }

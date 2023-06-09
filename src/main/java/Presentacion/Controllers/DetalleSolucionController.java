@@ -10,6 +10,7 @@ import Logica.Controladores.SolucionController;
 import Presentacion.PanelCodigoSolucion;
 import java.awt.Dimension;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +24,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -100,16 +102,14 @@ public class DetalleSolucionController implements Initializable {
     
     public void initialize(){
             //Obtengo los datos de la solucion
-            List<Solucion> solucion = SolucionController.getInstance().obtenerSolucion(idSol);
-            for(Solucion res: solucion){
-                codigoSol=res.getCodigo();
-                descripcion=res.getDescripcion();
-                archivos=res.getArchivos();
-                fechaSol=res.getFechaSubida();
-                usosSol=res.getPuntos();
+            Solucion solucion = SolucionController.getInstance().obtenerSolucion(idSol);
+                codigoSol=solucion.getCodigo();
+                descripcion=solucion.getDescripcion();
+                archivos=solucion.getArchivos();
+                fechaSol=solucion.getFechaSubida();
+                usosSol=solucion.getPuntos();
 
-                //codigoErr=res.getError_Tecnologia().getError().getCodigo();
-            }
+                codigoErr=solucion.getError().getCodigo();
 
             //Frame para el codigo de error
             JInternalFrame iFrame = new PanelCodigoSolucion(codigoErr,SyntaxConstants.SYNTAX_STYLE_JAVA);
@@ -143,10 +143,8 @@ public class DetalleSolucionController implements Initializable {
                     imageView.setPreserveRatio(true);
                     tablaArchivos.addRow(0, imageView);
                 }else{
-                    WebView webView=new WebView();
-                    WebEngine webEngine = webView.getEngine();
-                    webEngine.load(arch.getUrl());
-                    archivosWeb.getChildren().add(webView);
+                    Hyperlink link= new Hyperlink(arch.getUrl());
+                    this.archivosWeb.getChildren().add(link);
                 }
             }
 
@@ -163,7 +161,7 @@ public class DetalleSolucionController implements Initializable {
             tablaArchivos.setGridLinesVisible(true);
 
             txtUsosSolucion.setText("Usos: "+usosSol);
-            txtFechaSolucion.setText(txtFechaSolucion.getText()+fechaSol.toString());
+            txtFechaSolucion.setText(txtFechaSolucion.getText()+new SimpleDateFormat("dd-MM-yyyy").format(this.fechaSol));
 
 
             //Creo el popup para expandir imagenes

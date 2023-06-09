@@ -24,18 +24,18 @@ public class SolucionController {
         private static final Conexion con=Conexion.getInstance();
     }
     
-     public List<Solucion> obtenerSolucion(long id){
-        List<Solucion> resultado=null;
+     public Solucion obtenerSolucion(long id){
+        Object resultado=null;
         EntityManager em= SolucionControllerHolder.con.getEntity();
         em.getTransaction().begin();
         try{
             Query q = em.createNativeQuery("SELECT * from Solucion where id="+id, Solucion.class);
-            resultado=q.getResultList();
+            resultado=q.getSingleResult();
             em.getTransaction().commit();  
     }catch(Exception e){
         em.getTransaction().rollback();
     }
-      return resultado;  
+      return (Solucion)resultado;  
     }
      
      public List<Solucion> obtenerSoluciones(){

@@ -7,8 +7,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="90.0" prefWidth="400.0" style="-fx-border-color: black; -fx-border-style: solid;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="Presentacion.Controllers.BusquedaSolucionController">
+<AnchorPane id="AnchorPane" prefHeight="90.0" prefWidth="400.0" style="-fx-border-color: black; -fx-border-style: solid;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentacion.Controllers.BusquedaSolucionController">
    <children>
       <Text fx:id="txtTitulo" layoutX="14.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Titulo de la solucion" />
       <Text fx:id="txtDescripcion" layoutX="14.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Descripcion" wrappingWidth="306.16064453125">
@@ -17,5 +16,6 @@
          </font>
       </Text>
       <Button fx:id="btnDetalle" layoutX="339.0" layoutY="30.0" mnemonicParsing="false" onMouseClicked="#DetalleSolucion" prefHeight="31.0" prefWidth="32.0" text="&gt;" />
+      <HBox fx:id="hBoxEtiquetas" layoutX="14.0" layoutY="54.0" prefHeight="21.0" prefWidth="293.0" />
    </children>
 </AnchorPane>

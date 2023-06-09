@@ -4,8 +4,11 @@
  */
 package Presentacion.Controllers;
 
+import Logica.Clases.Error_Etiqueta;
+import Logica.Clases.Solucion_Etiqueta;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,6 +18,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -32,8 +37,11 @@ public class BusquedaSolucionController implements Initializable {
     @FXML
     private Button btnDetalle;
     private String titulo,descripcion;
+    DashboardController dashboard;
     private long id;
-    private AnchorPane apPrincipal;
+    @FXML
+    private HBox hBoxEtiquetas;
+    private List<Solucion_Etiqueta> etiquetas;
     
 
     /**
@@ -43,16 +51,24 @@ public class BusquedaSolucionController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         
     }    
-    public void setDatos(String titulo, String descripcion,long id){
+    public void setDatos(String titulo, String descripcion,long id, DashboardController dash, List<Solucion_Etiqueta>etiquetas){
         this.titulo=titulo;
         this.descripcion=descripcion;
         this.id=id;
+        this.etiquetas=etiquetas;
+        this.dashboard=dash;
     }
     
-    public void initialize(AnchorPane ap){
+    public void initialize(){
         txtTitulo.setText(titulo);
         txtDescripcion.setText(descripcion);
-        apPrincipal=ap;
+        hBoxEtiquetas.setSpacing(6);
+        for(Solucion_Etiqueta e: etiquetas){
+            Text etiqueta=new Text(e.getEtiqueta().getNombre());
+            etiqueta.setFill(Color.BLACK);
+            hBoxEtiquetas.getChildren().add(etiqueta);
+        }
+        
     }
 
     @FXML
@@ -66,12 +82,13 @@ public class BusquedaSolucionController implements Initializable {
                 DetalleSolucionController subfileController = loader.getController();
                 
                 subfileController.setId(id);
-                subfileController.setEscenaPrevia(btnDetalle.getScene());
+                //subfileController.setEscenaPrevia(btnDetalle.getScene());
                 subfileController.initialize();
+                this.dashboard.setVista(subfileRoot);
                 
-                Scene s=new Scene(subfileRoot);
-                Stage stage=(Stage)btnDetalle.getScene().getWindow();
-                stage.setScene(s);
+                //Scene s=new Scene(subfileRoot);
+                //Stage stage=(Stage)btnDetalle.getScene().getWindow();
+                //stage.setScene(s);
            
         }catch (IOException e) {
                 e.printStackTrace();

@@ -26,17 +26,18 @@ public class ErrorController {
         return instance;
     }
     
-    public List<Error> obtenerError(long id){
+    public Error obtenerError(long id){
         EntityManager em = Conexion.getInstance().getEntity();
-        List<Error> resultado = null;
+        Object resultado = null;
         em.getTransaction().begin();
         try {
-            resultado = em.createNativeQuery("SELECT * FROM error where id="+id, Error.class).getResultList();
-                em.getTransaction().commit();
+            Query q = em.createNativeQuery("SELECT * FROM error where id="+id, Error.class);
+            resultado=q.getSingleResult();    
+            em.getTransaction().commit();
         } catch (Exception e){
             em.getTransaction().rollback();
         }
-        return resultado;
+        return (Error)resultado;
     }
     public List<Logica.Clases.Error> obtenerErrores(){
         EntityManager em = Conexion.getInstance().getEntity();

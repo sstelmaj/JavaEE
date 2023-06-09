@@ -90,6 +90,16 @@ public class Error implements Serializable {
         this.id = id;
     }
 
+    public List<Solucion> getSoluciones() {
+        return soluciones;
+    }
+
+    public void setSoluciones(List<Solucion> soluciones) {
+        this.soluciones = soluciones;
+    }
+    
+    
+
     public List<Nota> getNotas() {
         return notas;
     }
