@@ -4,33 +4,38 @@
  */
 package Presentacion.DTOs;
 
-import Logica.Clases.Perfil;
 import Logica.Clases.Usuario;
+import java.util.List;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 
 /**
  *
- * @author UsuarioWithCheckbox
+ * @author UsuarioParaGestionar
  */
-public class UsuarioWithCheckbox {
+public class UsuarioParaGestionar {
 
     private Long id;
     private String nombre;
     private String apellido;
     private String mail;
-    private Perfil perfil;
     private CheckBox checkbox;
+    private ComboBox combobox;
     
-    public UsuarioWithCheckbox(Usuario user) {
+    public UsuarioParaGestionar(Usuario user, List<String> perfilesDisponibles) {
         this.id = user.getId();
         this.nombre = user.getNombre();
         this.apellido = user.getApellido();
         this.mail = user.getMail();
-        this.perfil = user.getPerfil();
+        
         this.checkbox = new CheckBox();
         this.checkbox.setSelected(user.isActive());
+        
+        this.combobox = new ComboBox(FXCollections.observableArrayList(perfilesDisponibles));
+        this.combobox.setValue(user.getPerfil().getNombre());
     }
 
     public Long getId() {
@@ -64,23 +69,34 @@ public class UsuarioWithCheckbox {
     public void setMail(String mail) {
         this.mail = mail;
     }
-    public Perfil getPerfil() {
-        return perfil;
-    }
-
-    public void setPerfil(Perfil perfil) {
-        this.perfil = perfil;
-    }
 
     public CheckBox getCheckbox() {
         return checkbox;
+    }
+
+    public void setCheckboxIsSelected(Boolean selected) {
+        this.checkbox.setSelected(selected);
     }
     
     public void setCheckboxAction(EventHandler<ActionEvent> eventHandler) {
         this.checkbox.setOnAction(eventHandler);
     }
 
-    public void setCheckboxIsSelected(Boolean selected) {
-        this.checkbox.setSelected(selected);
+    public ComboBox getCombobox() {
+        return combobox;
     }
+
+    public void setComboboxValue(String value) {
+        this.combobox.setValue(value);
+    }
+    
+    public void setComboboxAction(EventHandler<ActionEvent> eventHandler) {
+        this.combobox.setOnAction(eventHandler);
+    }
+
+    @Override
+    public String toString() {
+        return "UsuarioParaGestionar{" + "nombre=" + nombre + ", apellido=" + apellido;
+    }
+    
 }

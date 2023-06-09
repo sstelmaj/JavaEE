@@ -4,11 +4,14 @@
  */
 package Logica.Controladores;
 
+
+import Logica.Clases.Perfil;
 import Logica.Clases.Etiqueta;
 import Logica.Clases.Usuario;
 import Persistencia.Conexion;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
 public class UsuarioController {
@@ -38,6 +41,33 @@ public class UsuarioController {
         return resultado;
     }
     
+
+    public void actualizarEstadoUsuarioPorId(Long id, Boolean nuevoEstado){
+        EntityManager em = Conexion.getInstance().getEntity();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            Usuario usuario = em.find(Usuario.class, id);
+            usuario.setIsActive(nuevoEstado);
+            tx.commit();
+        } catch (Exception e){
+            em.getTransaction().rollback();
+        }
+    }
+    
+    public void actualizarPerfilUsuarioPorId(Long id, String nuevoPerfil){
+        EntityManager em = Conexion.getInstance().getEntity();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            Usuario usuario = em.find(Usuario.class, id);
+            Perfil perfil = em.find(Perfil.class, nuevoPerfil);
+            usuario.setPerfil(perfil);
+            tx.commit();
+        } catch (Exception e){
+            em.getTransaction().rollback();
+        }
+
     public Usuario obtenerUsuario(Long id){
         Usuario user=null;
         Object resultado = null;
@@ -72,7 +102,5 @@ public class UsuarioController {
         }
         return false;
     }
-    
-    
 
 }
