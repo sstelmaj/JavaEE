@@ -79,6 +79,7 @@ public class ItemLista extends Control {
                  DetalleErrorController detalleErrorController=(DetalleErrorController)loader.getController();
                  DashboardController dashboardController = DashboardController.getInstance();
                  detalleErrorController.initialize(dashboardController.getAnchorPane(),this.error);
+                 
                  dashboardController.setControladorAnterior(this.controlador);
                  dashboardController.setControladorSiguiente(detalleErrorController);
                  
