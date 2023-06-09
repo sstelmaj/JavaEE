@@ -6,11 +6,16 @@ package Presentacion.Controllers;
 
 import Logica.Clases.Etiqueta;
 import Logica.Clases.*;
+import Logica.Controladores.ErrorController;
 import Logica.Controladores.EtiquetaController;
 import Persistencia.Conexion;
+import Presentacion.Main;
 import Presentacion.RSTA;
 import java.awt.Dimension;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -40,6 +45,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.scene.Scene;
 import javafx.scene.control.Accordion;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -47,15 +53,19 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.swing.JInternalFrame;
 import jdk.nashorn.api.scripting.JSObject;
@@ -113,8 +123,6 @@ public class SubirSolucionController implements Initializable {
    
     @FXML
     private ListView<String> listaCompletado;
-    @FXML
-    private AnchorPane anchorPrueba;
     private AnchorPane anchorPrueba2;
     
     private Stage popupStage;
@@ -139,6 +147,26 @@ public class SubirSolucionController implements Initializable {
     private Solucion crear_solucion;
     
     private StringProperty tipoPantallaProperty = new SimpleStringProperty("");
+    @FXML
+    private AnchorPane anchorFile;
+    @FXML
+    private Button botonArchivo;
+    @FXML
+    private Label textArchivoSeleccionado;
+    @FXML
+    private TableView<Archivo> tablaArchivos;
+    @FXML
+    private TableColumn <Archivo, String> columnArchivo;
+    @FXML
+    private TableColumn <Archivo, String> columnExt;
+    
+    private ObservableList<Archivo> archivos_;
+    @FXML
+    private Button botonVer;
+    
+    private Archivo archivo;
+    @FXML
+    private Button mostrarError;
 
     public StringProperty tipoPantallaProperty() {
         return tipoPantallaProperty;
@@ -221,11 +249,15 @@ public class SubirSolucionController implements Initializable {
                 tipoPantalla =newValue;
                 textTitulo.setText(newValue);
                 botonIngresar.setText("Adjuntar");
+                mostrarError.setVisible(false);
             }
               
         });
          
-         
+         archivos_ = FXCollections.observableArrayList();
+        //asocia las columnas con el tituo
+        this.columnArchivo.setCellValueFactory(new PropertyValueFactory("nombre"));
+        this.columnExt.setCellValueFactory(new PropertyValueFactory("extension")); 
         //para poder filtrar luego aca obtengo el observable list para el filtrado
         try {
             List<Etiqueta> etiquetas = EtiquetaController.getInstance().listaEtiquetas();
@@ -341,7 +373,19 @@ public class SubirSolucionController implements Initializable {
             
         }
         
-       
+        List<Archivo> archivos =  new ArrayList<>();
+        if(this.archivos_ != null){
+            for (Archivo archivo : this.archivos_) {
+                archivos.add(archivo);
+                System.out.println(archivo.getNombre());
+            }
+            crear_solucion.setArchivos(archivos);
+        }
+        
+        if(!tipoPantalla.equals("Solucion Asociada")){
+            List<Logica.Clases.Error> errores = ErrorController.getInstance().listaErrores(new ArrayList(),"201");
+               crear_solucion.setError(errores.get(0));
+         }
     
         crear_solucion.setDescripcion(textDescripcion.getText());
         
@@ -358,14 +402,31 @@ public class SubirSolucionController implements Initializable {
         crear_solucion.setLink(linkTextFieldUrl.getText());
         
         if(tipoPantalla.equals("Solucion Asociada")){
-            if(this.error_controller != null){
+            if(textDescripcion.getText().equals("")){
+                   Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Información");
+                        alert.setHeaderText(null);
+                        alert.setContentText("la descripcion no puede estar vacía!");
+                        alert.showAndWait();
+            }
+            else if(this.error_controller != null){
                 error_controller.setSolucion(crear_solucion);
                 error_controller.setActualizador("recibir solucion");
+                
+                Stage stage = (Stage) textDescripcion.getScene().getWindow();
+
+                // Cerrar la ventana actual
+                stage.close();
             }
         }
         else{
             try { 
             Conexion.getInstance().persist(crear_solucion);
+              Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("Información");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Se ha creado la solucion con exito!");
+                        alert.showAndWait();
             } catch (Exception e) {
                 // Manejo de la excepción
                 e.printStackTrace();
@@ -466,5 +527,37 @@ public class SubirSolucionController implements Initializable {
            System.out.println(tipoPantalla);
 
         }      
+
+    @FXML
+    private void clickAbrir(ActionEvent event) throws IOException {
+        FileChooser fileChooser = new FileChooser();
+        Archivo archivo = new Archivo();
+        
+         File selectedFile = fileChooser.showOpenDialog(Main.getStage()); 
+        
+        if(selectedFile != null){
+            String nombre = selectedFile.getName();
+            
+            
+            String extension = "";
+            int i = nombre.lastIndexOf(".");
+
+            if (i > 0) {
+            extension = nombre.substring(i + 1);
+            }
+            archivo.setExtension(extension);
+            archivo.setNombre(nombre.substring(0, i));
+            byte[] fileContent = Files.readAllBytes(selectedFile.toPath());
+            
+            archivo.setContenidoByte(fileContent);
+            
+            System.out.println("nombre"+nombre+"exttension"+extension);
+            textArchivoSeleccionado.setText(nombre);
+            
+            this.archivos_.add(archivo);
+            this.tablaArchivos.setItems(archivos_);
+            this.archivo = archivo;
+        }
+    }
     
 }

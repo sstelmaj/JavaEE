@@ -4,11 +4,11 @@
  */
 package Presentacion.Controllers;
 
+import Logica.Clases.Etiqueta;
 import Logica.Clases.*;
+import Logica.Controladores.ErrorController;
 import Logica.Controladores.EtiquetaController;
 import Persistencia.Conexion;
-import Presentacion.Main;
-import Presentacion.RSTA;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
@@ -20,14 +20,18 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -37,26 +41,57 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
 import javafx.scene.Scene;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.swing.JInternalFrame;
+import jdk.nashorn.api.scripting.JSObject;
+import org.fife.ui.autocomplete.AutoCompletion;
+import org.fife.ui.autocomplete.BasicCompletion;
+import org.fife.ui.autocomplete.CompletionProvider;
+import org.fife.ui.autocomplete.DefaultCompletionProvider;
+import org.fife.ui.autocomplete.ShorthandCompletion;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-
+import org.fife.ui.rtextarea.RTextScrollPane;
+import Presentacion.RSTA;
+import Presentacion.Main;
+import java.awt.Insets;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleBinding;
+import javafx.beans.binding.NumberBinding;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.control.Alert;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.paint.Color;
 /**
  * FXML Controller class
  *
@@ -138,7 +173,71 @@ public class SubirErrorController implements Initializable {
     private AnchorPane anchorFile;
     @FXML
     private Button botonArchivo;
+    @FXML
     private Label textArchivoSeleccionado;
+    @FXML
+    private TableView<Archivo> tablaArchivos;
+    @FXML
+    private TableColumn <Archivo, String> columnArchivo;
+    @FXML
+    private TableColumn <Archivo, String> columnExt;
+    
+    private ObservableList<Archivo> archivos_;
+    
+    List<Etiqueta> etiquetas_error = new ArrayList<>();
+    
+    Map<String, Etiqueta> mapEtiquetas = new HashMap<>();
+    
+    List<Etiqueta> etiquetas;
+    
+    private AnchorPane panelContent;
+    @FXML
+    private AnchorPane anchorError;
+    @FXML
+    private Button botonVer;
+    @FXML
+    private Pane paneButtons;
+    @FXML
+    private Button botonEliminarSolucion;
+    @FXML
+    private Button botonImprimirEtiqueta;
+    
+   
+    
+    public void setPanelContent(AnchorPane pane){
+        this.panelContent = pane;
+        //anclamos el anchor de la vista al anchor content por el tema de la jerarquia
+        panelContent.setRightAnchor(anchorError,0.0);
+        panelContent.setLeftAnchor(anchorError,0.0);
+        panelContent.setTopAnchor(anchorError,0.0);
+        panelContent.setBottomAnchor(anchorError,0.0);
+    //   anchor1.setPrefWidth(900);
+       BackgroundFill backgroundFill = new BackgroundFill(Color.LIGHTGREEN, null, null);
+            Background background = new Background(backgroundFill);
+            anchor1.setBackground(background);
+      //    double maxRightAnchor = 500;
+
+            anchorError.setRightAnchor(botonIngresar, 500.0);
+        //    anchorError.setLeftAnchor(botonIngresar, botonIngresar.getLayoutX());
+        //    anchorError.setTopAnchor(botonIngresar, botonIngresar.getLayoutY());
+         //   anchorError.setLeftAnchor(acordion,acordion.getLayoutX() );
+         
+         //   anchorError.setLeftAnchor(acordion,anchor1.getLayoutX()+ 500.0 );
+           
+
+   //         botonIngresar.maxWidthProperty().bind(anchorError.widthProperty().subtract(maxRightAnchor));
+//      botonIngresar.minWidth(100.0);
+//         anchorError.widthProperty().addListener((observable, oldValue, newValue) -> {
+//                Double newWidth = (double) newValue;
+//               String widthString = String.valueOf(newWidth);
+//               anchorError.setLeftAnchor(acordion,anchor1.getWidth()+200.0 );
+//              
+//           });
+      
+
+      
+        
+    }
     
     public final void setActualizador(String descripcion) {
         actualizador.set(descripcion);
@@ -169,6 +268,8 @@ public class SubirErrorController implements Initializable {
     
     public final void setSolucion(Solucion solucion) {
         this.solucion_asociada = solucion;
+        botonEliminarSolucion.setVisible(true);
+        botonVerSolucion.setVisible(true);
     }
    
     /**
@@ -178,6 +279,12 @@ public class SubirErrorController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
          //para el primer renderizado visual
+         botonEliminarSolucion.setVisible(false);
+         botonVerSolucion.setVisible(false);
+         tipoPantalla="Subir Error";
+         DashboardController.getInstance().setControladorAnterior(null);
+         DashboardController.getInstance().setControladorSiguiente(null);
+         
          tipoPantallaProperty.addListener((observable, oldValue, newValue) -> {
             if (newValue=="Modificar Error") {
                 
@@ -194,9 +301,13 @@ public class SubirErrorController implements Initializable {
                     textFieldTitulo.setText(errorModificar.getTitulo());
                      linkTextFieldUrl.setText(errorModificar.getLink());
                      textFieldRepositorio.setText(errorModificar.getRepositorio());
+                     
                     
-                    String fechaSubida = errorModificar.getFechaSubida().toString();
-                    if(fechaSubida != null){
+                           
+                     
+                   
+                    if(errorModificar.getFechaSubida() != null){
+                        String fechaSubida = errorModificar.getFechaSubida().toString();;
                        DateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
                         String fechaString;
                         Date fechaDate;
@@ -218,15 +329,18 @@ public class SubirErrorController implements Initializable {
                     //obtenemos el contenido de el internal frame
                     if (internalFrameConsola instanceof RSTA) {
                         RSTA rsta = (RSTA) internalFrameConsola;
-                        rsta.setTextAreaContenido(errorModificar.getConsola());
+                        if(errorModificar.getConsola()!=null){
+                            rsta.setTextAreaContenido(errorModificar.getConsola());
+                        }
                     }   
                     JInternalFrame internalFrameCodigo = (JInternalFrame) swingNode.getContent();
        
                     //obtenemos el contenido de el internal frame
                     if (internalFrameCodigo instanceof RSTA) {
                         RSTA rsta = (RSTA) internalFrameCodigo;
+                         if(errorModificar.getCodigo()!=null){
                         rsta.setTextAreaContenido(errorModificar.getCodigo());
-                              
+                         } 
                     } 
 
                 }
@@ -255,7 +369,7 @@ public class SubirErrorController implements Initializable {
          
         //para poder filtrar luego aca obtengo el observable list para el filtrado
         try {
-            List<Etiqueta> etiquetas = EtiquetaController.getInstance().listaEtiquetas();
+             etiquetas = EtiquetaController.getInstance().listaEtiquetasActivas();
 
             // Crear un ObservableList a partir de la lista existente
              items = FXCollections.observableArrayList();
@@ -263,6 +377,7 @@ public class SubirErrorController implements Initializable {
             // Agregar los elementos a la lista ObservableList
             for (Etiqueta etiqueta : etiquetas) {
                 items.add(etiqueta.getNombre());
+                mapEtiquetas.put(etiqueta.getNombre().toUpperCase(), etiqueta);
             }
 
             //asigno a la lista en la descripcion
@@ -273,7 +388,12 @@ public class SubirErrorController implements Initializable {
             e.printStackTrace();
         }
         
-      
+        archivos_ = FXCollections.observableArrayList();
+        //asocia las columnas con el tituo
+        this.columnArchivo.setCellValueFactory(new PropertyValueFactory("nombre"));
+        this.columnExt.setCellValueFactory(new PropertyValueFactory("extension"));
+        
+        
           
         textDescripcion.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.contains("#")) {
@@ -392,7 +512,7 @@ public class SubirErrorController implements Initializable {
             
         }
     
-        error.setDescripcion(textDescripcion.getText());
+       
         
     //    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", new Locale("es")); (util para despues o capaz el input fecha lo modifica)
 
@@ -405,19 +525,48 @@ public class SubirErrorController implements Initializable {
         }
         error.setLink(linkTextFieldUrl.getText());
         error.setRepositorio(textFieldRepositorio.getText());
+        
+        
+         List<Archivo> archivos =  new ArrayList<>();
+        if(this.archivos_ != null){
+                for (Archivo archivo : this.archivos_) {
+                    archivos.add(archivo);
+                    System.out.println(archivo.getNombre());
+                }
+            }
+        
+        
         if(this.archivo != null){
-            List<Archivo> archivos =  new ArrayList<>();
-            archivos.add(archivo);
+           
+        //    archivos.add(archivo);
+            
+            
+            
             error.setArchivos(archivos);
         }
+        obtenerEtiquetasDescripcion();
+         error.setDescripcion(textDescripcion.getText());
             try { 
             Conexion.getInstance().merge(error);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("Información");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Se ha creado el error con exito!");
+                        alert.showAndWait();
             } catch (Exception e) {
                 // Manejo de la excepción
                 e.printStackTrace();
+                 Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText(null);
+                        
+                        alert.setContentText("Ha ocurrido un error en la base de datos");
+                        alert.showAndWait();
             }
             System.out.println(tipoPantalla);
         if(tipoPantalla.equals("Subir Error")){
+            
+            
             if(this.solucion_asociada !=null){
                 try { 
                    
@@ -473,7 +622,7 @@ public class SubirErrorController implements Initializable {
         try {
         
         JInternalFrame iFrame = new RSTA();
-        iFrame.setPreferredSize(new Dimension(550,400));
+        iFrame.setPreferredSize(new Dimension(500,400));
         iFrame.setSize(20, 20);
         iFrame.setVisible(true);
         iFrame.setBorder(null);
@@ -482,6 +631,10 @@ public class SubirErrorController implements Initializable {
        
         swingNode.setContent(iFrame);
          anchor1.getChildren().add(swingNode);
+         anchor1.setRightAnchor(swingNode,0.0);
+         anchor1.setLeftAnchor(swingNode,0.0);
+         anchor1.setTopAnchor(swingNode,0.0);
+         anchor1.setBottomAnchor(swingNode,0.0);
          
          acordion.setExpandedPane(titledPaneDescripcion);
          
@@ -565,7 +718,7 @@ public class SubirErrorController implements Initializable {
         
         if(selectedFile != null){
             String nombre = selectedFile.getName();
-            archivo.setNombre(nombre);
+            
             
             String extension = "";
             int i = nombre.lastIndexOf(".");
@@ -574,15 +727,85 @@ public class SubirErrorController implements Initializable {
             extension = nombre.substring(i + 1);
             }
             archivo.setExtension(extension);
-
+            archivo.setNombre(nombre.substring(0, i));
             byte[] fileContent = Files.readAllBytes(selectedFile.toPath());
             
             archivo.setContenidoByte(fileContent);
             
             System.out.println("nombre"+nombre+"exttension"+extension);
-        //    textArchivoSeleccionado.setText(nombre);
+            textArchivoSeleccionado.setText(nombre);
+            
+            this.archivos_.add(archivo);
+            this.tablaArchivos.setItems(archivos_);
             this.archivo = archivo;
         }
        
+    }
+
+    @FXML
+    private void clickImprimirEtiqueta(ActionEvent event) {
+        ArrayList<String> valores = new ArrayList<>();
+        valores.add("Angular");
+        valores.add("React");
+        valores.add("Yii");
+        
+        List<Logica.Clases.Error> erroresFiltrados = ErrorController.getInstance().filtradoErroresPorEtiquetas(valores);
+        
+        if(erroresFiltrados != null){
+            System.out.println("llegaron los errores"+erroresFiltrados.size());
+            for (Logica.Clases.Error error : erroresFiltrados) {
+               System.out.println(error.getTitulo());
+               
+               
+            }
+            
+        }
+    }
+    
+    private void obtenerEtiquetasDescripcion(){
+       // String patron = "#\\w+\\s";
+       String patron ="#\\w+\\s|#\\w+$";
+        List<String> etiquetasAEliminar = new ArrayList();
+        // Compilar el patrón en un objeto Pattern
+        Pattern pattern = Pattern.compile(patron);
+
+        // Crear un objeto Matcher para buscar coincidencias en el texto
+        Matcher matcher = pattern.matcher(textDescripcion.getText());
+        
+        // Recorrer las coincidencias encontradas
+        
+        while (matcher.find()) {
+            String item = matcher.group();
+             if (item.length() > 1) {
+                String subItem = item.substring(1).trim();
+                System.out.println(subItem);
+                  
+                boolean containsIgnoreCase = items.stream()
+                .anyMatch(item2 -> item2.equalsIgnoreCase(subItem));
+        
+        System.out.println(containsIgnoreCase);
+        
+        
+                if(containsIgnoreCase){
+                    System.out.println("la etiqueta existe");
+                    Etiqueta etiqueta = mapEtiquetas.get(subItem.toUpperCase());
+                    this.etiquetas_error.add(etiqueta);
+                }
+                else{
+                    System.out.println("la etiqueta no existe");
+                    etiquetasAEliminar.add(item);
+                }
+            }
+        }
+       this.error.setEtiquetas(etiquetas_error);
+       String descContenido= textDescripcion.getText(); 
+        for (String etiq : etiquetasAEliminar) {
+               System.out.println(etiq);
+               System.out.println(descContenido);
+               descContenido = descContenido.replace(etiq, "");
+               
+            }
+         System.out.println("sin etiquetas erroneas"+descContenido);
+         textDescripcion.setText(descContenido);
     }
 }

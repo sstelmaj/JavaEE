@@ -109,7 +109,13 @@
             <artifactId>draggablejfxtreeview</artifactId>
             <version>1.0</version>
         </dependency>
-        
+
+        <dependency>
+            <groupId>org.netbeans.external</groupId>
+            <artifactId>AbsoluteLayout</artifactId>
+            <version>RELEASE150</version>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>

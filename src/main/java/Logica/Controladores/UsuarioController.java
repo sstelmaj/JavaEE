@@ -5,6 +5,7 @@
 package Logica.Controladores;
 
 
+
 import Logica.Clases.Perfil;
 import Logica.Clases.Etiqueta;
 import Logica.Clases.Usuario;
@@ -101,6 +102,45 @@ public class UsuarioController {
             }
         }
         return false;
+    }
+    
+    public boolean existeUsuario(String nombre) {
+    EntityManager em = Conexion.getInstance().getEntity();
+    Object usuario = null;
+    boolean resultado = false;
+    em.getTransaction().begin();
+        try {
+            usuario=em.createNativeQuery("SELECT * FROM usuario WHERE mail ='"+nombre+"'").getSingleResult();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+        }
+        if(usuario != null){
+            System.out.println("existe");
+            resultado = true;
+        }else{
+            System.out.println("no existe");
+        }   
+    return resultado;
+    }
+    
+    public Usuario obtenerUsuario(String mail_usuario){
+        Usuario usuario=null;
+        Object resultado = null;
+        EntityManager em= Conexion.getInstance().getEntity(); ;
+        em.getTransaction().begin();
+        try{
+            Query q = em.createNativeQuery("SELECT * from usuario where mail='"+mail_usuario+"'", Usuario.class);
+            resultado=q.getSingleResult();
+            em.getTransaction().commit();  
+        }catch(Exception e){
+            em.getTransaction().rollback();
+        }
+        if(resultado!=null){
+            usuario = (Usuario) resultado;
+            System.out.println("funciona");
+        }
+      return usuario;  
     }
 
 }
