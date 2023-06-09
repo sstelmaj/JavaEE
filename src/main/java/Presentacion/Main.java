@@ -40,9 +40,8 @@ public class Main extends Application { //iniciador
             //Show the scene containing the root layout
             Scene scene = new Scene(ventana);
             primaryStage.setTitle("Login");
-            primaryStage.setResizable(true);
-        //    primaryStage.setMinHeight(800.0);
-        //    primaryStage.setMinWidth(1552.0);
+            //primaryStage.setResizable(true);
+            primaryStage.setResizable(false);
             primaryStage.setScene(scene);
         //    primaryStage.setFullScreen(true);
             //se le pasa el primary stage para poder controlar las resoluciones
