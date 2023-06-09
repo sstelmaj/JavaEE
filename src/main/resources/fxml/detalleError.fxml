@@ -68,9 +68,9 @@
             </Accordion>
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="828.0" layoutY="84.0" prefHeight="557.0" prefWidth="399.0">
+      <AnchorPane layoutX="828.0" layoutY="66.0" prefHeight="597.0" prefWidth="461.0">
          <children>
-            <ScrollPane layoutY="73.0" prefHeight="478.0" prefWidth="399.0">
+            <ScrollPane layoutY="103.0" prefHeight="476.0" prefWidth="399.0">
               <content>
                 <AnchorPane fx:id="anchPaneLista" minHeight="0.0" minWidth="0.0" prefHeight="476.0" prefWidth="397.0">
                      <children>
@@ -79,7 +79,12 @@
                   </AnchorPane>
               </content>
             </ScrollPane>
-            <TextField fx:id="buscador" layoutX="14.0" layoutY="26.0" prefHeight="31.0" prefWidth="368.0" />
+            <ComboBox fx:id="comboBoxEtiquetas" layoutX="14.0" layoutY="32.0" prefWidth="150.0" />
+            <ComboBox fx:id="comboBoxSubEtiq" layoutX="183.0" layoutY="32.0" prefWidth="150.0" />
+            <Button fx:id="btnAgregarEtiqueta" layoutX="367.0" layoutY="32.0" mnemonicParsing="false" onMouseClicked="#agregarEtiquetaAFiltro" text="Agregar" />
+            <HBox fx:id="buscador" layoutX="2.0" layoutY="68.0" prefHeight="31.0" prefWidth="355.0" />
+            <Text layoutX="14.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Etiquetas" />
+            <Text layoutX="183.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Subetiquetas" />
          </children>
       </AnchorPane>
       <Text layoutX="957.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Soluciones">

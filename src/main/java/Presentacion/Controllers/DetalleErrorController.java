@@ -9,15 +9,21 @@ import Logica.Clases.Solucion;
 import Logica.Clases.Error;
 import Logica.Clases.Error_Etiqueta;
 import Logica.Clases.Etiqueta;
+import Logica.Clases.Solucion_Etiqueta;
 import Logica.Controladores.ErrorController;
+import Logica.Controladores.EtiquetaController;
 import Presentacion.PanelCodigoSolucion;
 import java.awt.Dimension;
 import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,9 +32,13 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -68,7 +78,7 @@ public class DetalleErrorController implements Initializable {
     @FXML
     private VBox lista;
     @FXML
-    private TextField buscador;
+    private HBox buscador;
     @FXML
     private Text txtTitulo;
     @FXML
@@ -86,12 +96,21 @@ public class DetalleErrorController implements Initializable {
     private String descripcion,codigo,consola;
     private Date fechaModif;
     private List<Archivo> archivos;
-    private List<Error_Etiqueta> etiquetas;
+    private List<Error_Etiqueta> etiquetasError;
+    List<Etiqueta>allEtiquetas;
+    private List<Solucion>soluciones;
+    private ArrayList<String>etiquetasSeleccionadas=new ArrayList();
     DashboardController dashboard;
     @FXML
     private AnchorPane apEtiquetas;
     @FXML
     private HBox hBoxEtiquetas;
+    @FXML
+    private ComboBox<String> comboBoxEtiquetas;
+    @FXML
+    private Button btnAgregarEtiqueta;
+    @FXML
+    private ComboBox<String> comboBoxSubEtiq;
 
     /**
      * Initializes the controller class.
@@ -104,13 +123,15 @@ public class DetalleErrorController implements Initializable {
     public void initialize(){
         //List<Solucion>soluciones=ErrorController.getInstance().obtenerSolucionesDelError(151 /*idError*/);
         Error error=ErrorController.getInstance().obtenerError(151 /*idError*/);
-        List<Solucion>soluciones=error.getSoluciones();
+        soluciones=error.getSoluciones();
+        soluciones.sort(Comparator.comparingInt(Solucion::getPuntos));
+        allEtiquetas=EtiquetaController.getInstance().listaEtiquetas();
             this.descripcion=error.getDescripcion();
             this.codigo=error.getCodigo();
             this.consola=error.getConsola();
             this.archivos=error.getArchivos();
             this.fechaModif=error.getFechaSubida();
-            this.etiquetas=error.getError_Etiquetas();
+            this.etiquetasError=error.getError_Etiquetas();
         
         //Frame para el codigo de error
         JInternalFrame iFrame = new PanelCodigoSolucion(this.codigo,SyntaxConstants.SYNTAX_STYLE_JAVA);
@@ -134,10 +155,8 @@ public class DetalleErrorController implements Initializable {
                     //Ver como cargar dinamicamente
                     tablaArchivos.addRow(0, imageView);
                 }else{
-                    WebView webView=new WebView();
-                    WebEngine webEngine = webView.getEngine();
-                    webEngine.load(arch.getUrl());
-                    this.anchPaneRefExt.getChildren().add(webView);
+                    Hyperlink link= new Hyperlink(arch.getUrl());
+                    this.anchPaneRefExt.getChildren().add(link);
                 }
             }
 
@@ -152,7 +171,7 @@ public class DetalleErrorController implements Initializable {
             txtDescripcion.setFont(Font.font("Calibri", FontPosture.ITALIC, 15));
             txtFlowDescripcion.getChildren().addAll(tituloDescripcion,txtDescripcion);
             hBoxEtiquetas.setSpacing(10);
-            for(Error_Etiqueta e:etiquetas){
+            for(Error_Etiqueta e:etiquetasError){
                 Text etiqueta=new Text(e.getEtiqueta().getNombre());
                 etiqueta.setFill(Color.BLACK);
                 hBoxEtiquetas.getChildren().add(etiqueta);
@@ -165,7 +184,7 @@ public class DetalleErrorController implements Initializable {
             this.txtFlowConsola.getChildren().addAll(txtConsola);
             
             
-            this.txtFechaModif.setText(txtFechaModif.getText()+this.fechaModif.toString());
+            this.txtFechaModif.setText(txtFechaModif.getText()+new SimpleDateFormat("dd-MM-yyyy").format(this.fechaModif)/*this.fechaModif.toString()*/);
 
 
             //Creo el popup para expandir imagenes
@@ -211,23 +230,22 @@ public class DetalleErrorController implements Initializable {
                 }
             }
         });
-    
-        for(Solucion sol:soluciones){
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/busquedaSolucion.fxml"));
-                Parent subfileRoot = loader.load();
-                // Obtén el controlador del archivo subfile.fxml
-                BusquedaSolucionController subfileController = loader.getController();
-                subfileController.setDatos("Solucion de ejemplo", sol.getDescripcion(), sol.getId(), this.dashboard, sol.getSolucion_Etiquetas());
-                subfileController.initialize();
-
-                
-                lista.getChildren().add(subfileRoot);
-            }catch (IOException e) {
-                System.out.println(e);
-            }  
-        }
         
+        //PANEL DE ENLACES EXTERNOS
+        
+        
+        
+        //FILTRADO DE SOLUCIONES
+        filtrarSoluciones();
+        
+        for(Etiqueta e: allEtiquetas){
+            if(e.getPadre()==null){
+                this.comboBoxEtiquetas.getItems().add(e.getNombre());
+            }
+        }
+        comboBoxEtiquetas.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            cargarSubetiquetas();
+        });
         //TODO: AGREGAR NOTA Y VER LAS NOTAS DEL ERROR
     
     }
@@ -240,7 +258,71 @@ public class DetalleErrorController implements Initializable {
     }
     
     private boolean checkIfFileHasExtension(String s) {
-        String[] extensiones={"jpg","png","jpeg","webx"};
-        return Arrays.stream(extensiones).anyMatch(entry -> s.endsWith(entry));
+        String[] extensionesImagenes={"jpg","png","jpeg","webx"};
+        return Arrays.stream(extensionesImagenes).anyMatch(entry -> s.endsWith(entry));
+    }
+
+    @FXML
+    private void agregarEtiquetaAFiltro(MouseEvent event) {
+        String seleccionado=this.comboBoxSubEtiq.getSelectionModel().getSelectedItem();
+        if(seleccionado!=null){
+            this.etiquetasSeleccionadas.add(seleccionado);
+            Text etiqueta=new Text(seleccionado);
+            etiqueta.setOnMouseClicked(this::eliminarEtiquetaSeleccionada);
+            this.buscador.getChildren().add(etiqueta);
+            this.comboBoxSubEtiq.getItems().remove(seleccionado); 
+            filtrarSoluciones();
+        }
+    }
+    
+private void filtrarSoluciones(){
+        boolean tieneEtiqueta=false;
+        this.lista.getChildren().clear();
+        for(Solucion sol:this.soluciones){
+            List<Solucion_Etiqueta>etiquetasSolucion=sol.getSolucion_Etiquetas();
+            boolean contieneTodos = etiquetasSolucion.stream()
+            .map(Solucion_Etiqueta::getEtiqueta)
+            .map(Etiqueta::getNombre)
+            .collect(Collectors.toList())
+            .containsAll(etiquetasSeleccionadas);
+            
+            if(contieneTodos){
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/busquedaSolucion.fxml"));
+                    Parent subfileRoot = loader.load();
+                    // Obtén el controlador del archivo subfile.fxml
+                    BusquedaSolucionController subfileController = loader.getController();
+                    subfileController.setDatos("Solucion de ejemplo", sol.getDescripcion(), sol.getId(), this.dashboard, sol.getSolucion_Etiquetas());
+                    subfileController.initialize();
+
+                    lista.getChildren().add(subfileRoot);
+                }catch (IOException ex) {
+                    System.out.println(ex);
+                }
+            }
+        }
+    }
+    
+    private void eliminarEtiquetaSeleccionada (MouseEvent event) {
+        Text etiqueta = (Text) event.getSource();
+        //this.comboBoxEtiquetas.getItems().add(etiqueta.getText());
+        this.buscador.getChildren().remove(etiqueta);
+        this.etiquetasSeleccionadas.remove(etiqueta.getText());
+        filtrarSoluciones();
+    }
+    
+    private void cargarSubetiquetas(){
+        this.comboBoxSubEtiq.getItems().clear();
+        for(Etiqueta e:this.allEtiquetas){
+            if(e.getPadre()!=null){
+                if(e.getPadre().equals(comboBoxEtiquetas.getSelectionModel().getSelectedItem()) && !this.etiquetasSeleccionadas.contains(e.getPadre())){
+                    this.comboBoxSubEtiq.getItems().add(e.getNombre());
+                }
+            }else{
+                if(e.getNombre().equals(comboBoxEtiquetas.getSelectionModel().getSelectedItem()) && !this.etiquetasSeleccionadas.contains(e.getNombre())){
+                    this.comboBoxSubEtiq.getItems().add(e.getNombre());
+                }
+            }
+        }
     }
 }
