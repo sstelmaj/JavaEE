@@ -7,8 +7,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="672.0" prefWidth="1001.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="Presentacion.Controllers.PruebaFiltradoController">
+<AnchorPane id="AnchorPane" fx:id="root" prefHeight="672.0" prefWidth="1001.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentacion.Controllers.PruebaFiltradoController">
    <children>
       <ComboBox fx:id="comboSo" layoutX="88.0" layoutY="53.0" prefWidth="150.0" promptText="SO" />
       <ComboBox fx:id="comboFramework" layoutX="265.0" layoutY="53.0" prefWidth="150.0" promptText="Framework" />

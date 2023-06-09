@@ -74,6 +74,39 @@ public class DashboardController implements Initializable {
     @FXML
     private AnchorPane anchorDash;
     
+    private Initializable controladorAnterior =null;
+    
+    private Initializable controladorSiguiente =null;
+    @FXML
+    private Button botonAtras;
+    @FXML
+    private Button botonAdelante;
+    @FXML
+    private Button botonErrores;
+    @FXML
+    private Button botonSoluciones;
+    @FXML
+    private Button botonCerrarSesion;
+    @FXML
+    private Button botonInicio;
+    @FXML
+    private Button botonAjustes;
+
+    public void setControladorAnterior(Initializable parent) {
+        this.controladorAnterior = parent;
+    }
+    
+    public void setControladorSiguiente(Initializable parent) {
+        this.controladorSiguiente = parent;
+    }
+    
+    private static DashboardController instancia;
+    
+    public static DashboardController getInstance() {
+        
+        return instancia;
+    }
+    
     public void setPrimaryStage(Stage mainStage){
         this.mainStage = mainStage;
         System.out.println("se setea"+ mainStage.getWidth());
@@ -90,6 +123,10 @@ public class DashboardController implements Initializable {
          contentAPane.getChildren().setAll(vista);
          
     }
+    
+    public AnchorPane getAnchorPane (){
+        return this.contentAPane;
+    }
     private String fxml;
     /**
      * Initializes the controller class.
@@ -97,17 +134,19 @@ public class DashboardController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        instancia = this;
           try{
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/fxml/subirError.fxml"));
+            loader.setLocation(getClass().getResource("/fxml/inicio.fxml"));
             Parent nuevaVista = loader.load();
-            SubirErrorController subirErrorController = (SubirErrorController)loader.getController();
-            subirErrorController.setPantalla("Subir Error");
-            subirErrorController.setPanelContent(contentAPane);
+            InicioController inicioController = (InicioController)loader.getController();
+        //    subirErrorController.setPantalla("Subir Error");
+            inicioController.setPanelContent(contentAPane);
             contentAPane.getChildren().setAll(nuevaVista);
             BackgroundFill backgroundFill = new BackgroundFill(Color.LIGHTBLUE, null, null);
             Background background = new Background(backgroundFill);
             contentAPane.setBackground(background);
+        //      contentAPane.setStyle("-fx-background-color: #14151e;");
             anchorDash.setRightAnchor(contentAPane,100.0);
             anchorDash.setLeftAnchor(contentAPane,contentAPane.getLayoutX());
             anchorDash.setTopAnchor(contentAPane,contentAPane.getLayoutY());
@@ -118,16 +157,10 @@ public class DashboardController implements Initializable {
         
         }
           
-          
-       
-           
-        
-            
-         
-      
-          
+  
           
         // Agregar elementos al ComboBox
+        vistas.put("Inicio", "/fxml/inicio.fxml");
         vistas.put("Subir Error", "/fxml/subirError.fxml");
         vistas.put("Modificar Error", "/fxml/subirError.fxml");
         vistas.put("Vista 2", "/fxml/Vista2.fxml");
@@ -146,7 +179,7 @@ public class DashboardController implements Initializable {
         
         
         // Agregar elementos al ComboBox
-        selectorVista.getItems().addAll("Subir Error", "Modificar Error","Subir Solucion","Modificar Solucion",
+        selectorVista.getItems().addAll("Inicio","Subir Error", "Modificar Error","Subir Solucion","Modificar Solucion",
                 "Vista 2", "Detalle Solucion","Crear Etiqueta","Modificar Etiqueta", "Admin", "Error","Crear Perfil","Modificar Perfil","Crear Usuario","Modificar Usuario","Prueba Filtrado");
         
         // Listener para cambio de selección en el ComboBox
@@ -221,10 +254,10 @@ public class DashboardController implements Initializable {
                 
                 
                 
-                if(fxml.equals("/fxml/detalleError.fxml")){
-                    DetalleErrorController detalleErrorController=(DetalleErrorController)loader.getController();
-                    detalleErrorController.initialize(contentAPane);
-                }
+//                if(fxml.equals("/fxml/detalleError.fxml")){
+//                    DetalleErrorController detalleErrorController=(DetalleErrorController)loader.getController();
+//                    detalleErrorController.initialize(contentAPane);
+//                }
                 
                 contentAPane.getChildren().setAll(nuevaVista);
                 
@@ -282,6 +315,54 @@ public class DashboardController implements Initializable {
     private void verContent(ActionEvent event) {
         System.out.println(contentAPane.getWidth());
         System.out.println(contentAPane.getHeight());
+    }
+
+    @FXML
+    private void clickAtras(ActionEvent event) {
+        if(this.controladorAnterior != null){
+            if (this.controladorAnterior instanceof PruebaFiltradoController) {
+                // El objeto es una instancia de la clase SubirErrorController
+                PruebaFiltradoController pruebaFiltradoController = (PruebaFiltradoController) this.controladorAnterior;
+                
+                 contentAPane.getChildren().setAll(pruebaFiltradoController.getRoot());
+                // Realiza las acciones deseadas con el controlador
+            }
+           
+        }
+    }
+
+    @FXML
+    private void clickAdelante(ActionEvent event) {
+        if(this.controladorSiguiente != null){
+            if (this.controladorSiguiente instanceof DetalleErrorController) {
+                // El objeto es una instancia de la clase SubirErrorController
+                DetalleErrorController detalleErrorController = (DetalleErrorController) this.controladorSiguiente;
+                
+                 contentAPane.getChildren().setAll(detalleErrorController.getAnchPaneGeneral());
+                // Realiza las acciones deseadas con el controlador
+            }
+           
+        }
+    }
+
+    @FXML
+    private void clickErrores(ActionEvent event) {
+    }
+
+    @FXML
+    private void clickSoluciones(ActionEvent event) {
+    }
+
+    @FXML
+    private void cerrarSesion(ActionEvent event) {
+    }
+
+    @FXML
+    private void clickInicio(ActionEvent event) {
+    }
+
+    @FXML
+    private void clickAjustes(ActionEvent event) {
     }
         
     

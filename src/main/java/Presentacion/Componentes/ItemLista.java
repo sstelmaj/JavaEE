@@ -2,9 +2,18 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
-package Presentacion;
+package Presentacion.Componentes;
 
 import Logica.Clases.Error;
+import Logica.Clases.Solucion;
+import Presentacion.Controllers.DashboardController;
+import Presentacion.Controllers.DetalleErrorController;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
@@ -19,9 +28,19 @@ public class ItemLista extends Control {
     private Text txtTitulo;
     private Text txtDescripcion;
     private Button btnDetalle;
+    private String tipoItem;
+    
+    
     private Logica.Clases.Error error;
-    public ItemLista() {
+    
+    private Solucion solucion;
+    
+    private Initializable controlador;
+    
+    public ItemLista(String tipo, Initializable controlador) {
         // Crear el AnchorPane
+        tipoItem = tipo;
+        this.controlador = controlador;
         anchorPane = new AnchorPane();
         anchorPane.setPrefSize(400.0, 90.0);
         
@@ -39,11 +58,37 @@ public class ItemLista extends Control {
         btnDetalle = new Button(">");
         btnDetalle.setLayoutX(339.0);
         btnDetalle.setLayoutY(30.0);
+        btnDetalle.setOnMouseClicked(event -> Detalle());
         
         anchorPane.setVisible(true);
         // Establecer el AnchorPane como contenido del control
         anchorPane.getChildren().addAll(txtTitulo, txtDescripcion, btnDetalle);
         getChildren().add(anchorPane);
+    }
+    
+    private void Detalle(){
+         FXMLLoader loader = new FXMLLoader();
+        if(tipoItem.equals("solucion")){
+            
+        }
+        else{
+           
+             try {
+                 loader.setLocation(getClass().getResource("/fxml/detalleError.fxml"));
+                 Parent nuevaVista = loader.load();
+                 DetalleErrorController detalleErrorController=(DetalleErrorController)loader.getController();
+                 DashboardController dashboardController = DashboardController.getInstance();
+                 detalleErrorController.initialize(dashboardController.getAnchorPane(),this.error);
+                 dashboardController.setControladorAnterior(this.controlador);
+                 dashboardController.setControladorSiguiente(detalleErrorController);
+                 
+                 dashboardController.getAnchorPane().getChildren().setAll(nuevaVista);
+             } catch (IOException ex) {
+                 Logger.getLogger(ItemLista.class.getName()).log(Level.SEVERE, null, ex);
+             }
+        
+        }
+    
     }
 
     @Override
@@ -77,6 +122,14 @@ public class ItemLista extends Control {
 
     public void setError(Error error) {
         this.error = error;
+    }
+
+    public Solucion getSolucion() {
+        return solucion;
+    }
+
+    public void setSolucion(Solucion solucion) {
+        this.solucion = solucion;
     }
     
     

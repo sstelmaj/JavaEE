@@ -4,6 +4,7 @@
  */
 package Presentacion.Controllers;
 
+import Logica.Clases.Usuario;
 import Logica.Controladores.UsuarioController;
 import Persistencia.Sesion;
 import java.io.IOException;
@@ -47,32 +48,57 @@ public class LoginController implements Initializable {
     private ImageView imageView;
     
     public void login(ActionEvent event) throws IOException {
+        usernameField.setText("joacomaidana12@gmail.com");
+        passwordField.setText("Joaco21");
+        
         String mail = usernameField.getText();
         String password = passwordField.getText();
             
         if (UsuarioController.getInstance().iniciarSesion(mail, password) == true){
-            
-        Sesion.getInstance().setUser(mail);
-            
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Dashboard.fxml"));
-        Parent root = loader.load();
-            
-        // Crea una nueva escena y asigna la escena al escenario
-        Scene scene = new Scene(root);
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setTitle("Dashboard");
-        stage.setScene(scene);
-        stage.show();
-        } else {
+         Sesion sesion = Sesion.getInstance();
+         sesion.setUser(mail);
+         Usuario user = UsuarioController.getInstance().obtenerUsuario(mail);
+         sesion.setUsuario(user);
+            if(user.getPerfil().getNombre().equals("Admin")){
+                System.out.println("Inicia como admin");
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AdminDashboard.fxml"));
+                 Parent root = loader.load();
+
+                 // Crea una nueva escena y asigna la escena al escenario
+                 Scene scene = new Scene(root);
+                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                 stage.setTitle("Admin Dashboard");
+                 stage.setMinHeight(720.0);
+                 stage.setMinWidth(1260.0);
+                 stage.setScene(scene);
+                 stage.show();
+                 stage.centerOnScreen();
+            }else{
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Dashboard.fxml"));
+                 Parent root = loader.load();
+
+                 // Crea una nueva escena y asigna la escena al escenario
+                 Scene scene = new Scene(root);
+                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                 stage.setTitle("Dashboard");
+                 stage.setMinHeight(800.0);
+                 stage.setMinWidth(1552.0);
+                 stage.setScene(scene);
+                 stage.show();
+                 stage.centerOnScreen();
+            } 
+        }
+        else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error de inicio de sesión");
             alert.setHeaderText("Inicio de sesión fallido");
             alert.setContentText("El usuario o la contraseña son incorrectos. Por favor, inténtelo de nuevo.");
             alert.showAndWait();
-            
+
             usernameField.clear();
             passwordField.clear();
         }
+        
     }
         
     @Override

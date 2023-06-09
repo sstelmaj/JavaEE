@@ -83,6 +83,26 @@ public class DetalleErrorController implements Initializable {
     private String descripcion,codigo,consola;
     private Date fechaModif;
     private List<Archivo> archivos;
+    private Logica.Clases.Error errorDetalle;
+
+    public Error getErrorDetalle() {
+        return errorDetalle;
+    }
+
+    public void setErrorDetalle(Error errorDetalle) {
+        this.errorDetalle = errorDetalle;
+    }
+
+    public AnchorPane getAnchPaneGeneral() {
+        return anchPaneGeneral;
+    }
+
+    public void setAnchPaneGeneral(AnchorPane anchPaneGeneral) {
+        this.anchPaneGeneral = anchPaneGeneral;
+    }
+    
+    
+    
 
     /**
      * Initializes the controller class.
@@ -92,16 +112,16 @@ public class DetalleErrorController implements Initializable {
         
             
     }
-    public void initialize(AnchorPane ap){
-        List<Solucion>soluciones=ErrorController.getInstance().obtenerSolucionesDelError(151 /*idError*/);
-        List<Error> error=ErrorController.getInstance().obtenerError(151 /*idError*/);
-        for(Error e: error){
+    public void initialize(AnchorPane ap, Logica.Clases.Error e){
+    //    List<Solucion>soluciones=ErrorController.getInstance().obtenerSolucionesDelError(151 /*idError*/);
+    //    List<Error> error=ErrorController.getInstance().obtenerError(151 /*idError*/);
+    //    for(Error e: error){
             this.descripcion=e.getDescripcion();
             this.codigo=e.getCodigo();
             this.consola=e.getConsola();
             this.archivos=e.getArchivos();
             this.fechaModif=e.getFechaSubida();
-        }
+    //    }
         
         //Frame para el codigo de error
         JInternalFrame iFrame = new PanelCodigoSolucion(this.codigo,SyntaxConstants.SYNTAX_STYLE_JAVA);
@@ -197,7 +217,7 @@ public class DetalleErrorController implements Initializable {
             }
         });
     
-        for(Solucion sol:soluciones){
+        for(Solucion sol:e.getSoluciones()){
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/busquedaSolucion.fxml"));
                 Parent subfileRoot = loader.load();
@@ -208,8 +228,8 @@ public class DetalleErrorController implements Initializable {
 
                 
                 lista.getChildren().add(subfileRoot);
-            }catch (IOException e) {
-                System.out.println(e);
+            }catch (IOException e2) {
+                System.out.println(e2);
             }  
         }
         

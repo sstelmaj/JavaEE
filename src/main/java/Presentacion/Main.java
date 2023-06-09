@@ -5,6 +5,7 @@
 package Presentacion;
 
 import Presentacion.Controllers.DashboardController;
+import Presentacion.Controllers.LoginController;
 import Presentacion.Controllers.SubirErrorController;
 import java.io.IOException;
 import javafx.application.Application;
@@ -32,21 +33,22 @@ public class Main extends Application { //iniciador
         }
         try{
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("/fxml/Dashboard.fxml"));
+            loader.setLocation(Main.class.getResource("/fxml/Login.fxml"));
             AnchorPane ventana = (AnchorPane) loader.load();
-            DashboardController dashboardController = (DashboardController)loader.getController();
+            LoginController dashboardController = (LoginController)loader.getController();
             
             //Show the scene containing the root layout
             Scene scene = new Scene(ventana);
             primaryStage.setTitle("Login");
             primaryStage.setResizable(true);
-            primaryStage.setMinHeight(800.0);
-            primaryStage.setMinWidth(1552.0);
+        //    primaryStage.setMinHeight(800.0);
+        //    primaryStage.setMinWidth(1552.0);
             primaryStage.setScene(scene);
         //    primaryStage.setFullScreen(true);
             //se le pasa el primary stage para poder controlar las resoluciones
             
             primaryStage.show();
+            primaryStage.centerOnScreen();
         //    dashboardController.setPrimaryStage(primaryStage);
             this.stage = primaryStage;
             

@@ -74,13 +74,13 @@ public class UsuarioController {
     return resultado;
     }
     
-    public Usuario obtenerUsuario(String nombre_usuario){
+    public Usuario obtenerUsuario(String mail_usuario){
         Usuario usuario=null;
         Object resultado = null;
         EntityManager em= Conexion.getInstance().getEntity(); ;
         em.getTransaction().begin();
         try{
-            Query q = em.createNativeQuery("SELECT * from usuario where mail='"+nombre_usuario+"'", Usuario.class);
+            Query q = em.createNativeQuery("SELECT * from usuario where mail='"+mail_usuario+"'", Usuario.class);
             resultado=q.getSingleResult();
             em.getTransaction().commit();  
         }catch(Exception e){

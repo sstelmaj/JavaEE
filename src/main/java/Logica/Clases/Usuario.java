@@ -15,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -43,6 +44,26 @@ public class Usuario implements Serializable {
     
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Perfil perfil;
+    
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private AjustesUsuario ajustes;
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public AjustesUsuario getAjustes() {
+        return ajustes;
+    }
+
+    public void setAjustes(AjustesUsuario ajustes) {
+        this.ajustes = ajustes;
+    }
+    
     
 
     public Long getId() {

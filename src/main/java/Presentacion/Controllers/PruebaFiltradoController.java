@@ -5,7 +5,7 @@
 package Presentacion.Controllers;
 
 import Logica.Controladores.ErrorController;
-import Presentacion.ItemLista;
+import Presentacion.Componentes.ItemLista;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +48,16 @@ public class PruebaFiltradoController implements Initializable {
     private Button botonIngresar;
     @FXML
     private ListView<ItemLista> lista;
+    @FXML
+    private AnchorPane root;
+
+    public AnchorPane getRoot() {
+        return root;
+    }
+
+    public void setRoot(AnchorPane root) {
+        this.root = root;
+    }
 
     /**
      * Initializes the controller class.
@@ -90,6 +100,20 @@ public class PruebaFiltradoController implements Initializable {
             }
             
        //     valores.add("Angular");
+       if(valores.isEmpty()){
+           List<Logica.Clases.Error> errores = ErrorController.getInstance().obtenerErrores();
+           if(errores !=null){
+                lista.getItems().clear(); 
+                for (Logica.Clases.Error error : errores) {
+                    ItemLista item = new ItemLista("Error",this);
+                    item.setError(error);
+                    item.setTitulo(error.getTitulo());
+                    lista.getItems().add(item);
+                }
+            }
+           listaErrores.getItems().setAll(errores);
+           valores.clear();
+       }else{
             List<Logica.Clases.Error> errores = ErrorController.getInstance().filtradoErroresPorEtiquetas(valores);
             System.out.println(errores.size());
             valores.clear();
@@ -97,13 +121,16 @@ public class PruebaFiltradoController implements Initializable {
             if(errores !=null){
                 lista.getItems().clear(); 
                 for (Logica.Clases.Error error : errores) {
-                    ItemLista item = new ItemLista();
+                    ItemLista item = new ItemLista("Error",this);
                     item.setError(error);
                     item.setTitulo(error.getTitulo());
                     lista.getItems().add(item);
                 }
             }
             listaErrores.getItems().setAll(errores);
+       }
+           
+            
         }
     }
 
@@ -115,7 +142,7 @@ public class PruebaFiltradoController implements Initializable {
     @FXML
     private void ingresarPanel(ActionEvent event) {
 
-        ItemLista item = new ItemLista();
+        ItemLista item = new ItemLista("Error",this);
        lista.getItems().add(item);
     }
 }

@@ -281,6 +281,10 @@ public class SubirErrorController implements Initializable {
          //para el primer renderizado visual
          botonEliminarSolucion.setVisible(false);
          botonVerSolucion.setVisible(false);
+         tipoPantalla="Subir Error";
+         DashboardController.getInstance().setControladorAnterior(null);
+         DashboardController.getInstance().setControladorSiguiente(null);
+         
          tipoPantallaProperty.addListener((observable, oldValue, newValue) -> {
             if (newValue=="Modificar Error") {
                 

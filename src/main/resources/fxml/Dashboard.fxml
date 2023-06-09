@@ -22,5 +22,12 @@
       <Label fx:id="textResAlto" layoutX="84.0" layoutY="62.0" text="Alto" />
       <Button fx:id="botonPredeterminada" layoutX="18.0" layoutY="191.0" mnemonicParsing="false" onAction="#actionPredeterminada" prefHeight="25.0" prefWidth="113.0" text="Predeterminada" />
       <Button fx:id="botonMedidaContent" layoutX="16.0" layoutY="139.0" mnemonicParsing="false" onAction="#verContent" prefHeight="25.0" prefWidth="113.0" text="medida content" />
+      <Button fx:id="botonAtras" layoutX="161.0" layoutY="20.0" mnemonicParsing="false" onAction="#clickAtras" text="Atras" />
+      <Button fx:id="botonAdelante" layoutX="214.0" layoutY="20.0" mnemonicParsing="false" onAction="#clickAdelante" text="Adelante" />
+      <Button fx:id="botonErrores" layoutX="542.0" layoutY="14.0" mnemonicParsing="false" onAction="#clickErrores" prefHeight="37.0" prefWidth="72.0" text="Errores" />
+      <Button fx:id="botonSoluciones" layoutX="632.0" layoutY="14.0" mnemonicParsing="false" onAction="#clickSoluciones" prefHeight="37.0" prefWidth="83.0" text="Soluciones" />
+      <Button fx:id="botonCerrarSesion" layoutX="951.0" layoutY="14.0" mnemonicParsing="false" onAction="#cerrarSesion" prefHeight="37.0" prefWidth="92.0" text="Cerrar Session" />
+      <Button fx:id="botonInicio" layoutX="449.0" layoutY="14.0" mnemonicParsing="false" onAction="#clickInicio" prefHeight="37.0" prefWidth="72.0" text="Inicio" />
+      <Button fx:id="botonAjustes" layoutX="865.0" layoutY="14.0" mnemonicParsing="false" onAction="#clickAjustes" prefHeight="37.0" prefWidth="72.0" text="Ajustes" />
    </children>
 </AnchorPane>
