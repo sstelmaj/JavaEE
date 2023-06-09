@@ -8,12 +8,26 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="545.0" prefWidth="1064.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="Presentacion.Controllers.DashboardController">
+<AnchorPane id="AnchorPane" fx:id="anchorDash" prefHeight="545.0" prefWidth="1064.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentacion.Controllers.DashboardController">
     <stylesheets>
         <URL value="@/styles/dashboard.css" />
     </stylesheets>
    <children>
       <AnchorPane fx:id="contentAPane" layoutX="154.0" layoutY="60.0" prefHeight="444.0" prefWidth="873.0" />
-      <ComboBox fx:id="selectorVista" layoutX="457.0" layoutY="14.0" prefWidth="150.0" promptText="Vistas" />
+      <ComboBox fx:id="selectorVista" layoutX="18.0" layoutY="234.0" prefHeight="25.0" prefWidth="113.0" promptText="Vistas" />
+      <Label layoutX="25.0" layoutY="41.0" text="Resolucion:" />
+      <Label fx:id="textResAncho" layoutX="25.0" layoutY="62.0" text="Ancho" />
+      <Button fx:id="botonActualizar" layoutX="16.0" layoutY="96.0" mnemonicParsing="false" onAction="#actualizar" text="Actializar Medidas" />
+      <Label layoutX="68.0" layoutY="62.0" text="x" />
+      <Label fx:id="textResAlto" layoutX="84.0" layoutY="62.0" text="Alto" />
+      <Button fx:id="botonPredeterminada" layoutX="18.0" layoutY="191.0" mnemonicParsing="false" onAction="#actionPredeterminada" prefHeight="25.0" prefWidth="113.0" text="Predeterminada" />
+      <Button fx:id="botonMedidaContent" layoutX="16.0" layoutY="139.0" mnemonicParsing="false" onAction="#verContent" prefHeight="25.0" prefWidth="113.0" text="medida content" />
+      <Button fx:id="botonAtras" layoutX="161.0" layoutY="20.0" mnemonicParsing="false" onAction="#clickAtras" text="Atras" />
+      <Button fx:id="botonAdelante" layoutX="214.0" layoutY="20.0" mnemonicParsing="false" onAction="#clickAdelante" text="Adelante" />
+      <Button fx:id="botonErrores" layoutX="542.0" layoutY="14.0" mnemonicParsing="false" onAction="#clickErrores" prefHeight="37.0" prefWidth="72.0" text="Errores" />
+      <Button fx:id="botonSoluciones" layoutX="632.0" layoutY="14.0" mnemonicParsing="false" onAction="#clickSoluciones" prefHeight="37.0" prefWidth="83.0" text="Soluciones" />
+      <Button fx:id="botonCerrarSesion" layoutX="951.0" layoutY="14.0" mnemonicParsing="false" onAction="#cerrarSesion" prefHeight="37.0" prefWidth="92.0" text="Cerrar Session" />
+      <Button fx:id="botonInicio" layoutX="449.0" layoutY="14.0" mnemonicParsing="false" onAction="#clickInicio" prefHeight="37.0" prefWidth="72.0" text="Inicio" />
+      <Button fx:id="botonAjustes" layoutX="865.0" layoutY="14.0" mnemonicParsing="false" onAction="#clickAjustes" prefHeight="37.0" prefWidth="72.0" text="Ajustes" />
    </children>
 </AnchorPane>

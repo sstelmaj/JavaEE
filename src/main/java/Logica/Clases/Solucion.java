@@ -15,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
@@ -26,27 +27,19 @@ import javax.persistence.Temporal;
 @Entity
 public class Solucion implements Serializable {
 
-    @OneToMany(mappedBy = "solucion")
-    private List<Solucion_Etiqueta> solucion_Etiquetas;
+    @ManyToMany
+    private List<Etiqueta> etiquetas;
     
     @ManyToOne
     private Error error;
-
-  
+    
     @ManyToOne
     private Usuario usuario;
     
     @OneToMany
     private List<Archivo> archivos;
 
-    public List<Solucion_Etiqueta> getSolucion_Etiquetas() {
-        return solucion_Etiquetas;
-    }
-
-    public void setSolucion_Etiquetas(List<Solucion_Etiqueta> solucion_Etiquetas) {
-        this.solucion_Etiquetas = solucion_Etiquetas;
-    }
-    
+   
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -60,6 +53,8 @@ public class Solucion implements Serializable {
     private String descripcion;
     private String link;
     private int puntos;
+    
+    private Boolean active = Boolean.TRUE;
     
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaSubida;
@@ -89,6 +84,23 @@ public class Solucion implements Serializable {
     public void setPuntos(int puntos) {
         this.puntos = puntos;
     }
+
+    public List<Etiqueta> getEtiquetas() {
+        return etiquetas;
+    }
+
+    public void setEtiquetas(List<Etiqueta> etiquetas) {
+        this.etiquetas = etiquetas;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+    
     
 
 
@@ -139,8 +151,16 @@ public class Solucion implements Serializable {
     public void setFechaSubida(Date fechaSubida) {
         this.fechaSubida = fechaSubida;
     }
+
+    public Error getError() {
+        return error;
+    }
+
+    public void setError(Error error) {
+        this.error = error;
+    }
     
-    
+   
 
     @Override
     public int hashCode() {

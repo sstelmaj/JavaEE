@@ -5,13 +5,19 @@
 package Presentacion.Controllers;
 
 import Logica.Clases.Etiqueta;
+import Logica.Clases.Usuario;
 import Logica.Controladores.EtiquetaController;
 import Persistencia.Conexion;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,6 +26,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeCell;
@@ -47,6 +54,32 @@ public class crearEtiquetaController implements Initializable {
     
     private TreeItem<String> clickedItem;
     
+    private StringProperty tipoPantallaProperty = new SimpleStringProperty("");
+    
+    private String tipoPantalla ="-";
+    
+    private Etiqueta etiquetaModificar;
+    
+    ObservableList<String> items;
+    @FXML
+    private Label textTitulo;
+    
+    public StringProperty tipoPantallaProperty() {
+        return tipoPantallaProperty;
+    }
+
+    public final String getTipoPantalla() {
+        return tipoPantallaProperty.get();
+    }
+
+    public final void setTipoPantalla(String tipoPantalla) {
+        tipoPantallaProperty.set(tipoPantalla);
+    }
+    
+    public final void setEtiquetaModificar(Etiqueta etiqueta) {
+        this.etiquetaModificar = etiqueta;
+    }
+    
     @FXML
     private Button ingresarEtiqueta;
     @FXML
@@ -57,6 +90,8 @@ public class crearEtiquetaController implements Initializable {
     private TextField textEtiquetaPadre;
     
     private List<Etiqueta> etiquetas_eliminar = new ArrayList<>() ;
+    
+    Map<String, Etiqueta> mapEtiquetas = new HashMap<>();
     @FXML
     private ListView<String> listaSubEtiquetas;
     @FXML
@@ -71,18 +106,25 @@ public class crearEtiquetaController implements Initializable {
         // TODO
         
         TreeItem<String> rootItem = new TreeItem("Etiquetas");
-        List<Etiqueta> etiquetas_padre = EtiquetaController.getInstance().listaEtiquetas();
+        List<Etiqueta> etiquetas_padre = EtiquetaController.getInstance().listaEtiquetasActivas();
         
         for (Etiqueta etiqueta : etiquetas_padre) {
-            if(etiqueta.getPadre() == null){
+            if(etiqueta.getPadre() == null && etiqueta.getActive()){
                 TreeItem<String> item_padre = new TreeItem(etiqueta.getNombre());
                 
                 rootItem.getChildren().add(item_padre);
                 for(Etiqueta sub_etiqueta : etiqueta.getSub_etiqueta()){
-                    TreeItem<String> item_sub = new TreeItem(sub_etiqueta.getNombre());
-                    item_padre.getChildren().add(item_sub);
+                    
+                    if(sub_etiqueta.getActive()){
+                        TreeItem<String> item_sub = new TreeItem(sub_etiqueta.getNombre());
+                         item_padre.getChildren().add(item_sub);
+                    }
+                   
                 }
-            }        
+            }   
+            if(etiqueta.getActive()){
+                mapEtiquetas.put(etiqueta.getNombre(), etiqueta);
+            }
         }
             
         
@@ -91,7 +133,49 @@ public class crearEtiquetaController implements Initializable {
         arbolEtiquetas.setShowRoot(false);
         //arbolEtiquetas.setCellFactory(new DraggableCellFactory());  
         
-        Etiqueta etiq = EtiquetaController.getInstance().obtenerEtiqueta("xbox");
+        //Etiqueta etiq = EtiquetaController.getInstance().obtenerEtiqueta("xbox");
+        
+        
+         tipoPantallaProperty.addListener((observable, oldValue, newValue) -> {
+            if (newValue=="Modificar Etiqueta") {
+                
+               
+                System.out.println("Modificar Usuario");
+                tipoPantalla =newValue;
+                textTitulo.setText(newValue);
+                ingresarEtiqueta.setText("Guardar Cambios");
+                
+               
+                if(etiquetaModificar != null){
+                    
+                    textEtiquetaPadre.setText(etiquetaModificar.getNombre());
+                    textEtiquetaPadre.setEditable(false);
+                   
+                    if(etiquetaModificar.getSub_etiqueta()!=null){
+                         
+                       for(Etiqueta sub_etiqueta : etiquetaModificar.getSub_etiqueta()){              
+                            if(sub_etiqueta.getActive()){
+                               listaSubEtiquetas.getItems().add(sub_etiqueta.getNombre());
+                                 
+                            }
+
+                        }
+                        
+                    }
+                    
+                    
+                
+
+                }
+
+            }
+            else if(newValue=="Crear Usuario"){
+                System.out.println("Crear Usuario");
+                tipoPantalla =newValue;
+                textTitulo.setText(newValue);
+            }
+              
+        });
         
     }
     
@@ -106,7 +190,7 @@ public class crearEtiquetaController implements Initializable {
         
         if(!EtiquetaController.getInstance().existeEtiqueta(textEtiquetaPadre.getText())){
             
-            ObservableList<String> items = listaSubEtiquetas.getItems();
+             items = listaSubEtiquetas.getItems();
             
             if(items != null){
                 for (String item : items) {
@@ -130,6 +214,11 @@ public class crearEtiquetaController implements Initializable {
             try { 
 
             Conexion.getInstance().merge(padre);
+              Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("Información");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Se ha creado la etiqueta con exito!");
+                        alert.showAndWait();
             System.out.println("sube la etiqueta con las sub etiquetas");
             } catch (Exception e) {
                 // Manejo de la excepción
@@ -177,14 +266,22 @@ public class crearEtiquetaController implements Initializable {
 
     @FXML
     private void clickAgregarSubEtiqueta(ActionEvent event) {
-        
+        boolean exist = EtiquetaController.getInstance().existeEtiqueta(textSubEtiqueta.getText());
         if(textSubEtiqueta.equals("")){
              Alert alert = new Alert(AlertType.ERROR);
                 alert.setTitle("Información");
                 alert.setHeaderText(null);
                 alert.setContentText("El campo de la sub etiqueta no puede estar vacio!");
                 alert.showAndWait();
-        }else{
+        }
+        else if (exist){
+             Alert alert = new Alert(AlertType.WARNING);
+                alert.setTitle("Información");
+                alert.setHeaderText(null);
+                alert.setContentText("Esa etiqueta ya existe!");
+                alert.showAndWait();
+        }
+        else{
             listaSubEtiquetas.getItems().add(textSubEtiqueta.getText());
         
         }

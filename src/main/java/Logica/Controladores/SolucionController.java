@@ -37,4 +37,17 @@ public class SolucionController {
     }
       return (Solucion)resultado;  
     }
+     
+     public List<Solucion> obtenerSoluciones(){
+        EntityManager em = Conexion.getInstance().getEntity();
+        List<Solucion> resultado = null;
+        em.getTransaction().begin();
+        try {
+            resultado = em.createNativeQuery("SELECT * FROM solucion", Solucion.class).getResultList();
+            em.getTransaction().commit();
+        } catch (Exception e){
+            em.getTransaction().rollback();
+        }
+        return resultado;
+     }
 }

@@ -50,18 +50,15 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
     public RSTA() {
         
         
-    //    try {
-    //       UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-    //    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-    //        ex.printStackTrace();
-    //    }
-        
+     
         
         
         initComponents();
-
+    
+        
         
         jPanel_CP.setLayout(new BorderLayout());
+     //    panel.add(jPanel_CP, constraints);
          textArea = new RSyntaxTextArea(20, 60);
         
    //    Font font = new Font("Segoe UI", Font.PLAIN, 12);
@@ -75,8 +72,8 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
         //para poder abrir o colapsar metodos
         textArea.setCodeFoldingEnabled(true);
         
-        AutoCompletion ac = new AutoCompletion(provider);
-        ac.install(textArea);
+    //    AutoCompletion ac = new AutoCompletion(provider);
+    //    ac.install(textArea);
         RTextScrollPane sp = new RTextScrollPane(textArea);
         jPanel_CP.add(sp);
         
@@ -103,8 +100,8 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
         matchCaseCB = new JCheckBox("Match Case");
         toolBar.add(matchCaseCB);
         jPanel_CP.add(toolBar, BorderLayout.NORTH);
-
         
+        pack();
     }
 
     @Override
@@ -137,14 +134,22 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jComboBoxLeng = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
+        jComboBoxLeng = new javax.swing.JComboBox<>();
         jPanel_CP = new javax.swing.JPanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(600, 616));
+
+        jPanel1.setBackground(new java.awt.Color(0, 153, 153));
+        jPanel1.setLayout(new java.awt.BorderLayout());
+
+        jPanel2.setPreferredSize(new java.awt.Dimension(400, 80));
 
         jButton1.setText("Copy");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -167,6 +172,8 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
             }
         });
 
+        jLabel1.setText("Lenguajes");
+
         jComboBoxLeng.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ACTIONSCRIPT", "ASSEMBLER_X86", "BBCODE", "C", "CLOJURE", "C++", "CSHARP", "CSS", "DELPHI", "DTD", "FORTRAN", "GROOVY", "HTACCESS", "HTML", "JAVA", "JAVASCRIPT", "JSON", "JSP", "LATEX", "LISP", "LUA", "MAKEFILE", "MXML", "NSIS", "PERL", "PHP", "PROPERTIES_FILE", "PYTHON", "RUBY", "SAS", "SCALA", "SQL", "TCL", "UNIX_SHELL", "VISUAL_BASIC", "WINDOWS_BATCH", "XML" }));
         jComboBoxLeng.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -174,53 +181,63 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
             }
         });
 
-        jLabel1.setText("Lenguajes");
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addComponent(jComboBoxLeng, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(26, Short.MAX_VALUE))
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addGap(0, 282, Short.MAX_VALUE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 283, Short.MAX_VALUE)))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jComboBoxLeng, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jButton2)
+                                .addComponent(jButton4)))))
+                .addGap(558, 558, 558))
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addGap(0, 312, Short.MAX_VALUE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 284, Short.MAX_VALUE)))
+        );
+
+        jPanel1.add(jPanel2, java.awt.BorderLayout.NORTH);
 
         javax.swing.GroupLayout jPanel_CPLayout = new javax.swing.GroupLayout(jPanel_CP);
         jPanel_CP.setLayout(jPanel_CPLayout);
         jPanel_CPLayout.setHorizontalGroup(
             jPanel_CPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 421, Short.MAX_VALUE)
+            .addGap(0, 565, Short.MAX_VALUE)
         );
         jPanel_CPLayout.setVerticalGroup(
             jPanel_CPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 321, Short.MAX_VALUE)
+            .addGap(0, 575, Short.MAX_VALUE)
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(40, 40, 40)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBoxLeng, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel_CP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(227, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton4)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jComboBoxLeng, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel_CP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(245, 245, 245))
-        );
+        jPanel1.add(jPanel_CP, java.awt.BorderLayout.CENTER);
+
+        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -498,7 +515,10 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new RSTA().setVisible(true);
+                RSTA rsta = new RSTA();
+                rsta.setVisible(true);
+                rsta.pack();
+                
             }
         });
     }
@@ -509,6 +529,8 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
     private javax.swing.JButton jButton4;
     private javax.swing.JComboBox<String> jComboBoxLeng;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel_CP;
     // End of variables declaration//GEN-END:variables
 }

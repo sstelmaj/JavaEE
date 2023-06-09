@@ -6,8 +6,9 @@ package Presentacion.Controllers;
  */
 
 import Logica.Clases.Usuario;
+import Logica.Controladores.PerfilController;
 import Logica.Controladores.UsuarioController;
-import Presentacion.DTOs.UsuarioWithCheckbox;
+import Presentacion.DTOs.UsuarioParaGestionar;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,11 +18,9 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.text.Text;
 
 /**
  * FXML Controller class
@@ -30,13 +29,12 @@ import javafx.scene.text.Text;
  */
 public class AdminUsuariosController implements Initializable {
 
-    
-    private ObservableList<UsuarioWithCheckbox> usuarios;
+    private List<Usuario> usuariosDB;
+    List<String> perfilesDB;
+    private ObservableList<UsuarioParaGestionar> usuarios;
     
     @FXML
-    private Text txtTitle;
-    @FXML
-    private TableView<UsuarioWithCheckbox> tableUsuarios;
+    private TableView<UsuarioParaGestionar> tableUsuarios;
     @FXML
     private TableColumn<?, ?> colApellidos;
     @FXML
@@ -47,15 +45,14 @@ public class AdminUsuariosController implements Initializable {
     private TableColumn<?, ?> colActivos;
     @FXML
     private TableColumn<?, ?> colPerfiles;
-    @FXML
-    private Button btnSave;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        List<Usuario> usuariosDB = UsuarioController.getInstance().obtenerUsuarios();
+        usuariosDB = UsuarioController.getInstance().obtenerUsuarios();
+        perfilesDB = PerfilController.getInstance().obtenerNombresDePerfiles();
         initTable();
         loadData();
     }    
@@ -66,28 +63,35 @@ public class AdminUsuariosController implements Initializable {
         this.colApellidos.setCellValueFactory(new PropertyValueFactory("apellido"));
         this.colCorreos.setCellValueFactory(new PropertyValueFactory("mail"));
         this.colActivos.setCellValueFactory(new PropertyValueFactory("checkbox"));
+        this.colPerfiles.setCellValueFactory(new PropertyValueFactory("combobox"));
     }
     
     private void loadData(){
-        List<UsuarioWithCheckbox> usuarios = new ArrayList<>();
+        List<UsuarioParaGestionar> usuarios = new ArrayList<>();
+        usuariosDB.forEach(user -> usuarios.add(
+                new UsuarioParaGestionar(user, perfilesDB)
+        ));
         
-        List<Usuario> usuariosDB = UsuarioController.getInstance().obtenerUsuarios();
-        usuariosDB.forEach(user -> usuarios.add(new UsuarioWithCheckbox(user)));
         usuarios.forEach(user -> user.setCheckboxAction((ActionEvent t) -> {
-            // EVENTO AL CAMBIAR EL ESTADO ACTIVO. 
-            // Pensar en guardar otra copia de los usuarios, con los cambios de estado y perfil y luego hacer un bulk save.
+            actualizarEstadoUsuario(user);
+        }));
+        usuarios.forEach(user -> user.setComboboxAction((ActionEvent t) -> {
+            actualizarPerfilUsuario(user);
         }));
         
         this.usuarios = FXCollections.observableArrayList(usuarios);
         this.tableUsuarios.setItems(this.usuarios);
         
     }
-
-    @FXML
-    private void saveChanges() {
-        //DE DONDE OBTENGO EL NUEVO USUARIO ?
-        //UsuarioController.getInstance().actualizarUsuario(usuario);
-        
+    
+    private void actualizarEstadoUsuario(UsuarioParaGestionar usuario){
+        Boolean nuevoEstado = usuario.getCheckbox().isSelected();
+        UsuarioController.getInstance().actualizarEstadoUsuarioPorId(usuario.getId(), nuevoEstado);
+    }
+    
+    private void actualizarPerfilUsuario(UsuarioParaGestionar usuario){
+        String nuevoPerfil = (String) usuario.getCombobox().getValue();
+        UsuarioController.getInstance().actualizarPerfilUsuarioPorId(usuario.getId(), nuevoPerfil);
         
     }
 }

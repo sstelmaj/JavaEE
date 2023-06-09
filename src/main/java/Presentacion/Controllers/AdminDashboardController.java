@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -18,6 +19,9 @@ import javafx.scene.Scene;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
@@ -48,13 +52,50 @@ public class AdminDashboardController implements Initializable {
             
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+        btnExportar.setOnAction(event -> mostrarVentanaExportar());
+        btnImportar.setOnAction(event -> mostrarVentanaImportar());
+    }
+    
+    private void mostrarVentanaExportar() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/exportarDatos.fxml"));
+            Parent popupRoot = fxmlLoader.load();
+            ExportarDatosController exportarDatosController = fxmlLoader.getController();
+
+            Stage popupStage = new Stage();
+            popupStage.initModality(Modality.APPLICATION_MODAL);
+            popupStage.initOwner(btnExportar.getScene().getWindow());
+            popupStage.setTitle("Exportar...");
+            Scene scene = new Scene(popupRoot);
+            popupStage.setScene(scene);
+            popupStage.showAndWait();
+        } catch (IOException ex) {
+            Logger.getLogger(AdminDashboardController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void mostrarVentanaImportar() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/importarDatos.fxml"));
+            Parent popupRoot = fxmlLoader.load();
+            ImportarDatosController importarDatosController = fxmlLoader.getController();
+
+            Stage popupStage = new Stage();
+            popupStage.initModality(Modality.APPLICATION_MODAL);
+            popupStage.initOwner(btnImportar.getScene().getWindow());
+            popupStage.setTitle("Importar...");
+            Scene scene = new Scene(popupRoot);
+            popupStage.setScene(scene);
+            popupStage.showAndWait();
+        } catch (IOException ex) {
+            Logger.getLogger(AdminDashboardController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     @FXML
     private void gotoAdminUsuarios(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AdminGestionUsuarios.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AdminGestionarUsuarios.fxml"));
             Parent nuevaVista = loader.load();
             
             Scene scene = new Scene(nuevaVista);
@@ -67,6 +108,8 @@ public class AdminDashboardController implements Initializable {
             Logger.getLogger(AdminDashboardController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    
     
     /*
     * 

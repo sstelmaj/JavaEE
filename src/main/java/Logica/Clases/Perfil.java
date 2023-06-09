@@ -28,6 +28,7 @@ public class Perfil implements Serializable {
     private boolean desactivar;
     private boolean modificar;
     
+    private Boolean active = Boolean.TRUE;
     
     public String getNombre() {
         return nombre;
@@ -68,6 +69,16 @@ public class Perfil implements Serializable {
     public void setModificar(boolean modificar) {
         this.modificar = modificar;
     }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+    
+    
     
     
 

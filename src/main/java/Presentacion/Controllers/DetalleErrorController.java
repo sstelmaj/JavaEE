@@ -96,6 +96,7 @@ public class DetalleErrorController implements Initializable {
     private String descripcion,codigo,consola;
     private Date fechaModif;
     private List<Archivo> archivos;
+
     private List<Error_Etiqueta> etiquetasError;
     List<Etiqueta>allEtiquetas;
     private List<Solucion>soluciones;
@@ -112,6 +113,25 @@ public class DetalleErrorController implements Initializable {
     @FXML
     private ComboBox<String> comboBoxSubEtiq;
 
+    private Logica.Clases.Error errorDetalle;
+
+    public Error getErrorDetalle() {
+        return errorDetalle;
+    }
+
+    public void setErrorDetalle(Error errorDetalle) {
+        this.errorDetalle = errorDetalle;
+    }
+
+    public AnchorPane getAnchPaneGeneral() {
+        return anchPaneGeneral;
+    }
+
+    public void setAnchPaneGeneral(AnchorPane anchPaneGeneral) {
+        this.anchPaneGeneral = anchPaneGeneral;
+    }
+    
+
     /**
      * Initializes the controller class.
      */
@@ -120,9 +140,9 @@ public class DetalleErrorController implements Initializable {
         
             
     }
-    public void initialize(){
+    public void initialize(AnchorPane ap, Logica.Clases.Error error){
         //List<Solucion>soluciones=ErrorController.getInstance().obtenerSolucionesDelError(151 /*idError*/);
-        Error error=ErrorController.getInstance().obtenerError(151 /*idError*/);
+        //Error error=ErrorController.getInstance().obtenerError(151 /*idError*/);
         soluciones=error.getSoluciones();
         soluciones.sort(Comparator.comparingInt(Solucion::getPuntos));
         allEtiquetas=EtiquetaController.getInstance().listaEtiquetas();
@@ -230,6 +250,23 @@ public class DetalleErrorController implements Initializable {
                 }
             }
         });
+
+    
+        for(Solucion sol:error.getSoluciones()){
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/busquedaSolucion.fxml"));
+                Parent subfileRoot = loader.load();
+                // Obtén el controlador del archivo subfile.fxml
+                BusquedaSolucionController subfileController = loader.getController();
+                subfileController.setDatos("Solucion de ejemplo", sol.getDescripcion(), sol.getId());
+                subfileController.initialize(ap);
+
+                
+                lista.getChildren().add(subfileRoot);
+            }catch (IOException e2) {
+                System.out.println(e2);
+            }  
+        }
         
         //PANEL DE ENLACES EXTERNOS
         

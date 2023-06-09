@@ -71,6 +71,7 @@ public class ErrorController {
         try{
             Query q = em.createNativeQuery("SELECT * From error WHERE id = ?", Logica.Clases.Error.class);
             q.setParameter(1, unico);
+             System.out.println("la consulta para obtener el error es:"+q.toString());
             resultado = q.getResultList();
             em.getTransaction().commit();
         }catch(Exception e){
@@ -78,4 +79,46 @@ public class ErrorController {
         }
         return resultado;
     }
+     
+        public List<Logica.Clases.Error> filtradoErroresPorEtiquetas(ArrayList<String> valores) {
+             EntityManager em = Conexion.getInstance().getEntity();
+             List<Logica.Clases.Error> resultado = null;
+             em.getTransaction().begin();
+             try {
+                 // Construir la consulta dinámica con los parámetros
+                 StringBuilder queryBuilder = new StringBuilder();
+                 queryBuilder.append("SELECT * FROM error WHERE ID IN (SELECT errors_ID FROM error_etiqueta WHERE etiquetas_NOMBRE IN (");
+
+                 // Agregar los parámetros en la consulta
+                 for (int i = 0; i < valores.size(); i++) {
+                     queryBuilder.append("?");
+
+                     // Agregar coma para todos los parámetros excepto el último
+                     if (i < valores.size() - 1) {
+                         queryBuilder.append(",");
+                     }
+                 }
+
+                 queryBuilder.append(") GROUP BY errors_ID HAVING COUNT(DISTINCT etiquetas_NOMBRE) >= ?)");
+
+                 // Crear la consulta con la cadena SQL construida
+                 Query q = em.createNativeQuery(queryBuilder.toString(), Logica.Clases.Error.class);
+
+                 // Establecer los parámetros en la consulta
+                 for (int i = 0; i < valores.size(); i++) {
+                     q.setParameter(i + 1, valores.get(i));
+                 }
+
+                 // Establecer el parámetro para la cantidad de valores
+                 q.setParameter(valores.size() + 1, valores.size());
+
+                 resultado = q.getResultList();
+                 em.getTransaction().commit();
+             } catch (Exception e) {
+                 em.getTransaction().rollback();
+             }
+             return resultado;
+         }
+        
+        
 }
