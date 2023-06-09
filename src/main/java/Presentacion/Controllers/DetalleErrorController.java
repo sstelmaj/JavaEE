@@ -7,9 +7,7 @@ package Presentacion.Controllers;
 import Logica.Clases.Archivo;
 import Logica.Clases.Solucion;
 import Logica.Clases.Error;
-import Logica.Clases.Error_Etiqueta;
 import Logica.Clases.Etiqueta;
-import Logica.Clases.Solucion_Etiqueta;
 import Logica.Controladores.ErrorController;
 import Logica.Controladores.EtiquetaController;
 import Presentacion.PanelCodigoSolucion;
@@ -97,7 +95,7 @@ public class DetalleErrorController implements Initializable {
     private Date fechaModif;
     private List<Archivo> archivos;
 
-    private List<Error_Etiqueta> etiquetasError;
+    private List<Etiqueta> etiquetasError;
     List<Etiqueta>allEtiquetas;
     private List<Solucion>soluciones;
     private ArrayList<String>etiquetasSeleccionadas=new ArrayList();
@@ -151,7 +149,9 @@ public class DetalleErrorController implements Initializable {
             this.consola=error.getConsola();
             this.archivos=error.getArchivos();
             this.fechaModif=error.getFechaSubida();
-            this.etiquetasError=error.getError_Etiquetas();
+            this.etiquetasError=error.getEtiquetas();
+            
+            this.dashboard = DashboardController.getInstance();
         
         //Frame para el codigo de error
         JInternalFrame iFrame = new PanelCodigoSolucion(this.codigo,SyntaxConstants.SYNTAX_STYLE_JAVA);
@@ -191,8 +191,8 @@ public class DetalleErrorController implements Initializable {
             txtDescripcion.setFont(Font.font("Calibri", FontPosture.ITALIC, 15));
             txtFlowDescripcion.getChildren().addAll(tituloDescripcion,txtDescripcion);
             hBoxEtiquetas.setSpacing(10);
-            for(Error_Etiqueta e:etiquetasError){
-                Text etiqueta=new Text(e.getEtiqueta().getNombre());
+            for(Etiqueta e:etiquetasError){
+                Text etiqueta=new Text(e.getNombre());
                 etiqueta.setFill(Color.BLACK);
                 hBoxEtiquetas.getChildren().add(etiqueta);
             }
@@ -258,8 +258,8 @@ public class DetalleErrorController implements Initializable {
                 Parent subfileRoot = loader.load();
                 // Obtén el controlador del archivo subfile.fxml
                 BusquedaSolucionController subfileController = loader.getController();
-                subfileController.setDatos("Solucion de ejemplo", sol.getDescripcion(), sol.getId());
-                subfileController.initialize(ap);
+                subfileController.setDatos("Solucion de ejemplo", sol.getDescripcion(), sol.getId(), this.dashboard, sol.getEtiquetas());
+                subfileController.initialize();
 
                 
                 lista.getChildren().add(subfileRoot);
@@ -316,9 +316,8 @@ private void filtrarSoluciones(){
         boolean tieneEtiqueta=false;
         this.lista.getChildren().clear();
         for(Solucion sol:this.soluciones){
-            List<Solucion_Etiqueta>etiquetasSolucion=sol.getSolucion_Etiquetas();
+            List<Etiqueta>etiquetasSolucion=sol.getEtiquetas();
             boolean contieneTodos = etiquetasSolucion.stream()
-            .map(Solucion_Etiqueta::getEtiqueta)
             .map(Etiqueta::getNombre)
             .collect(Collectors.toList())
             .containsAll(etiquetasSeleccionadas);
@@ -329,7 +328,7 @@ private void filtrarSoluciones(){
                     Parent subfileRoot = loader.load();
                     // Obtén el controlador del archivo subfile.fxml
                     BusquedaSolucionController subfileController = loader.getController();
-                    subfileController.setDatos("Solucion de ejemplo", sol.getDescripcion(), sol.getId(), this.dashboard, sol.getSolucion_Etiquetas());
+                    subfileController.setDatos("Solucion de ejemplo", sol.getDescripcion(), sol.getId(), this.dashboard, sol.getEtiquetas());
                     subfileController.initialize();
 
                     lista.getChildren().add(subfileRoot);

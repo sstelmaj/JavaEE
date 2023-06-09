@@ -239,9 +239,8 @@ public class DashboardController implements Initializable {
                 if(fxml.equals("/fxml/detalleError.fxml")){
                     DetalleErrorController detalleErrorController=(DetalleErrorController)loader.getController();
                     detalleErrorController.setDashboard(this);
-                    detalleErrorController.initialize();
-
-                else if(newValue.equals("Modificar Etiqueta")){
+                    //detalleErrorController.initialize(contentAPane, );
+                } else if(newValue.equals("Modificar Etiqueta")){
                     crearEtiquetaController crearEtiquetaController = (crearEtiquetaController)loader.getController();
                     Etiqueta etiqueta = EtiquetaController.getInstance().obtenerEtiqueta("SO");
                     if(etiqueta != null){

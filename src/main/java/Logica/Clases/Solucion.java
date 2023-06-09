@@ -152,16 +152,6 @@ public class Solucion implements Serializable {
         this.fechaSubida = fechaSubida;
     }
 
-    public Error getError() {
-        return error;
-    }
-
-    public void setError(Error error) {
-        this.error = error;
-    }
-    
-   
-
     @Override
     public int hashCode() {
         int hash = 0;

@@ -4,8 +4,7 @@
  */
 package Presentacion.Controllers;
 
-import Logica.Clases.Error_Etiqueta;
-import Logica.Clases.Solucion_Etiqueta;
+import Logica.Clases.Etiqueta;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -41,7 +40,7 @@ public class BusquedaSolucionController implements Initializable {
     private long id;
     @FXML
     private HBox hBoxEtiquetas;
-    private List<Solucion_Etiqueta> etiquetas;
+    private List<Etiqueta> etiquetas;
     
 
     /**
@@ -51,7 +50,7 @@ public class BusquedaSolucionController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         
     }    
-    public void setDatos(String titulo, String descripcion,long id, DashboardController dash, List<Solucion_Etiqueta>etiquetas){
+    public void setDatos(String titulo, String descripcion,long id, DashboardController dash, List<Etiqueta>etiquetas){
         this.titulo=titulo;
         this.descripcion=descripcion;
         this.id=id;
@@ -63,8 +62,8 @@ public class BusquedaSolucionController implements Initializable {
         txtTitulo.setText(titulo);
         txtDescripcion.setText(descripcion);
         hBoxEtiquetas.setSpacing(6);
-        for(Solucion_Etiqueta e: etiquetas){
-            Text etiqueta=new Text(e.getEtiqueta().getNombre());
+        for(Etiqueta e: etiquetas){
+            Text etiqueta=new Text(e.getNombre());
             etiqueta.setFill(Color.BLACK);
             hBoxEtiquetas.getChildren().add(etiqueta);
         }

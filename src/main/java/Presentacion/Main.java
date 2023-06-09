@@ -43,7 +43,7 @@ public class Main extends Application { //iniciador
             //primaryStage.setResizable(true);
             primaryStage.setResizable(false);
             primaryStage.setScene(scene);
-        //    primaryStage.setFullScreen(true);
+            //primaryStage.setFullScreen(true);
             //se le pasa el primary stage para poder controlar las resoluciones
             
             primaryStage.show();

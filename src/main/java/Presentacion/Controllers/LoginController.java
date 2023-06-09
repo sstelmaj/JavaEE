@@ -48,8 +48,8 @@ public class LoginController implements Initializable {
     private ImageView imageView;
     
     public void login(ActionEvent event) throws IOException {
-        usernameField.setText("joacomaidana11@gmail.com");
-        passwordField.setText("Joaco21");
+        usernameField.setText("joaquin.maidana@estudiantes.utec.edu.uy");
+        passwordField.setText("Passw0rd");
         
         String mail = usernameField.getText();
         String password = passwordField.getText();
@@ -59,7 +59,7 @@ public class LoginController implements Initializable {
          sesion.setUser(mail);
          Usuario user = UsuarioController.getInstance().obtenerUsuario(mail);
          sesion.setUsuario(user);
-            if(user.getPerfil().getNombre().equals("Admin")){
+            if(user.getPerfil().getNombre().equals("Administrador")){
                 System.out.println("Inicia como admin");
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AdminDashboard.fxml"));
                  Parent root = loader.load();
@@ -71,6 +71,7 @@ public class LoginController implements Initializable {
                  stage.setMinHeight(720.0);
                  stage.setMinWidth(1260.0);
                  stage.setScene(scene);
+                 //stage.setFullScreen(true);
                  stage.show();
                  stage.centerOnScreen();
             }else{
@@ -83,6 +84,7 @@ public class LoginController implements Initializable {
                  stage.setTitle("Dashboard");
                  stage.setMinHeight(800.0);
                  stage.setMinWidth(1552.0);
+                 //stage.setFullScreen(true);
                  stage.setScene(scene);
                  stage.show();
                  stage.centerOnScreen();

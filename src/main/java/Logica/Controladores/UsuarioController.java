@@ -68,6 +68,7 @@ public class UsuarioController {
         } catch (Exception e){
             em.getTransaction().rollback();
         }
+    }
 
     public Usuario obtenerUsuario(Long id){
         Usuario user=null;
