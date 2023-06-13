@@ -48,7 +48,7 @@ public class ExportarDatosController implements Initializable {
     @FXML
     private AnchorPane container;
     
-    private SimpleDateFormat formatter = new SimpleDateFormat("d-M-yyyy"); 
+    private SimpleDateFormat formatter = new SimpleDateFormat("d/M/yyyy"); 
     
     
     @Override
@@ -76,9 +76,9 @@ public class ExportarDatosController implements Initializable {
         headerRow.createCell(5).setCellValue("Link");
         headerRow.createCell(6).setCellValue("Repositorio");
         headerRow.createCell(7).setCellValue("Titulo");
-        headerRow.createCell(8).setCellValue("Usuario_ID");
+        headerRow.createCell(8).setCellValue("Usuario_Mail");
         // Lleno las filas
-        int rowNum = 1;
+        int rowNum = 1;   
         for (Logica.Clases.Error error : errores) {
             Row row = sheet.createRow(rowNum++);
             row.createCell(0).setCellValue(error.getId());
@@ -89,7 +89,7 @@ public class ExportarDatosController implements Initializable {
             row.createCell(5).setCellValue(error.getLink());
             row.createCell(6).setCellValue(error.getRepositorio());
             row.createCell(7).setCellValue(error.getTitulo());
-            row.createCell(8).setCellValue(error.getUsuario().getId());
+            row.createCell(8).setCellValue(error.getUsuario().getMail());
         }
         // Guardar archivo excel
             FileChooser fileChooser = new FileChooser();
@@ -144,9 +144,12 @@ public class ExportarDatosController implements Initializable {
         headerRow.createCell(3).setCellValue("FechaSubida");
         headerRow.createCell(4).setCellValue("Link");
         headerRow.createCell(5).setCellValue("Puntos");
-        headerRow.createCell(6).setCellValue("Usuario");
+        headerRow.createCell(6).setCellValue("ID Usuario");
+        headerRow.createCell(7).setCellValue("Mail Usuario");
+        headerRow.createCell(8).setCellValue("Error ID");
+        headerRow.createCell(9).setCellValue("Error titulo");
         // Lleno las filas
-         
+        
         int rowNum = 1;
         for (Solucion solucion : soluciones) {
             Row row = sheet.createRow(rowNum++);
@@ -154,9 +157,34 @@ public class ExportarDatosController implements Initializable {
             row.createCell(1).setCellValue(solucion.getCodigo());
             row.createCell(2).setCellValue(solucion.getDescripcion());
             row.createCell(3).setCellValue(formatter.format(solucion.getFechaSubida()));
-            row.createCell(4).setCellValue(solucion.getLink());
-            row.createCell(5).setCellValue(solucion.getPuntos());
-            row.createCell(6).setCellValue(solucion.getUsuario().getId());
+            
+            if (solucion.getLink() != null) {
+                row.createCell(4).setCellValue(solucion.getLink());
+            } else {
+                row.createCell(4).setCellValue(""); // Dejar la celda en blanco si el valor es nulo
+            }
+            
+            if (solucion.getPuntos() != 0) {
+                row.createCell(5).setCellValue(solucion.getPuntos());
+            } else {
+                row.createCell(5).setCellValue(""); // Dejar la celda en blanco si el valor es nulo
+            }
+            
+            if (solucion.getUsuario() != null) {
+                row.createCell(6).setCellValue(solucion.getUsuario().getId().intValue());
+                row.createCell(7).setCellValue(solucion.getUsuario().getMail());
+            } else {
+                row.createCell(6).setCellValue("");
+                row.createCell(7).setCellValue("");
+            }
+            
+            if (solucion.getError() != null) {
+                row.createCell(8).setCellValue(solucion.getError().getId().intValue());
+                row.createCell(9).setCellValue(solucion.getError().getTitulo());
+            } else {
+                row.createCell(8).setCellValue("");
+                row.createCell(9).setCellValue("");
+            }
         }
         // Guardar archivo excel
             FileChooser fileChooser = new FileChooser();

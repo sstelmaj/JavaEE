@@ -19,9 +19,13 @@ import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.fxml.FXML;
@@ -62,8 +66,7 @@ public class ImportarDatosController implements Initializable {
         btnSolucion.setOnAction(event -> importSoluciones());
     }    
     
-    void importErrores(){
-        
+    void importErrores() {
         try {
             // Crear un cuadro de diálogo para seleccionar el archivo Excel a importar
             FileChooser fileChooser = new FileChooser();
@@ -84,60 +87,94 @@ public class ImportarDatosController implements Initializable {
                 // Obtener la hoja de trabajo deseada del libro (por ejemplo, la primera hoja)
                 Sheet sheet = workbook.getSheetAt(0);
 
-                // Iterar sobre las filas de la hoja de trabajo
-                SimpleDateFormat formatter = new SimpleDateFormat("d-M-yyyy");  
-                Iterator<Row> rowIterator = sheet.iterator();
-                rowIterator.next();
-                while (rowIterator.hasNext()) {
-                    Row row = rowIterator.next();
-                    
-                    // Leer los datos de cada celda de la fila y procesarlos según tus necesidades
-                    // Por ejemplo, puedes obtener los valores de las celdas y guardarlos en tu base de datos
-                    Cell cell1 = row.getCell(0);
-                    Cell cell2 = row.getCell(1);
-                    Cell cell3 = row.getCell(2);
-                    Cell cell4 = row.getCell(3);
-                    Cell cell5 = row.getCell(4);
-                    Cell cell6 = row.getCell(5);
-                    Cell cell7 = row.getCell(6);
-                    Cell cell8 = row.getCell(7);
-                    Cell cell9 = row.getCell(8);
-                    // ...
+                // Definir el mapeo de columnas esperado
+                Map<String, Integer> columnMapping = new HashMap<>();
+                columnMapping.put("ID", -1); // Asignar un valor negativo para las columnas no encontradas
+                columnMapping.put("Codigo", -1);
+                columnMapping.put("Descripcion", -1);
+                columnMapping.put("FechaSubida", -1);
+                columnMapping.put("Link", -1);
+                columnMapping.put("Repositorio", -1);
+                columnMapping.put("Titulo", -1);
+                columnMapping.put("Usuario_Mail", -1);
+                // ...
 
-                    // Procesar los datos de las celdas
-                    Double value1 = cell1.getNumericCellValue();
-                    String value2 = cell2.getStringCellValue();
-                    String value3 = cell3.getStringCellValue();
-                    String value4 = cell4.getStringCellValue();
-                    String value5 = cell5.getStringCellValue();
-                    String value6 = cell6.getStringCellValue();
-                    String value7 = cell7.getStringCellValue();
-                    String value8 = cell8.getStringCellValue();
-                    Double value9 = cell9.getNumericCellValue();
-                    // ...
+                // Obtener la primera fila del archivo Excel
+                Row headerRow = sheet.getRow(0);
+                if (headerRow != null) {
+                    // Iterar sobre las celdas de la primera fila y mapear las columnas
+                    for (int i = 0; i < headerRow.getLastCellNum(); i++) {
+                        Cell cell = headerRow.getCell(i);
+                        if (cell != null && cell.getCellType() == CellType.STRING) {
+                            String columnName = cell.getStringCellValue();
+                            if (columnMapping.containsKey(columnName)) {
+                                columnMapping.put(columnName, i); // Actualizar el índice de la columna en el mapeo
+                            }
+                        }
+                    }
+                }
+                System.out.println(sheet.getLastRowNum());
+                System.out.println(sheet.getLastRowNum());
+                System.out.println(sheet.getLastRowNum());
+                System.out.println(sheet.getLastRowNum());
+                System.out.println(sheet.getLastRowNum());
+                System.out.println(sheet.getLastRowNum());
+                System.out.println(sheet.getLastRowNum());
+
+                // Iterar sobre las filas restantes y procesar los datos
+                SimpleDateFormat formatoOriginal = new SimpleDateFormat("d/M/yyyy");
+                SimpleDateFormat formatoNuevo = new SimpleDateFormat("d-M-yyyy");
+                
+                for (int rowNum = 1; rowNum <= sheet.getLastRowNum(); rowNum++) {
+                    Row row = sheet.getRow(rowNum);
+
+                    // Obtener los datos de las celdas según el mapeo de columnas
+                    Double id = getNumericCellValue(row, columnMapping.get("ID"));
+                    String codigo = getStringCellValue(row, columnMapping.get("Codigo"));
+                    String descripcion = getStringCellValue(row, columnMapping.get("Descripcion"));
+                    String fechaSubida = getStringCellValue(row, columnMapping.get("FechaSubida"));
+                    String link = getStringCellValue(row, columnMapping.get("Link"));
+                    String repositorio = getStringCellValue(row, columnMapping.get("Repositorio"));
+                    String titulo = getStringCellValue(row, columnMapping.get("Titulo"));
+                    String usuarioMail = getStringCellValue(row, columnMapping.get("Usuario_Mail"));
                     
-                    // Realizar las operaciones necesarias con los datos leídos
-                    // (por ejemplo, guardarlos en tu base de datos)
+                    if (ErrorController.getInstance().obtenerError(id.longValue()) != null){
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Aviso!");
+                        alert.setHeaderText(null);
+                        alert.setContentText("El error de ID: "+id+" ya existe en la Base de Datos");
+                        alert.showAndWait();
+                        continue;
+                    }
+                    
                     Logica.Clases.Error error = new Logica.Clases.Error();
-                    error.setId(value1.longValue());
-                    error.setCodigo(value2);
-                    error.setConsola(value3);
-                    error.setDescripcion(value4);
+                    
+                    if (descripcion != null) {
+                        error.setDescripcion(descripcion);
+                    }
+                    if (link != null){
+                        error.setLink(link);
+                    }
+                    if (link != null){
+                        error.setRepositorio(repositorio);
+                    }
+
+                    error.setId(id.longValue());
+                    error.setCodigo(codigo);
+                    error.setTitulo(titulo);
+                    error.setUsuario(UsuarioController.getInstance().obtenerUsuario(usuarioMail));
+                    error.setActive(Boolean.TRUE);
                     try {
-                        error.setFechaSubida(formatter.parse(value5));
+                        Date fecha = formatoOriginal.parse(fechaSubida);
+                        String fechaFormateada = formatoNuevo.format(fecha);
+                        Date fechaFormateadaDate = formatoNuevo.parse(fechaFormateada);
+                        error.setFechaSubida(fechaFormateadaDate);
                     } catch (ParseException ex) {
                         Logger.getLogger(ImportarDatosController.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    error.setLink(value6);
-                    error.setRepositorio(value7);
-                    error.setTitulo(value8);
-                    error.setUsuario(UsuarioController.getInstance().obtenerUsuario(value9.longValue()));
-                    
                     Conexion.getInstance().persist(error);
-                    
                 }
 
-                
                 // Cerrar el flujo de entrada del archivo
                 fileIn.close();
 
@@ -157,10 +194,9 @@ public class ImportarDatosController implements Initializable {
             alert.setContentText("Se produjo un error al importar los datos desde el archivo Excel.");
             alert.showAndWait();
         }
-
     }
     
-    void importSoluciones(){
+    void importSoluciones() {
         try {
             // Crear un cuadro de diálogo para seleccionar el archivo Excel a importar
             FileChooser fileChooser = new FileChooser();
@@ -181,52 +217,116 @@ public class ImportarDatosController implements Initializable {
                 // Obtener la hoja de trabajo deseada del libro (por ejemplo, la primera hoja)
                 Sheet sheet = workbook.getSheetAt(0);
 
-                SimpleDateFormat formatter = new SimpleDateFormat("d-M-yyyy");  
-                Iterator<Row> rowIterator = sheet.iterator();
-                rowIterator.next();
-                // Iteracion sobre todas las filas de la hoja excel
-                while (rowIterator.hasNext()) {
-                    Row row = rowIterator.next();
-                    
-                    // Obtengo los valores de las celdas
-                    Cell cell1 = row.getCell(0);
-                    Cell cell2 = row.getCell(1);
-                    Cell cell3 = row.getCell(2);
-                    Cell cell4 = row.getCell(3);
-                    Cell cell5 = row.getCell(4);
-                    Cell cell6 = row.getCell(5);
-                    Cell cell7 = row.getCell(6);
+                // Definir el mapeo de columnas esperado
+                Map<String, Integer> columnMapping = new HashMap<>();
+                columnMapping.put("ID", -1);
+                columnMapping.put("Codigo", -1);
+                columnMapping.put("Descripcion", -1);
+                columnMapping.put("FechaSubida", -1);
+                columnMapping.put("Link", -1);
+                columnMapping.put("Puntos", -1);
+                columnMapping.put("Mail Usuario", -1);
+                columnMapping.put("Error ID", -1);
+                // ...
 
-                    Double value1 = cell1.getNumericCellValue();
-                    String value2 = cell2.getStringCellValue();
-                    String value3 = cell3.getStringCellValue();
-                    String value4 = cell4.getStringCellValue();
-                    String value5 = cell5.getStringCellValue();
-                    Double value6 = cell6.getNumericCellValue();
-                    Double value7 = cell7.getNumericCellValue();
+                // Obtener la primera fila del archivo Excel
+                Row headerRow = sheet.getRow(0);
+                if (headerRow != null) {
+                    // Iterar sobre las celdas de la primera fila y mapear las columnas
+                    for (int i = 0; i < headerRow.getLastCellNum(); i++) {
+                        Cell cell = headerRow.getCell(i);
+                        if (cell != null && cell.getCellType() == CellType.STRING) {
+                            String columnName = cell.getStringCellValue();
+                            if (columnMapping.containsKey(columnName)) {
+                                columnMapping.put(columnName, i); // Actualizar el índice de la columna en el mapeo
+                            }
+                        }
+                    }
+                }
+
+                SimpleDateFormat formatoOriginal = new SimpleDateFormat("d/M/yyyy");
+                SimpleDateFormat formatoNuevo = new SimpleDateFormat("d-M-yyyy");
+                
+                
+                System.out.println(sheet.getLastRowNum());
+                System.out.println(sheet.getLastRowNum());
+                System.out.println(sheet.getLastRowNum());
+                System.out.println(sheet.getLastRowNum());
+                System.out.println(sheet.getLastRowNum());
+                System.out.println(sheet.getLastRowNum());
+                System.out.println(sheet.getLastRowNum());
+
+                // Iterar sobre las filas restantes y procesar los datos
+                for (int rowNum = 1; rowNum <= sheet.getLastRowNum(); rowNum++) {
+                    Row row = sheet.getRow(rowNum);
+
+                    // Obtener los datos de las celdas según el mapeo de columnas
+                    Double id = getNumericCellValue(row, columnMapping.get("ID"));
+                    String codigo = getStringCellValue(row, columnMapping.get("Codigo"));
+                    String descripcion = getStringCellValue(row, columnMapping.get("Descripcion"));
+                    String fechaSubida = getStringCellValue(row, columnMapping.get("FechaSubida"));
+                    String link = getStringCellValue(row, columnMapping.get("Link"));
+                    Double puntos = getNumericCellValue(row, columnMapping.get("Puntos"));
+                    String usuarioMail = getStringCellValue(row, columnMapping.get("Mail Usuario"));
+                    Double errorId = getNumericCellValue(row, columnMapping.get("Error ID"));
+                    //String errorTitulo = getStringCellValue(row, columnMapping.get("Error titulo"));
                     // ...
                     
-                    // Guardo la solucion en la base de datos
+                    if (SolucionController.getInstance().obtenerSolucion(id.longValue()) != null){
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Aviso!");
+                        alert.setHeaderText(null);
+                        alert.setContentText("La solucion de ID "+id+" ya existe en la Base de Datos");
+                        alert.showAndWait();
+                        continue;
+                    } else if (ErrorController.getInstance().obtenerError(errorId.longValue()) == null){
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Aviso!");
+                        alert.setHeaderText(null);
+                        alert.setContentText("La solucion de ID "+id+" no puede asociarse al error "+errorId+ " ya que este no existe en la base de datos, por favor ingrese el Error primero.");
+                        alert.showAndWait();
+                        continue;
+                    } else if (UsuarioController.getInstance().obtenerUsuario(usuarioMail) == null){
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Aviso!");
+                        alert.setHeaderText(null);
+                        alert.setContentText("La solucion de ID "+id+" no puede asociarse al usuario "+usuarioMail+ " ya que este no existe en la base de datos, por favor ingrese el Usuario primero.");
+                        alert.showAndWait();
+                        continue;
+                    }
+
                     Solucion solucion = new Solucion();
-                    solucion.setId(value1.longValue());
-                    solucion.setCodigo(value2);
-                    solucion.setDescripcion(value3);
+                    solucion.setId(id.longValue());
+                    solucion.setCodigo(codigo);
+                    
+                    if (descripcion != null) {
+                        solucion.setDescripcion(descripcion);
+                    }
+                    if (link != null){
+                        solucion.setLink(link);
+                    }
+                    if (puntos != null){
+                        solucion.setPuntos(puntos.intValue());
+                    }
                     try {
-                        solucion.setFechaSubida(formatter.parse(value4));
+                        Date fecha = formatoOriginal.parse(fechaSubida);
+                        String fechaFormateada = formatoNuevo.format(fecha);
+                        Date fechaFormateadaDate = formatoNuevo.parse(fechaFormateada);
+                        solucion.setFechaSubida(fechaFormateadaDate);
                     } catch (ParseException ex) {
                         Logger.getLogger(ImportarDatosController.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    solucion.setLink(value5);
-                    solucion.setPuntos(value6.intValue());
-                    solucion.setUsuario(UsuarioController.getInstance().obtenerUsuario(value7.longValue()));
-                    
+                    solucion.setUsuario(UsuarioController.getInstance().obtenerUsuario(usuarioMail));
+                    solucion.setError(ErrorController.getInstance().obtenerError(errorId.longValue()));
+                    // ...
+
                     Conexion.getInstance().persist(solucion);
-                    
                 }
 
                 // Cerrar el flujo de entrada del archivo
                 fileIn.close();
 
+                // Mostrar un mensaje de éxito
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Éxito");
                 alert.setHeaderText(null);
@@ -235,6 +335,7 @@ public class ImportarDatosController implements Initializable {
             }
         } catch (IOException ex) {
             ex.printStackTrace();
+            // Mostrar un mensaje de error
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText(null);
@@ -247,6 +348,28 @@ public class ImportarDatosController implements Initializable {
     private void closePopup() {
         Stage stage = (Stage) btnError.getScene().getWindow();
         stage.close();
+    }
+    
+    // Método para obtener el valor numérico de una celda
+    private Double getNumericCellValue(Row row, Integer columnIndex) {
+        if (columnIndex != null && columnIndex >= 0 && row != null) {
+            Cell cell = row.getCell(columnIndex);
+            if (cell != null && cell.getCellType() == CellType.NUMERIC) {
+                return cell.getNumericCellValue();
+            }
+        }
+        return null;
+    }
+    
+    // Método para obtener el valor de cadena de una celda
+    private String getStringCellValue(Row row, Integer columnIndex) {
+        if (columnIndex != null && columnIndex >= 0 && row != null) {
+            Cell cell = row.getCell(columnIndex);
+            if (cell != null && cell.getCellType() == CellType.STRING) {
+                return cell.getStringCellValue();
+            }
+        }
+        return null;
     }
 
 }
