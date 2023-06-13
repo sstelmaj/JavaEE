@@ -97,7 +97,6 @@ public class ImportarDatosController implements Initializable {
                 columnMapping.put("Repositorio", -1);
                 columnMapping.put("Titulo", -1);
                 columnMapping.put("Usuario_Mail", -1);
-                // ...
 
                 // Obtener la primera fila del archivo Excel
                 Row headerRow = sheet.getRow(0);
@@ -113,13 +112,6 @@ public class ImportarDatosController implements Initializable {
                         }
                     }
                 }
-                System.out.println(sheet.getLastRowNum());
-                System.out.println(sheet.getLastRowNum());
-                System.out.println(sheet.getLastRowNum());
-                System.out.println(sheet.getLastRowNum());
-                System.out.println(sheet.getLastRowNum());
-                System.out.println(sheet.getLastRowNum());
-                System.out.println(sheet.getLastRowNum());
 
                 // Iterar sobre las filas restantes y procesar los datos
                 SimpleDateFormat formatoOriginal = new SimpleDateFormat("d/M/yyyy");
@@ -227,7 +219,6 @@ public class ImportarDatosController implements Initializable {
                 columnMapping.put("Puntos", -1);
                 columnMapping.put("Mail Usuario", -1);
                 columnMapping.put("Error ID", -1);
-                // ...
 
                 // Obtener la primera fila del archivo Excel
                 Row headerRow = sheet.getRow(0);
@@ -246,15 +237,6 @@ public class ImportarDatosController implements Initializable {
 
                 SimpleDateFormat formatoOriginal = new SimpleDateFormat("d/M/yyyy");
                 SimpleDateFormat formatoNuevo = new SimpleDateFormat("d-M-yyyy");
-                
-                
-                System.out.println(sheet.getLastRowNum());
-                System.out.println(sheet.getLastRowNum());
-                System.out.println(sheet.getLastRowNum());
-                System.out.println(sheet.getLastRowNum());
-                System.out.println(sheet.getLastRowNum());
-                System.out.println(sheet.getLastRowNum());
-                System.out.println(sheet.getLastRowNum());
 
                 // Iterar sobre las filas restantes y procesar los datos
                 for (int rowNum = 1; rowNum <= sheet.getLastRowNum(); rowNum++) {
@@ -270,7 +252,6 @@ public class ImportarDatosController implements Initializable {
                     String usuarioMail = getStringCellValue(row, columnMapping.get("Mail Usuario"));
                     Double errorId = getNumericCellValue(row, columnMapping.get("Error ID"));
                     //String errorTitulo = getStringCellValue(row, columnMapping.get("Error titulo"));
-                    // ...
                     
                     if (SolucionController.getInstance().obtenerSolucion(id.longValue()) != null){
                         Alert alert = new Alert(Alert.AlertType.WARNING);
