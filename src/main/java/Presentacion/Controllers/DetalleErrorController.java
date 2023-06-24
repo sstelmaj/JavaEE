@@ -8,20 +8,37 @@ import Logica.Clases.Archivo;
 import Logica.Clases.Solucion;
 import Logica.Clases.Error;
 import Logica.Clases.Etiqueta;
+import Logica.Clases.Nota;
 import Logica.Controladores.ErrorController;
 import Logica.Controladores.EtiquetaController;
+import Persistencia.Conexion;
+import Presentacion.Componentes.ItemNota;
 import Presentacion.PanelCodigoSolucion;
+import java.awt.Desktop;
+import javafx.application.HostServices;
 import java.awt.Dimension;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -33,7 +50,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -68,8 +90,6 @@ public class DetalleErrorController implements Initializable {
     @FXML
     private AnchorPane anchPaneArchivos;
     @FXML
-    private AnchorPane anchPaneRefExt;
-    @FXML
     private AnchorPane anchPaneCodigo;
     @FXML
     private AnchorPane anchPaneLista;
@@ -88,7 +108,7 @@ public class DetalleErrorController implements Initializable {
     @FXML
     private TextFlow txtFlowConsola;
     @FXML
-    private GridPane tablaArchivos;
+    private GridPane tablaImagenes;
     
     private long idError;
     private String descripcion,codigo,consola;
@@ -96,7 +116,7 @@ public class DetalleErrorController implements Initializable {
     private List<Archivo> archivos;
 
     private List<Etiqueta> etiquetasError;
-    List<Etiqueta>allEtiquetas;
+    private List<Etiqueta>allEtiquetas;
     private List<Solucion>soluciones;
     private ArrayList<String>etiquetasSeleccionadas=new ArrayList();
     DashboardController dashboard;
@@ -112,6 +132,25 @@ public class DetalleErrorController implements Initializable {
     private ComboBox<String> comboBoxSubEtiq;
 
     private Logica.Clases.Error errorDetalle;
+    @FXML
+    private AnchorPane anchPaneDescrip1;
+    @FXML
+    private ListView<ItemNota> listaNotas;
+    @FXML
+    private TextArea txtAreaNotas;
+    private List<Nota> notasError;
+    @FXML
+    private AnchorPane anchorFile;
+    private TableView<Archivo> tablaArchivos;
+    @FXML
+    private TableColumn<Archivo, String> columnArchivo;
+    @FXML
+    private TableColumn<Archivo, String> columnExt;
+    private ObservableList<Archivo> listaArchivos;
+    @FXML
+    private Button botonVer;
+    @FXML
+    private TableView<?> tablaArchivos1;
 
     public Error getErrorDetalle() {
         return errorDetalle;
@@ -139,9 +178,11 @@ public class DetalleErrorController implements Initializable {
             
     }
     public void initialize(AnchorPane ap, Logica.Clases.Error error){
+        this.errorDetalle=error;
         //List<Solucion>soluciones=ErrorController.getInstance().obtenerSolucionesDelError(151 /*idError*/);
         //Error error=ErrorController.getInstance().obtenerError(151 /*idError*/);
         soluciones=error.getSoluciones();
+        notasError=error.getNotas();
         soluciones.sort(Comparator.comparingInt(Solucion::getPuntos));
         allEtiquetas=EtiquetaController.getInstance().listaEtiquetas();
             this.descripcion=error.getDescripcion();
@@ -166,18 +207,41 @@ public class DetalleErrorController implements Initializable {
         anchPaneCodigo.getChildren().add(swingNode);
         
         
+        
+        listaArchivos=FXCollections.observableArrayList();
+        this.columnArchivo.setCellValueFactory(new PropertyValueFactory("nombre"));
+        this.columnExt.setCellValueFactory(new PropertyValueFactory("extension"));
         //Cargo las imagenes en el GridPane
             for(Archivo arch:archivos){
-                if(this.checkIfFileHasExtension(arch.getUrl())){
-                    ImageView imageView=new ImageView(new Image(arch.getUrl()));
-                    imageView.setCursor(Cursor.HAND);
-                    imageView.setPreserveRatio(true);
-                    //Ver como cargar dinamicamente
-                    tablaArchivos.addRow(0, imageView);
+                if(this.checkIfFileHasExtension(arch.getExtension())){
+                    if(arch.getContenidoByte()!=null){
+                        Image imgEnBytes=new Image(new ByteArrayInputStream(arch.getContenidoByte()));
+                        ImageView imageView=new ImageView(imgEnBytes);
+                        imageView.setCursor(Cursor.HAND);
+                        imageView.setPreserveRatio(true);
+                        tablaImagenes.addRow(1, imageView);
+                    }else{
+                        ImageView imageView=new ImageView(new Image(arch.getUrl()));
+                        imageView.setCursor(Cursor.HAND);
+                        imageView.setPreserveRatio(true);
+                        //Ver como cargar dinamicamente
+                        tablaImagenes.addRow(0, imageView);
+                    }
                 }else{
-                    Hyperlink link= new Hyperlink(arch.getUrl());
-                    this.anchPaneRefExt.getChildren().add(link);
+                    this.listaArchivos.add(arch);                   
                 }
+                this.tablaArchivos.setItems(listaArchivos);
+                /*else{
+                    Hyperlink link= new Hyperlink(arch.getUrl());
+                    link.setOnAction(event ->{
+                        try {
+                            Desktop.getDesktop().browse(new URI(arch.getUrl()));
+                        }catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    });
+                    this.anchPaneRefExt.getChildren().add(link);
+                }*/
             }
 
 
@@ -196,7 +260,7 @@ public class DetalleErrorController implements Initializable {
                 etiqueta.setFill(Color.BLACK);
                 hBoxEtiquetas.getChildren().add(etiqueta);
             }
-            tablaArchivos.setGridLinesVisible(true);
+            tablaImagenes.setGridLinesVisible(true);
 
             Text txtConsola=new Text(this.consola);
             txtConsola.setFill(Color.GRAY);
@@ -208,7 +272,7 @@ public class DetalleErrorController implements Initializable {
 
 
             //Creo el popup para expandir imagenes
-            for (Node node : tablaArchivos.getChildren()) {
+            for (Node node : tablaImagenes.getChildren()) {
                 if (node instanceof ImageView) {
                     ImageView imageView = (ImageView) node;
                     imageView.setOnMouseClicked(event -> {
@@ -219,11 +283,11 @@ public class DetalleErrorController implements Initializable {
                         popup.getContent().add(popupImageView);
 
                         //Obtengo la escena para deshabilitar el click del raton
-                        Scene scene = tablaArchivos.getScene();
+                        Scene scene = tablaImagenes.getScene();
                         scene.getRoot().setDisable(true);
 
 
-                        popup.show(tablaArchivos.getScene().getWindow());
+                        popup.show(tablaImagenes.getScene().getWindow());
                         popup.setOnHidden(hiddenEvent -> {
                             popup.hide();
                             scene.getRoot().setDisable(false);
@@ -233,8 +297,8 @@ public class DetalleErrorController implements Initializable {
             }
 
             // Agregar un ChangeListener a la propiedad widthProperty y heightProperty del GridPane
-        tablaArchivos.widthProperty().addListener((obs, oldVal, newVal) -> {
-            for (Node node : tablaArchivos.getChildren()) {
+        tablaImagenes.widthProperty().addListener((obs, oldVal, newVal) -> {
+            for (Node node : tablaImagenes.getChildren()) {
                 if(node instanceof ImageView){
                     ImageView imageView = (ImageView) node;
                     imageView.setFitWidth(newVal.doubleValue() / 3);
@@ -242,8 +306,8 @@ public class DetalleErrorController implements Initializable {
             }
         });
 
-        tablaArchivos.heightProperty().addListener((var obs, var oldVal, var newVal) -> {
-            for (Node node : tablaArchivos.getChildren()) {
+        tablaImagenes.heightProperty().addListener((var obs, var oldVal, var newVal) -> {
+            for (Node node : tablaImagenes.getChildren()) {
                 if(node instanceof ImageView){
                     ImageView imageView = (ImageView) node;
                     imageView.setFitHeight(newVal.doubleValue() / 3);
@@ -283,8 +347,10 @@ public class DetalleErrorController implements Initializable {
         comboBoxEtiquetas.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             cargarSubetiquetas();
         });
-        //TODO: AGREGAR NOTA Y VER LAS NOTAS DEL ERROR
-    
+        
+        //PANEL NOTAS
+        cargarNotas();
+        
     }
     
     private void setError(long id){
@@ -359,6 +425,56 @@ private void filtrarSoluciones(){
                     this.comboBoxSubEtiq.getItems().add(e.getNombre());
                 }
             }
+        }
+    }
+    
+    private void cargarNotas(){
+        listaNotas.getItems().clear(); 
+        for(Nota nota:notasError){
+            ItemNota itemNota=new ItemNota();
+            itemNota.setContenidoNota(nota.getContenido());
+            itemNota.setTxtFecha(new SimpleDateFormat("dd-MM-yyyy").format(nota.getFechaSubida()));
+            listaNotas.getItems().add(itemNota);
+        }
+    }
+
+    @FXML
+    private void agregarNota(MouseEvent event) {
+        Nota nota= new Nota();
+        Date fecha=Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        if(!this.txtAreaNotas.getText().isEmpty()){
+            List <Nota>notas= this.errorDetalle.getNotas();
+            nota.setContenido(this.txtAreaNotas.getText());
+            nota.setFechaSubida(fecha);
+            notas.add(nota);
+            Conexion.getInstance().persist(nota);
+            this.errorDetalle.setNotas(notas);
+            Conexion.getInstance().merge(errorDetalle);
+        }
+        this.notasError=this.errorDetalle.getNotas();
+        cargarNotas();
+    }
+    
+    @FXML
+    private void mostrarArchivos(){
+        Archivo archivoTemp=this.tablaArchivos.getSelectionModel().getSelectedItem();
+        if(!archivoTemp.getExtension().equals("web")){
+            try {
+                File archivo = File.createTempFile(archivoTemp.getNombre(), "." + archivoTemp.getExtension());
+                try (FileOutputStream fileOuputStream = new FileOutputStream(archivo)) {
+                    fileOuputStream.write(archivoTemp.getContenidoByte());
+                }
+                archivo.deleteOnExit();
+                Desktop.getDesktop().open(archivo);
+            } catch (Exception ex) {
+                System.out.println(ex);
+            }
+        }else{
+            try {
+                    Desktop.getDesktop().browse(new URI(archivoTemp.getUrl()));
+                }catch (Exception ex) {
+                    ex.printStackTrace();
+                }
         }
     }
 }

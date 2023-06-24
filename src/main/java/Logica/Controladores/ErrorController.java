@@ -103,7 +103,7 @@ public class ErrorController {
 
                  // Crear la consulta con la cadena SQL construida
                  Query q = em.createNativeQuery(queryBuilder.toString(), Logica.Clases.Error.class);
-
+                 
                  // Establecer los parámetros en la consulta
                  for (int i = 0; i < valores.size(); i++) {
                      q.setParameter(i + 1, valores.get(i));
@@ -111,7 +111,7 @@ public class ErrorController {
 
                  // Establecer el parámetro para la cantidad de valores
                  q.setParameter(valores.size() + 1, valores.size());
-
+                 
                  resultado = q.getResultList();
                  em.getTransaction().commit();
              } catch (Exception e) {
@@ -120,5 +120,17 @@ public class ErrorController {
              return resultado;
          }
         
-        
+        public List<Error> busquedaDeErrores(String busqueda){
+            EntityManager em = Conexion.getInstance().getEntity();
+            List<Logica.Clases.Error> resultado = null;
+            em.getTransaction().begin();
+            try {
+            Query q=em.createNativeQuery("SELECT * FROM error where descripcion LIKE(\"%"+busqueda+"%\") OR consola LIKE(\"%"+busqueda+"%\");", Logica.Clases.Error.class);
+            resultado = q.getResultList();
+            em.getTransaction().commit();
+            } catch (Exception e){
+                    em.getTransaction().rollback();
+            }
+            return resultado;
+        }     
 }

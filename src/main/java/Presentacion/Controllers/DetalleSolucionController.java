@@ -8,13 +8,20 @@ import Logica.Clases.Archivo;
 import Logica.Clases.Solucion;
 import Logica.Controladores.SolucionController;
 import Presentacion.PanelCodigoSolucion;
+import java.awt.Desktop;
 import java.awt.Dimension;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.net.URI;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,6 +32,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -68,8 +78,6 @@ public class DetalleSolucionController implements Initializable {
     private AnchorPane anchorPaneDestacado;
     
     @FXML
-    private AnchorPane archivosWeb;
-    @FXML
     private Text txtUsosSolucion;
     @FXML
     private Text txtFechaSolucion;
@@ -82,6 +90,17 @@ public class DetalleSolucionController implements Initializable {
     @FXML
     private Button btnBack;
     private Scene escenaPrevia;
+    @FXML
+    private AnchorPane anchorFile;
+    @FXML
+    private TableView<Archivo> tablaArchivos1;
+    @FXML
+    private TableColumn<Archivo, String> columnArchivo;
+    @FXML
+    private TableColumn<Archivo, String> columnExt;
+    private ObservableList<Archivo> listaArchivos;
+    @FXML
+    private Button botonVer;
     
     /**
      * Initializes the controller class.
@@ -136,7 +155,7 @@ public class DetalleSolucionController implements Initializable {
             optCodigo.getChildren().add(swingNode2);
 
            //Cargo las imagenes en el GridPane
-            for(Archivo arch:archivos){
+           /* for(Archivo arch:archivos){
                 if(this.checkIfFileHasExtension(arch.getUrl())){
                     ImageView imageView=new ImageView(new Image(arch.getUrl()));
                     imageView.setCursor(Cursor.HAND);
@@ -146,6 +165,41 @@ public class DetalleSolucionController implements Initializable {
                     Hyperlink link= new Hyperlink(arch.getUrl());
                     this.archivosWeb.getChildren().add(link);
                 }
+            }*/
+            listaArchivos=FXCollections.observableArrayList();
+            this.columnArchivo.setCellValueFactory(new PropertyValueFactory("nombre"));
+            this.columnExt.setCellValueFactory(new PropertyValueFactory("extension"));
+            for(Archivo arch:archivos){
+                if(this.checkIfFileHasExtension(arch.getExtension())){
+                    if(arch.getContenidoByte()!=null){
+                        Image imgEnBytes=new Image(new ByteArrayInputStream(arch.getContenidoByte()));
+                        ImageView imageView=new ImageView(imgEnBytes);
+                        imageView.setCursor(Cursor.HAND);
+                        imageView.setPreserveRatio(true);
+                        tablaArchivos.addRow(1, imageView);
+                    }else{
+                        ImageView imageView=new ImageView(new Image(arch.getUrl()));
+                        imageView.setCursor(Cursor.HAND);
+                        imageView.setPreserveRatio(true);
+                        //Ver como cargar dinamicamente
+                        tablaArchivos.addRow(0, imageView);
+                    }
+                }else{
+                    this.listaArchivos.add(arch);                   
+                }
+                this.tablaArchivos1.setItems(listaArchivos);
+                
+                /*else{
+                    Hyperlink link= new Hyperlink(arch.getUrl());
+                    link.setOnAction(event ->{
+                        try {
+                            Desktop.getDesktop().browse(new URI(arch.getUrl()));
+                        }catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    });
+                    this.archivosWeb.getChildren().add(link);
+                }*/
             }
 
 
@@ -212,6 +266,29 @@ public class DetalleSolucionController implements Initializable {
     private boolean checkIfFileHasExtension(String s) {
         String[] extensiones={"jpg","png","jpeg","webx"};
         return Arrays.stream(extensiones).anyMatch(entry -> s.endsWith(entry));
+    }
+    
+    @FXML
+    private void mostrarArchivos(){
+        Archivo archivoTemp=this.tablaArchivos1.getSelectionModel().getSelectedItem();
+        if(!archivoTemp.getExtension().equals("web")){
+            try {
+                File archivo = File.createTempFile(archivoTemp.getNombre(), "." + archivoTemp.getExtension());
+                try (FileOutputStream fileOuputStream = new FileOutputStream(archivo)) {
+                    fileOuputStream.write(archivoTemp.getContenidoByte());
+                }
+                archivo.deleteOnExit();
+                Desktop.getDesktop().open(archivo);
+            } catch (Exception ex) {
+                System.out.println(ex);
+            }
+        }else{
+            try {
+                Desktop.getDesktop().browse(new URI(archivoTemp.getUrl()));
+            }catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
     }
     
     /*private void agregarArchivoATabla(){

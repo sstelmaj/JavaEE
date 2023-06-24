@@ -113,8 +113,8 @@ public class ItemLista extends Control {
         return txtDescripcion;
     }
 
-    public void setTxtDescripcion(Text txtDescripcion) {
-        this.txtDescripcion = txtDescripcion;
+    public void setTxtDescripcion(String txtDescripcion) {
+        this.txtDescripcion.setText(txtDescripcion);
     }
 
     public Error getError() {
