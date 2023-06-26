@@ -11,10 +11,13 @@ import Persistencia.Conexion;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -22,7 +25,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Point2D;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -59,6 +61,8 @@ public class crearEtiquetaController implements Initializable {
     private String tipoPantalla ="-";
     
     private Etiqueta etiquetaModificar;
+    
+    private TreeItem<String> rootItem = new TreeItem("Etiquetas");
     
     ObservableList<String> items;
     @FXML
@@ -105,10 +109,12 @@ public class crearEtiquetaController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         
-        TreeItem<String> rootItem = new TreeItem("Etiquetas");
+        actualizarArbol();
+        /*
         List<Etiqueta> etiquetas_padre = EtiquetaController.getInstance().listaEtiquetasActivas();
         
         for (Etiqueta etiqueta : etiquetas_padre) {
+            rootItem.getChildren().clear();
             if(etiqueta.getPadre() == null && etiqueta.getActive()){
                 TreeItem<String> item_padre = new TreeItem(etiqueta.getNombre());
                 
@@ -134,6 +140,7 @@ public class crearEtiquetaController implements Initializable {
         //arbolEtiquetas.setCellFactory(new DraggableCellFactory());  
         
         //Etiqueta etiq = EtiquetaController.getInstance().obtenerEtiqueta("xbox");
+        */
         
         
          tipoPantallaProperty.addListener((observable, oldValue, newValue) -> {
@@ -181,61 +188,14 @@ public class crearEtiquetaController implements Initializable {
     
     @FXML
     private void clickIngresarEtiqueta(ActionEvent event) {
-        EtiquetaController etiquetacontroller=null;
-        Etiqueta padre = new Etiqueta();
-        padre.setNombre(textEtiquetaPadre.getText());
-        
-        List<Etiqueta> sub_etiquetas = new ArrayList<>();
-        
-        
-        if(!EtiquetaController.getInstance().existeEtiqueta(textEtiquetaPadre.getText())){
-            
-             items = listaSubEtiquetas.getItems();
-            
-            if(items != null){
-                for (String item : items) {
-                    System.out.println(item);
-                    if(item.equals(textEtiquetaPadre.getText())){
-                        Alert alert = new Alert(AlertType.ERROR);
-                        alert.setTitle("Información");
-                        alert.setHeaderText(null);
-                        alert.setContentText("la subetiqueta: "+item+"no puede ser igual a la etiqueta padre!");
-                        alert.showAndWait();
-                    }
-                    else{
-                        Etiqueta etiq = new Etiqueta();
-                        etiq.setNombre(item);
-                        etiq.setPadre(padre.getNombre());
-                        sub_etiquetas.add(etiq);
-                    }
-                }
-            }
-            padre.setSub_etiqueta(sub_etiquetas);
-            try { 
-
-            Conexion.getInstance().merge(padre);
-              Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                        alert.setTitle("Información");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Se ha creado la etiqueta con exito!");
-                        alert.showAndWait();
-            System.out.println("sube la etiqueta con las sub etiquetas");
-            } catch (Exception e) {
-                // Manejo de la excepción
-                e.printStackTrace();
-            }
-        }else{
-            Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setTitle("Información");
-            alert.setHeaderText(null);
-            alert.setContentText("¡Ya existe esa etiqueta padre!");
-
-            alert.showAndWait();
-       
-
+        if(EtiquetaController.getInstance().existeEtiqueta(textEtiquetaPadre.getText())){
+            boolean agregarSubEtiquetas = ConfirmationDialog.show("La etiqueta padre ya existe. ¿Desea agregar las sub-etiquetas?");
+            if (agregarSubEtiquetas) {
+                agregarEtiquetas(true);
+            } 
+        } else {
+            agregarEtiquetas(false);
         }
-            
-        
     }
 
     @FXML
@@ -258,20 +218,18 @@ public class crearEtiquetaController implements Initializable {
                 alert.setContentText("La etiqueta no existe");
 
                 alert.showAndWait();
-            
             }
-            
         }
     }
 
     @FXML
     private void clickAgregarSubEtiqueta(ActionEvent event) {
-        boolean exist = EtiquetaController.getInstance().existeEtiqueta(textSubEtiqueta.getText());
-        if(textSubEtiqueta.equals("")){
+        boolean exist = EtiquetaController.getInstance().existeSubEtiqueta(textSubEtiqueta.getText(), textEtiquetaPadre.getText());
+        if(textSubEtiqueta.getText().equals("")){
              Alert alert = new Alert(AlertType.ERROR);
                 alert.setTitle("Información");
                 alert.setHeaderText(null);
-                alert.setContentText("El campo de la sub etiqueta no puede estar vacio!");
+                alert.setContentText("El campo de la sub-etiqueta no puede estar vacio!");
                 alert.showAndWait();
         }
         else if (exist){
@@ -281,9 +239,14 @@ public class crearEtiquetaController implements Initializable {
                 alert.setContentText("Esa etiqueta ya existe!");
                 alert.showAndWait();
         }
-        else{
+        else if (listaSubEtiquetas.getItems().contains(textSubEtiqueta.getText())){
+            Alert alert = new Alert(AlertType.WARNING);
+                alert.setTitle("Información");
+                alert.setHeaderText(null);
+                alert.setContentText("Ya has agregado esta sub-etiqueta!");
+                alert.showAndWait();
+        } else {
             listaSubEtiquetas.getItems().add(textSubEtiqueta.getText());
-        
         }
     }
 
@@ -303,6 +266,79 @@ public class crearEtiquetaController implements Initializable {
                 alert.showAndWait();
         }
     }
-   
+    
+    private void agregarEtiquetas(boolean existe){
+        EtiquetaController etiquetacontroller=null;
+        Etiqueta padre = new Etiqueta();
+        padre.setNombre(textEtiquetaPadre.getText());
+        
+        List<Etiqueta> sub_etiquetas = new ArrayList<>();
+        sub_etiquetas = EtiquetaController.getInstance().obtenerSubEtiquetas(padre.getNombre());
+        
+        items = listaSubEtiquetas.getItems();
+            
+            if (items != null) {
+            for (String item : items) {
+                System.out.println(item);
+                if (item.equals(textEtiquetaPadre.getText())) {
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setTitle("Información");
+                    alert.setHeaderText(null);
+                    alert.setContentText("la subetiqueta: " + item + " no puede ser igual a la etiqueta padre!");
+                    alert.showAndWait();
+                } else {
+                    Etiqueta etiq = new Etiqueta();
+                    etiq.setNombre(item);
+                    etiq.setPadre(padre.getNombre());
+                    sub_etiquetas.add(etiq);
+                }
+            }
+        }
+        padre.setSub_etiqueta(sub_etiquetas);
+        try {
+
+            Conexion.getInstance().merge(padre);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Información");
+            alert.setHeaderText(null);
+            alert.setContentText("Se ha creado la etiqueta con exito!");
+            alert.showAndWait();
+            System.out.println("sube la etiqueta con las sub etiquetas");
+            actualizarArbol();
+            listaSubEtiquetas.getItems().clear();
+            textEtiquetaPadre.clear();
+            textSubEtiqueta.clear();
+        } catch (Exception e) {
+            // Manejo de la excepción
+            e.printStackTrace();
+        }
+    }
+    
+    private void actualizarArbol() {
+        List<Etiqueta> etiquetas_padre = EtiquetaController.getInstance().listaEtiquetasActivas();
+        rootItem.getChildren().clear();
+        for (Etiqueta etiqueta : etiquetas_padre) {
+            if(etiqueta.getPadre() == null && etiqueta.getActive()){
+                TreeItem<String> item_padre = new TreeItem(etiqueta.getNombre());
+                
+                rootItem.getChildren().add(item_padre);
+                for(Etiqueta sub_etiqueta : etiqueta.getSub_etiqueta()){
+                    if(sub_etiqueta.getActive()){
+                        TreeItem<String> item_sub = new TreeItem(sub_etiqueta.getNombre());
+                         item_padre.getChildren().add(item_sub);
+                    }
+                }
+                rootItem.getChildren().sort((o1, o2) -> o1.getValue().compareTo(o2.getValue()));
+            }   
+            if(etiqueta.getActive()){
+                mapEtiquetas.put(etiqueta.getNombre(), etiqueta);
+            }
+        }
+            
+        
+    //    rootItem.getChildren().addAll(rootItemSO,rootItemFW);
+        arbolEtiquetas.setRoot(rootItem);
+        arbolEtiquetas.setShowRoot(false);
+    }
 
 }

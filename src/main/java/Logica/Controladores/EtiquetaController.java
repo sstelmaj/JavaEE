@@ -135,7 +135,38 @@ public class EtiquetaController {
              return resultado;
          }
     
+    public List<Etiqueta> obtenerSubEtiquetas(String padre) {
+        EntityManager em = Conexion.getInstance().getEntity();
+        List<Etiqueta> resultado = null;
+        em.getTransaction().begin();
+        try {
+            resultado = em.createNativeQuery("SELECT * FROM etiqueta WHERE PADRE = '"+padre+"'", Etiqueta.class).getResultList();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+        }
+        return resultado;
+    }
     
+    public boolean existeSubEtiqueta(String nombre, String padre) {
+    EntityManager em = Conexion.getInstance().getEntity();
+    Object etiqueta = null;
+    boolean resultado = false;
+    em.getTransaction().begin();
+        try {
+            etiqueta=em.createNativeQuery("SELECT * FROM etiqueta WHERE nombre ='"+nombre+"' and PADRE='"+nombre+"'").getSingleResult();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+        }
+        if(etiqueta != null){
+            System.out.println("existe");
+            resultado = true;
+        }else{
+            System.out.println("no existe");
+        }   
+    return resultado;
+    }
     
 
 }
