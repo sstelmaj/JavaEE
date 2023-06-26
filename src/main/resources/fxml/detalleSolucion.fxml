@@ -36,7 +36,7 @@
                   <content>
                     <AnchorPane fx:id="optArchivos" minHeight="-Infinity" minWidth="-Infinity" prefHeight="403.0" prefWidth="588.0">
                            <children>
-                              <GridPane fx:id="tablaArchivos" prefHeight="403.0" prefWidth="588.0">
+                              <GridPane fx:id="tablaArchivos" layoutY="46.0" prefHeight="357.0" prefWidth="588.0">
                                 <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -48,6 +48,8 @@
                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
                               </GridPane>
+                              <Button fx:id="prevButton" layoutX="14.0" layoutY="8.0" mnemonicParsing="false" text="Anterior" />
+                              <Button fx:id="nextButton" layoutX="534.0" layoutY="8.0" mnemonicParsing="false" text="Siguiente" />
                            </children>
                         </AnchorPane>
                   </content>
@@ -78,6 +80,5 @@
       </AnchorPane>
       <Text fx:id="txtFechaSolucion" layoutX="691.0" layoutY="641.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fecha de subida: " />
       <Text fx:id="txtUsosSolucion" layoutX="1064.0" layoutY="640.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-      <Button fx:id="btnBack" layoutX="14.0" layoutY="33.0" mnemonicParsing="false" onAction="#regresar" text="Volver" />
    </children>
 </AnchorPane>

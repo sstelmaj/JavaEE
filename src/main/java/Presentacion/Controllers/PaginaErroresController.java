@@ -47,14 +47,6 @@ public class PaginaErroresController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         allEtiquetas=EtiquetaController.getInstance().listaEtiquetas();
-        /*ObservableList<String> itemsS = (ObservableList<String>) comboSo.getItems();
-        ObservableList<String> itemsF = (ObservableList<String>) comboFramework.getItems();
-        itemsS.add("Ninguno"); 
-        itemsS.add("Java");
-        itemsS.add("JSP");
-        
-        itemsF.add("Ninguno"); 
-        itemsF.add("PC");*/
         
         filtrarErrores();
         

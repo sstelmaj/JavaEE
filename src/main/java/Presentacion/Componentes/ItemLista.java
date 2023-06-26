@@ -78,7 +78,9 @@ public class ItemLista extends Control {
                  Parent nuevaVista = loader.load();
                  DetalleErrorController detalleErrorController=(DetalleErrorController)loader.getController();
                  DashboardController dashboardController = DashboardController.getInstance();
-                 detalleErrorController.initialize(dashboardController.getAnchorPane(),this.error);
+                 detalleErrorController.setAnchPaneGeneral(dashboardController.getAnchorPane());
+                 detalleErrorController.setErrorDetalle(this.error);
+                 //detalleErrorController.initialize(dashboardController.getAnchorPane(),this.error);
                  
                  dashboardController.setControladorAnterior(this.controlador);
                  dashboardController.setControladorSiguiente(detalleErrorController);
