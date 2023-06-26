@@ -66,6 +66,7 @@ public class AdminDashboardController implements Initializable {
             popupStage.initModality(Modality.APPLICATION_MODAL);
             popupStage.initOwner(btnExportar.getScene().getWindow());
             popupStage.setTitle("Exportar...");
+            popupStage.setResizable(false);
             Scene scene = new Scene(popupRoot);
             popupStage.setScene(scene);
             popupStage.showAndWait();
@@ -84,6 +85,7 @@ public class AdminDashboardController implements Initializable {
             popupStage.initModality(Modality.APPLICATION_MODAL);
             popupStage.initOwner(btnImportar.getScene().getWindow());
             popupStage.setTitle("Importar...");
+            popupStage.setResizable(false);
             Scene scene = new Scene(popupRoot);
             popupStage.setScene(scene);
             popupStage.showAndWait();
