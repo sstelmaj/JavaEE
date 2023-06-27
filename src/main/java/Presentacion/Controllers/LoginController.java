@@ -49,17 +49,29 @@ public class LoginController implements Initializable {
     
     public void login(ActionEvent event) throws IOException {
       
-        usernameField.setText("martinperez2@gmail.com");
-        passwordField.setText("Joaco21");
-
+        usernameField.setText("paulo.ruiz@estudiantes.utec.edu.uy");
+        passwordField.setText("Passw0rd");
+        
         String mail = usernameField.getText();
         String password = passwordField.getText();
-            
+             
         if (UsuarioController.getInstance().iniciarSesion(mail, password) == true){
          Sesion sesion = Sesion.getInstance();
          sesion.setUser(mail);
          Usuario user = UsuarioController.getInstance().obtenerUsuario(mail);
          sesion.setUsuario(user);
+         
+         if(!user.isActive()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error de inicio de sesión");
+                alert.setHeaderText("Inicio de sesión fallido");
+                alert.setContentText("El usuario con el que intentas ingresar no está activo actualmente. Contactate con un administrador.");
+                alert.showAndWait();
+                usernameField.clear();
+                passwordField.clear();
+                
+            } else {
+         
             if(user.getPerfil().getNombre().equals("Administrador")){
                 System.out.println("Inicia como admin");
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AdminDashboard.fxml"));
@@ -101,7 +113,7 @@ public class LoginController implements Initializable {
                   DashboardController dashboardController=(DashboardController)loader.getController();
                     dashboardController.setStage(stage);
             } 
-            
+         }
         }
         else {
             Alert alert = new Alert(Alert.AlertType.ERROR);

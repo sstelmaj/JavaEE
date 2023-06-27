@@ -9,6 +9,7 @@ package Logica.Clases;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,7 +28,7 @@ import javax.persistence.Temporal;
 @Entity
 public class Solucion implements Serializable {
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Etiqueta> etiquetas;
     
     @ManyToOne
@@ -36,7 +37,7 @@ public class Solucion implements Serializable {
     @ManyToOne
     private Usuario usuario;
     
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Archivo> archivos;
 
    

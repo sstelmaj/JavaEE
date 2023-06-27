@@ -47,7 +47,7 @@ public class Error implements Serializable {
     
    
     
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Archivo> archivos;
 
     private static final long serialVersionUID = 1L;

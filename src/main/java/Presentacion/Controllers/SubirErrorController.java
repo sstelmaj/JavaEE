@@ -9,6 +9,7 @@ import Logica.Clases.*;
 import Logica.Controladores.ErrorController;
 import Logica.Controladores.EtiquetaController;
 import Persistencia.Conexion;
+import Persistencia.Sesion;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
@@ -80,7 +81,9 @@ import Presentacion.RSTA;
 import Presentacion.Main;
 import java.awt.Insets;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.beans.binding.Bindings;
@@ -578,7 +581,8 @@ public class SubirErrorController implements Initializable {
             
             if(this.solucion_asociada !=null){
                 try { 
-                   
+                solucion_asociada.setError(error);
+                solucion_asociada.setUsuario(Sesion.getInstance().getUsuario());
                 Conexion.getInstance().persist(this.solucion_asociada);
                 System.out.println("sube la solucion adjunta");
                 } catch (Exception e) {
