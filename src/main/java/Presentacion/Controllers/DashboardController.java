@@ -22,6 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -380,6 +382,14 @@ public class DashboardController implements Initializable {
 
     @FXML
     private void clickErrores(ActionEvent event) {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/fxml/paginaErrores.fxml"));
+        try {
+            Parent nuevaVista = loader.load();
+            contentAPane.getChildren().setAll(nuevaVista);
+        } catch (IOException ex) {
+            Logger.getLogger(DashboardController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @FXML

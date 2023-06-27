@@ -8,10 +8,16 @@
 
 <AnchorPane fx:id="container" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentacion.Controllers.ImportarDatosController">
    <children>
-       <VBox fx:id="popupRoot" alignment="CENTER" prefHeight="121.0" prefWidth="242.0" spacing="10">
+       <VBox fx:id="popupRoot" alignment="CENTER" prefHeight="121.0" prefWidth="320.0" spacing="10">
            <children>
-               <Button fx:id="btnError" prefHeight="45.0" prefWidth="140.0" text="Errores" />
-               <Button fx:id="btnSolucion" prefHeight="45.0" prefWidth="140.0" text="Soluciones" />
+            <Pane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                     <Button fx:id="btnSolucion" layoutX="26.0" layoutY="11.0" prefHeight="45.0" prefWidth="140.0" text="Soluciones" />
+                     <Button fx:id="btnError" layoutX="26.0" layoutY="66.0" prefHeight="45.0" prefWidth="140.0" text="Errores" />
+                  <Button fx:id="templateSoluciones" layoutX="175.0" layoutY="21.0" mnemonicParsing="false" text="Descargar template" />
+                  <Button fx:id="templateErrores" layoutX="175.0" layoutY="76.0" mnemonicParsing="false" text="Descargar template" />
+               </children>
+            </Pane>
            </children>
        </VBox>
    </children>

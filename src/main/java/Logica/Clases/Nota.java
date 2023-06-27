@@ -7,6 +7,7 @@ package Logica.Clases;
 
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
 
 /**
  *
@@ -30,6 +32,9 @@ public class Nota implements Serializable {
     @Lob
     @Column(name = "contenido", columnDefinition = "TEXT")
     private String contenido;
+    
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date fechaSubida;
     
     private Boolean active = Boolean.TRUE;
 
@@ -48,6 +53,15 @@ public class Nota implements Serializable {
     public void setContenido(String contenido) {
         this.contenido = contenido;
     }
+
+    public Date getFechaSubida() {
+        return fechaSubida;
+    }
+
+    public void setFechaSubida(Date fechaSubida) {
+        this.fechaSubida = fechaSubida;
+    }
+    
 
     public Boolean getActive() {
         return active;
