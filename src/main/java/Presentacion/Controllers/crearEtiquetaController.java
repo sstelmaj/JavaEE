@@ -30,6 +30,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
@@ -39,6 +40,7 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import me.davidthaler.draggablejfxtreeview.DraggableCellFactory;
 
@@ -102,88 +104,47 @@ public class crearEtiquetaController implements Initializable {
     private TextField textSubEtiqueta;
     @FXML
     private Button botonQuitar;
+    
+    
+    @FXML
+    private Button botonEliminarEtiqueta;
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        
         actualizarArbol();
-        /*
-        List<Etiqueta> etiquetas_padre = EtiquetaController.getInstance().listaEtiquetasActivas();
-        
-        for (Etiqueta etiqueta : etiquetas_padre) {
-            rootItem.getChildren().clear();
-            if(etiqueta.getPadre() == null && etiqueta.getActive()){
-                TreeItem<String> item_padre = new TreeItem(etiqueta.getNombre());
-                
-                rootItem.getChildren().add(item_padre);
-                for(Etiqueta sub_etiqueta : etiqueta.getSub_etiqueta()){
-                    
-                    if(sub_etiqueta.getActive()){
-                        TreeItem<String> item_sub = new TreeItem(sub_etiqueta.getNombre());
-                         item_padre.getChildren().add(item_sub);
-                    }
-                   
-                }
-            }   
-            if(etiqueta.getActive()){
-                mapEtiquetas.put(etiqueta.getNombre(), etiqueta);
-            }
-        }
-            
-        
-    //    rootItem.getChildren().addAll(rootItemSO,rootItemFW);
-        arbolEtiquetas.setRoot(rootItem);
-        arbolEtiquetas.setShowRoot(false);
-        //arbolEtiquetas.setCellFactory(new DraggableCellFactory());  
-        
-        //Etiqueta etiq = EtiquetaController.getInstance().obtenerEtiqueta("xbox");
-        */
-        
-        
-         tipoPantallaProperty.addListener((observable, oldValue, newValue) -> {
-            if (newValue=="Modificar Etiqueta") {
-                
-               
+        tipoPantallaProperty.addListener((observable, oldValue, newValue) -> {
+            if (newValue == "Modificar Etiqueta") {
+
                 System.out.println("Modificar Usuario");
-                tipoPantalla =newValue;
+                tipoPantalla = newValue;
                 textTitulo.setText(newValue);
                 ingresarEtiqueta.setText("Guardar Cambios");
-                
-               
-                if(etiquetaModificar != null){
-                    
+
+                if (etiquetaModificar != null) {
+
                     textEtiquetaPadre.setText(etiquetaModificar.getNombre());
                     textEtiquetaPadre.setEditable(false);
-                   
-                    if(etiquetaModificar.getSub_etiqueta()!=null){
-                         
-                       for(Etiqueta sub_etiqueta : etiquetaModificar.getSub_etiqueta()){              
-                            if(sub_etiqueta.getActive()){
-                               listaSubEtiquetas.getItems().add(sub_etiqueta.getNombre());
-                                 
+
+                    if (etiquetaModificar.getSub_etiqueta() != null) {
+                        for (Etiqueta sub_etiqueta : etiquetaModificar.getSub_etiqueta()) {
+                            if (sub_etiqueta.getActive()) {
+                                listaSubEtiquetas.getItems().add(sub_etiqueta.getNombre());
                             }
-
                         }
-                        
                     }
-                    
-                    
-                
-
                 }
-
-            }
-            else if(newValue=="Crear Usuario"){
+            } else if (newValue == "Crear Usuario") {
                 System.out.println("Crear Usuario");
-                tipoPantalla =newValue;
+                tipoPantalla = newValue;
                 textTitulo.setText(newValue);
             }
-              
+
         });
-        
+
+        //botonEliminarEtiqueta.setOnAction(event -> eliminarEtiqueta());    
     }
     
     @FXML
@@ -334,11 +295,26 @@ public class crearEtiquetaController implements Initializable {
                 mapEtiquetas.put(etiqueta.getNombre(), etiqueta);
             }
         }
-            
         
     //    rootItem.getChildren().addAll(rootItemSO,rootItemFW);
         arbolEtiquetas.setRoot(rootItem);
         arbolEtiquetas.setShowRoot(false);
     }
 
+    @FXML
+    private void eliminarEtiqueta() {
+        TreeView treeView = arbolEtiquetas;
+
+        TreeItem<String> seleccionado = (TreeItem<String>) treeView.getSelectionModel().getSelectedItem();
+        String etiqueta = seleccionado.getValue();
+        
+    }
+    
+    
+    private void borrarEtiqueta(TreeItem<String> item) {
+        item.getChildren().forEach(child -> borrarEtiqueta(child));
+        // Aquí implementa tu lógica de eliminación para el item
+        System.out.println("Eliminando etiqueta: " + item.getValue());
+    }
+    
 }
