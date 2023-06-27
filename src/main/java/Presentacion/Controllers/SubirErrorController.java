@@ -218,22 +218,31 @@ public class SubirErrorController implements Initializable {
       //    double maxRightAnchor = 500;
 
             anchorError.setRightAnchor(botonIngresar, 500.0);
-        //    anchorError.setLeftAnchor(botonIngresar, botonIngresar.getLayoutX());
-        //    anchorError.setTopAnchor(botonIngresar, botonIngresar.getLayoutY());
-         //   anchorError.setLeftAnchor(acordion,acordion.getLayoutX() );
-         
-         //   anchorError.setLeftAnchor(acordion,anchor1.getLayoutX()+ 500.0 );
-           
+        
+            var widthObservable = Bindings.selectDouble(panelContent.sceneProperty(), "width");
 
-   //         botonIngresar.maxWidthProperty().bind(anchorError.widthProperty().subtract(maxRightAnchor));
-//      botonIngresar.minWidth(100.0);
-//         anchorError.widthProperty().addListener((observable, oldValue, newValue) -> {
-//                Double newWidth = (double) newValue;
-//               String widthString = String.valueOf(newWidth);
-//               anchorError.setLeftAnchor(acordion,anchor1.getWidth()+200.0 );
-//              
-//           });
-      
+       
+        widthObservable.addListener((obs, oldWidth, newWidth) -> {
+            double panelWidth = newWidth.doubleValue();
+            
+             System.out.println(panelWidth);
+            
+            if (panelWidth == 1920.0) {
+               
+                anchor1.setPrefWidth(950.0);
+               JInternalFrame updatedInternalFrame = (JInternalFrame) swingNode.getContent();
+                updatedInternalFrame.repaint();
+             
+            } else if (panelWidth == 1536.0){
+               anchor1.setPrefWidth(530.0);
+//                anchor1.setPrefWidth(500.0);
+//               
+//               JInternalFrame updatedInternalFrame = (JInternalFrame) swingNode.getContent();
+//                updatedInternalFrame.repaint();
+               
+
+            }
+        });
 
       
         
