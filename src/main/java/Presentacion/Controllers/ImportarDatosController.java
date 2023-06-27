@@ -60,10 +60,18 @@ public class ImportarDatosController implements Initializable {
     @FXML
     private AnchorPane container;
     
+    @FXML
+    private Button templateSoluciones;
+    
+    @FXML
+    private Button templateErrores;
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         btnError.setOnAction(event -> importErrores());
         btnSolucion.setOnAction(event -> importSoluciones());
+        templateSoluciones.setOnAction(event -> templateSoluciones());
+        templateErrores.setOnAction(event -> templateErrores());
     }    
     
     void importErrores() {
@@ -322,6 +330,105 @@ public class ImportarDatosController implements Initializable {
             alert.setHeaderText(null);
             alert.setContentText("Se produjo un error al importar los datos desde el archivo Excel.");
             alert.showAndWait();
+        }
+    }
+    
+    void templateSoluciones() {
+       Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Soluciones");
+        // Encabezados
+        Row headerRow = sheet.createRow(0);
+        headerRow.createCell(0).setCellValue("ID");
+        headerRow.createCell(1).setCellValue("Codigo");
+        headerRow.createCell(2).setCellValue("Descripcion");
+        headerRow.createCell(3).setCellValue("FechaSubida");
+        headerRow.createCell(4).setCellValue("Link");
+        headerRow.createCell(5).setCellValue("Puntos");
+        headerRow.createCell(6).setCellValue("ID Usuario");
+        headerRow.createCell(7).setCellValue("Mail Usuario");
+        headerRow.createCell(8).setCellValue("Error ID");
+        headerRow.createCell(9).setCellValue("Error titulo");
+        
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Guardar archivo Excel");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivos Excel", "*.xlsx"));
+            
+        Stage stage = (Stage) btnError.getScene().getWindow();
+        File file = fileChooser.showSaveDialog(stage);
+        
+        if (file != null) {
+                FileOutputStream fileOut = null;
+            try {
+                // Guardar el libro de Excel en el archivo seleccionado
+                fileOut = new FileOutputStream(file);
+                workbook.write(fileOut);
+                fileOut.close();
+                
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Éxito");
+                alert.setHeaderText(null);
+                alert.setContentText("Template exportado correctamente a un archivo Excel.");
+                alert.showAndWait();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(ExportarDatosController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(ExportarDatosController.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                try {
+                    fileOut.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(ExportarDatosController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }
+    
+    void templateErrores() {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Errores");
+        // Encabezados
+        Row headerRow = sheet.createRow(0);
+        headerRow.createCell(0).setCellValue("ID");
+        headerRow.createCell(1).setCellValue("Codigo");
+        headerRow.createCell(2).setCellValue("Consola");
+        headerRow.createCell(3).setCellValue("Descripcion");
+        headerRow.createCell(4).setCellValue("FechaSubida");
+        headerRow.createCell(5).setCellValue("Link");
+        headerRow.createCell(6).setCellValue("Repositorio");
+        headerRow.createCell(7).setCellValue("Titulo");
+        headerRow.createCell(8).setCellValue("Usuario_Mail");
+        
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Guardar archivo Excel");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivos Excel", "*.xlsx"));
+            
+        Stage stage = (Stage) btnError.getScene().getWindow();
+        File file = fileChooser.showSaveDialog(stage);
+        
+        if (file != null) {
+                FileOutputStream fileOut = null;
+            try {
+                // Guardar el libro de Excel en el archivo seleccionado
+                fileOut = new FileOutputStream(file);
+                workbook.write(fileOut);
+                fileOut.close();
+                
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Éxito");
+                alert.setHeaderText(null);
+                alert.setContentText("Las soluciones se han exportado correctamente a un archivo Excel.");
+                alert.showAndWait();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(ExportarDatosController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(ExportarDatosController.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                try {
+                    fileOut.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(ExportarDatosController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
     }
     
