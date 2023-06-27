@@ -94,6 +94,7 @@ public class InicioController implements Initializable {
             }
         });
        
+       
         
        
     }
@@ -126,7 +127,7 @@ public class InicioController implements Initializable {
         
         botonCerrarSesion.setGraphic(new ImageView(imageCerrar));
         
-        
+        Usuario user =  Sesion.getInstance().getUsuario();
         
     }    
 

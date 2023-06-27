@@ -35,6 +35,11 @@ public class Sesion {
     }
 
     public void setStagePrincipal(Stage stagePrincipal) {
+        if(stagePrincipal !=null){
+            System.out.println("llega el stage");
+          
+        
+        }
         this.stagePrincipal = stagePrincipal;
     }
     
@@ -92,11 +97,12 @@ public class Sesion {
     public void setIsFullHD(boolean isFullHD) {
         this.isFullHD = isFullHD;
         if(isFullHD){
-            this.stagePrincipal.setWidth(1936.0);
-            this.stagePrincipal.setHeight(1056.0);
+            stagePrincipal.setMinHeight(1056.0);
+            stagePrincipal.setMinWidth(1936.0);
             System.out.println("llega aca");
         }else{
-            this.stagePrincipal.setWidth(200.200);
+            stagePrincipal.setHeight(800.0);
+            stagePrincipal.setWidth(1595.0);
             System.out.println("llega aca sino");
         }
     }
