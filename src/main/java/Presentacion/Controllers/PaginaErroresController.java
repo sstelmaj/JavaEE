@@ -95,8 +95,10 @@ public class PaginaErroresController implements Initializable {
                 listaErrores.getItems().clear(); 
                 for (Logica.Clases.Error error : erroresBusqueda) {
                     ItemLista item = new ItemLista("Error",this);
+                    item.getStylesheets().add(getClass().getResource("/styles/detalles.css").toExternalForm());
                     item.setError(error);
                     item.setTitulo(error.getTitulo());
+                    item.setEtiquetas(error.getEtiquetas());
                     item.setTxtDescripcion(error.getDescripcion());
                     listaErrores.getItems().add(item);
                 }
@@ -113,8 +115,10 @@ public class PaginaErroresController implements Initializable {
                 for (Logica.Clases.Error error : errores) {
                     if(erroresBusqueda!= null && erroresBusqueda.contains(error)){
                         ItemLista item = new ItemLista("Error",this);
+                        item.getStylesheets().add(getClass().getResource("/styles/detalles.css").toExternalForm());
                         item.setError(error);
                         item.setTitulo(error.getTitulo());
+                        item.setEtiquetas(error.getEtiquetas());
                         item.setTxtDescripcion(error.getDescripcion());
                         listaErrores.getItems().add(item);
                     }
