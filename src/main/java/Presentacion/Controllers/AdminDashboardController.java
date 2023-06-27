@@ -9,18 +9,21 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.chart.AreaChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -38,13 +41,18 @@ public class AdminDashboardController implements Initializable {
     @FXML
     private Button btnUsuarios;
     @FXML
-    private PieChart pieUsuarios;
-    @FXML
     private Button btnDescargar;
     @FXML
-    private AreaChart<?, ?> areaRegistros;
+    private BorderPane graphsPane;
+    @FXML
+    private PieChart pieRatio;
+    @FXML
+    private LineChart lineRecord;
+    @FXML
+    private CategoryAxis lineXAxis;
+    @FXML
+    private NumberAxis lineYAxis;
 
-    
     /**
      * Initializes the controller class.
      */
@@ -54,6 +62,18 @@ public class AdminDashboardController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         btnExportar.setOnAction(event -> mostrarVentanaExportar());
         btnImportar.setOnAction(event -> mostrarVentanaImportar());
+        
+        lineXAxis = new CategoryAxis();
+        lineYAxis = new NumberAxis();
+        
+        lineRecord = new LineChart(lineXAxis, lineYAxis);
+        graphsPane.setRight(lineRecord);
+        pieRatio = new PieChart();
+        pieRatio.setClockwise(true);
+        pieRatio.setStartAngle(90);
+        graphsPane.setLeft(pieRatio);
+        
+        loadChartsData();
     }
     
     private void mostrarVentanaExportar() {
@@ -109,10 +129,44 @@ public class AdminDashboardController implements Initializable {
         }
     }
     
-    
-    
-    /*
-    * 
-    */
-    
+    private void loadChartsData(){
+        lineXAxis.setLabel("Fecha");
+        lineYAxis.setLabel("Cantidad");
+        
+        lineRecord.setTitle("Publicaciones en 2023");
+        ObservableList<XYChart.Series> lineRecordData = FXCollections.observableArrayList(
+            new XYChart.Series("Errores Publicados", FXCollections.observableArrayList(
+                new XYChart.Data("21/06", 52),
+                new XYChart.Data("22/06", 66),
+                new XYChart.Data("23/06", 43),
+                new XYChart.Data("24/06", 50),
+                new XYChart.Data("25/06", 15),
+                new XYChart.Data("26/06", 35)
+            )),
+            new XYChart.Series("Soluciones Publicados", FXCollections.observableArrayList(
+                new XYChart.Data("21/06", 10),
+                new XYChart.Data("22/06", 8),
+                new XYChart.Data("23/06", 7),
+                new XYChart.Data("24/06", 10),
+                new XYChart.Data("25/06", 5),
+                new XYChart.Data("26/06", 17)
+            )),
+            new XYChart.Series("Usuarios registrados", FXCollections.observableArrayList(
+                new XYChart.Data("21/06", 12),
+                new XYChart.Data("22/06", 15),
+                new XYChart.Data("23/06", 5),
+                new XYChart.Data("24/06", 50),
+                new XYChart.Data("25/06", 23),
+                new XYChart.Data("26/06", 43)
+            ))
+        );
+        lineRecord.setData(lineRecordData);
+        
+        ObservableList<PieChart.Data> pieRatioData = FXCollections.observableArrayList(
+            new PieChart.Data("Errores Publicados", 600),
+            new PieChart.Data("Soluciones Publicados", 400)
+        );
+        pieRatio.setData(pieRatioData);
+        pieRatio.setTitle("Proporcion Error/Solucion");
+    }
 }
