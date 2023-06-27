@@ -4,6 +4,7 @@
  */
 package Presentacion.Controllers;
 
+import Logica.Clases.AjustesUsuario;
 import Logica.Clases.Archivo;
 import Logica.Clases.Etiqueta;
 import Logica.Clases.Perfil;
@@ -313,6 +314,9 @@ public class CrearUsuarioController implements Initializable {
         }else{
         
             try { 
+                AjustesUsuario ajustes = new AjustesUsuario();
+                ajustes.setFullHD(true);
+                usuario.setAjustes(ajustes);
                 Conexion.getInstance().merge(usuario);
                   Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                         alert.setTitle("Información");

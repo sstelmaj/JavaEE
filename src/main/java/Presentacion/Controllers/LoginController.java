@@ -48,7 +48,10 @@ public class LoginController implements Initializable {
     private ImageView imageView;
     
     public void login(ActionEvent event) throws IOException {
-        
+      
+        usernameField.setText("martinperez2@gmail.com");
+        passwordField.setText("Joaco21");
+
         String mail = usernameField.getText();
         String password = passwordField.getText();
             
@@ -80,13 +83,25 @@ public class LoginController implements Initializable {
                  Scene scene = new Scene(root);
                  Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                  stage.setTitle("Dashboard");
-                 stage.setMinHeight(800.0);
-                 stage.setMinWidth(1552.0);
+                 sesion.setStagePrincipal(stage);
+                 if(user.getAjustes().isFullHD()){
+                     stage.setMinHeight(1056.0);
+                     stage.setMinWidth(1936.0);
+                 }else{
+                      stage.setMinHeight(800.0);
+                     stage.setMinWidth(1595.0);
+                 }
+                 
+                 
                  //stage.setFullScreen(true);
+                  stage.setResizable(false);
                  stage.setScene(scene);
                  stage.show();
                  stage.centerOnScreen();
+                  DashboardController dashboardController=(DashboardController)loader.getController();
+                    dashboardController.setStage(stage);
             } 
+            
         }
         else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
