@@ -32,11 +32,11 @@
                     <AnchorPane fx:id="optCodigo" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                   </content>
                 </TitledPane>
-                <TitledPane animated="false" text="Archivos Adicionales">
+                <TitledPane animated="false" text="Imagenes">
                   <content>
                     <AnchorPane fx:id="optArchivos" minHeight="-Infinity" minWidth="-Infinity" prefHeight="403.0" prefWidth="588.0">
                            <children>
-                              <GridPane fx:id="tablaArchivos" prefHeight="403.0" prefWidth="588.0">
+                              <GridPane fx:id="tablaArchivos" layoutY="46.0" prefHeight="357.0" prefWidth="588.0">
                                 <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -48,13 +48,30 @@
                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
                               </GridPane>
+                              <Button fx:id="prevButton" layoutX="14.0" layoutY="8.0" mnemonicParsing="false" text="Anterior" />
+                              <Button fx:id="nextButton" layoutX="534.0" layoutY="8.0" mnemonicParsing="false" text="Siguiente" />
                            </children>
                         </AnchorPane>
                   </content>
                 </TitledPane>
-                  <TitledPane animated="false" layoutX="10.0" layoutY="41.0" text="Detalles 2">
+                  <TitledPane animated="false" prefHeight="200.0" prefWidth="200.0" text="Recursos adicionales">
                      <content>
-                        <AnchorPane fx:id="archivosWeb" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="403.0" prefWidth="588.0" />
+                        <AnchorPane fx:id="anchorFile" prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <Button layoutX="171.0" layoutY="273.0" mnemonicParsing="false" text="Descargar" />
+                              <ScrollPane layoutX="23.0" layoutY="22.0" prefHeight="240.0" prefWidth="566.0">
+                                 <content>
+                                    <TableView fx:id="tablaArchivos1" prefHeight="237.0" prefWidth="566.0">
+                                       <columns>
+                                          <TableColumn fx:id="columnArchivo" prefWidth="201.0" text="Archivo" />
+                                          <TableColumn fx:id="columnExt" minWidth="0.0" prefWidth="197.0" text="Extension" />
+                                       </columns>
+                                    </TableView>
+                                 </content>
+                              </ScrollPane>
+                              <Button fx:id="botonVer" layoutX="66.0" layoutY="273.0" mnemonicParsing="false" onMouseClicked="#mostrarArchivos" text="Ver archivo" />
+                           </children>
+                        </AnchorPane>
                      </content>
                   </TitledPane>
               </panes>
@@ -63,6 +80,5 @@
       </AnchorPane>
       <Text fx:id="txtFechaSolucion" layoutX="691.0" layoutY="641.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fecha de subida: " />
       <Text fx:id="txtUsosSolucion" layoutX="1064.0" layoutY="640.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-      <Button fx:id="btnBack" layoutX="14.0" layoutY="33.0" mnemonicParsing="false" text="Volver" onAction="#regresar" />
    </children>
 </AnchorPane>

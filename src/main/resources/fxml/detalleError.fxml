@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.*?>
 <?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
 
-<AnchorPane id="AnchorPane" fx:id="anchPaneGeneral" prefHeight="701.0" prefWidth="1382.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentacion.Controllers.DetalleErrorController">
-   <children>
+<AnchorPane id="AnchorPane" fx:id="anchPaneGeneral" prefHeight="701.0" prefWidth="1382.0" styleClass="mainFxmlClasss" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentacion.Controllers.DetalleErrorController">
+    <stylesheets>
+        <URL value="@/styles/detalles.css" />
+    </stylesheets>
+    <children>
       <AnchorPane layoutX="66.0" layoutY="84.0" prefHeight="557.0" prefWidth="639.0">
          <children>
             <Accordion prefHeight="557.0" prefWidth="639.0">
@@ -35,11 +41,11 @@
                            </children></AnchorPane>
                   </content>
                 </TitledPane>
-                <TitledPane animated="false" text="Archivos adicionales">
+                <TitledPane animated="false" text="Imagenes">
                   <content>
                     <AnchorPane fx:id="anchPaneArchivos" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <GridPane fx:id="tablaArchivos" prefHeight="396.0" prefWidth="639.0">
+                              <GridPane fx:id="tablaImagenes" layoutY="44.0" prefHeight="352.0" prefWidth="639.0">
                                 <columnConstraints>
                                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -51,17 +57,53 @@
                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
                               </GridPane>
+                              <Button fx:id="prevButton" layoutX="14.0" layoutY="7.0" mnemonicParsing="false" text="Anterior" />
+                              <Button fx:id="nextButton" layoutX="534.0" layoutY="7.0" mnemonicParsing="false" text="Siguiente" />
                            </children></AnchorPane>
                   </content>
                 </TitledPane>
-                  <TitledPane animated="false" text="Referencias externas">
-                     <content>
-                        <AnchorPane fx:id="anchPaneRefExt" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                     </content>
-                  </TitledPane>
                   <TitledPane animated="false" text="Codigo">
                      <content>
                         <AnchorPane fx:id="anchPaneCodigo" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                     </content>
+                  </TitledPane>
+                  <TitledPane animated="false" text="Notas">
+                     <content>
+                        <AnchorPane fx:id="anchPaneDescrip1" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <ScrollPane layoutY="6.0" prefHeight="364.0" prefWidth="639.0">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="363.0" prefWidth="636.0">
+                                       <children>
+                                          <ListView fx:id="listaNotas" layoutX="37.0" layoutY="14.0" prefHeight="236.0" prefWidth="563.0" />
+                                          <TextArea fx:id="txtAreaNotas" layoutX="36.0" layoutY="260.0" prefHeight="82.0" prefWidth="565.0" />
+                                          <Button layoutX="502.0" layoutY="348.0" mnemonicParsing="false" onMouseClicked="#agregarNota" text="Añadir nota" />
+                                       </children>
+                                    </AnchorPane>
+                                </content>
+                              </ScrollPane>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </TitledPane>
+                  <TitledPane animated="false" prefHeight="200.0" prefWidth="200.0" text="Recursos adicionales">
+                     <content>
+                        <AnchorPane fx:id="anchorFile" prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <Button layoutX="171.0" layoutY="273.0" mnemonicParsing="false" text="Descargar" />
+                              <ScrollPane layoutX="23.0" layoutY="22.0" prefHeight="240.0" prefWidth="566.0">
+                                 <content>
+                                    <TableView fx:id="tablaArchivos" prefHeight="237.0" prefWidth="566.0">
+                                       <columns>
+                                          <TableColumn fx:id="columnArchivo" prefWidth="201.0" text="Archivo" />
+                                          <TableColumn fx:id="columnExt" minWidth="0.0" prefWidth="197.0" text="Extension" />
+                                       </columns>
+                                    </TableView>
+                                 </content>
+                              </ScrollPane>
+                              <Button fx:id="botonVer" layoutX="66.0" layoutY="273.0" mnemonicParsing="false" onAction="#mostrarArchivos" text="Ver archivo" />
+                           </children>
+                        </AnchorPane>
                      </content>
                   </TitledPane>
               </panes>
