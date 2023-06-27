@@ -15,6 +15,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -63,8 +64,10 @@ public class BusquedaSolucionController implements Initializable {
         txtDescripcion.setText(descripcion);
         hBoxEtiquetas.setSpacing(6);
         for(Etiqueta e: etiquetas){
-            Text etiqueta=new Text(e.getNombre());
-            etiqueta.setFill(Color.BLACK);
+            /*Text etiqueta=new Text(e.getNombre());
+            etiqueta.setFill(Color.BLACK);*/
+            Label etiqueta=new Label(e.getNombre());
+            etiqueta.getStyleClass().add("etiquetas");
             hBoxEtiquetas.getChildren().add(etiqueta);
         }
         

@@ -8,20 +8,37 @@ import Logica.Clases.Archivo;
 import Logica.Clases.Solucion;
 import Logica.Clases.Error;
 import Logica.Clases.Etiqueta;
+import Logica.Clases.Nota;
 import Logica.Controladores.ErrorController;
 import Logica.Controladores.EtiquetaController;
+import Persistencia.Conexion;
+import Presentacion.Componentes.ItemNota;
 import Presentacion.PanelCodigoSolucion;
+import java.awt.Desktop;
+import javafx.application.HostServices;
 import java.awt.Dimension;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -33,13 +50,21 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -68,8 +93,6 @@ public class DetalleErrorController implements Initializable {
     @FXML
     private AnchorPane anchPaneArchivos;
     @FXML
-    private AnchorPane anchPaneRefExt;
-    @FXML
     private AnchorPane anchPaneCodigo;
     @FXML
     private AnchorPane anchPaneLista;
@@ -88,15 +111,15 @@ public class DetalleErrorController implements Initializable {
     @FXML
     private TextFlow txtFlowConsola;
     @FXML
-    private GridPane tablaArchivos;
+    private GridPane tablaImagenes;
     
-    private long idError;
+    private Error error;
     private String descripcion,codigo,consola;
     private Date fechaModif;
     private List<Archivo> archivos;
 
     private List<Etiqueta> etiquetasError;
-    List<Etiqueta>allEtiquetas;
+    private List<Etiqueta>allEtiquetas;
     private List<Solucion>soluciones;
     private ArrayList<String>etiquetasSeleccionadas=new ArrayList();
     DashboardController dashboard;
@@ -112,13 +135,39 @@ public class DetalleErrorController implements Initializable {
     private ComboBox<String> comboBoxSubEtiq;
 
     private Logica.Clases.Error errorDetalle;
+    @FXML
+    private AnchorPane anchPaneDescrip1;
+    @FXML
+    private ListView<ItemNota> listaNotas;
+    @FXML
+    private TextArea txtAreaNotas;
+    private List<Nota> notasError;
+    @FXML
+    private AnchorPane anchorFile;
+    @FXML
+    private TableView<Archivo> tablaArchivos;
+    @FXML
+    private TableColumn<Archivo, String> columnArchivo;
+    @FXML
+    private TableColumn<Archivo, String> columnExt;
+    private ObservableList<Archivo> listaArchivos;
+    private List<Image> listaImagenes=new ArrayList();
+    private int imagenesPorPagina = 9; // Número de imágenes por pagina del GridPane
+    private int paginaActual = 0; // Página actual del GridPane imagenes
+    @FXML
+    private Button botonVer;
+    @FXML
+    private Button prevButton;
+    @FXML
+    private Button nextButton;
 
     public Error getErrorDetalle() {
         return errorDetalle;
     }
 
     public void setErrorDetalle(Error errorDetalle) {
-        this.errorDetalle = errorDetalle;
+        this.error = errorDetalle;
+        this.initializeConDatos(); 
     }
 
     public AnchorPane getAnchPaneGeneral() {
@@ -135,160 +184,156 @@ public class DetalleErrorController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
-            
+       this.initializeConDatos();
     }
-    public void initialize(AnchorPane ap, Logica.Clases.Error error){
-        //List<Solucion>soluciones=ErrorController.getInstance().obtenerSolucionesDelError(151 /*idError*/);
-        //Error error=ErrorController.getInstance().obtenerError(151 /*idError*/);
-        soluciones=error.getSoluciones();
-        soluciones.sort(Comparator.comparingInt(Solucion::getPuntos));
-        allEtiquetas=EtiquetaController.getInstance().listaEtiquetas();
-            this.descripcion=error.getDescripcion();
-            this.codigo=error.getCodigo();
-            this.consola=error.getConsola();
-            this.archivos=error.getArchivos();
-            this.fechaModif=error.getFechaSubida();
-            this.etiquetasError=error.getEtiquetas();
-            
-            this.dashboard = DashboardController.getInstance();
-        
-        //Frame para el codigo de error
-        JInternalFrame iFrame = new PanelCodigoSolucion(this.codigo,SyntaxConstants.SYNTAX_STYLE_JAVA);
-        iFrame.setPreferredSize(new Dimension(550,400));
-        iFrame.setSize(20, 20);
-        iFrame.setVisible(true);
-        iFrame.setBorder(null);
-        ((javax.swing.plaf.basic.BasicInternalFrameUI) iFrame.getUI()).setNorthPane(null);
-        SwingNode swingNode = new SwingNode();
+    public void initializeConDatos(){
+        if(this.anchPaneGeneral!=null && this.error!=null){
+            this.errorDetalle=error;
+            soluciones=error.getSoluciones();
+            notasError=error.getNotas();
+            soluciones.sort(Comparator.comparingInt(Solucion::getPuntos));
+            allEtiquetas=EtiquetaController.getInstance().listaEtiquetas();
+                this.descripcion=error.getDescripcion();
+                this.codigo=error.getCodigo();
+                this.consola=error.getConsola();
+                this.archivos=error.getArchivos();
+                this.fechaModif=error.getFechaSubida();
+                this.etiquetasError=error.getEtiquetas();
 
-        swingNode.setContent(iFrame);
-        anchPaneCodigo.getChildren().add(swingNode);
-        
-        
-        //Cargo las imagenes en el GridPane
+                this.dashboard = DashboardController.getInstance();
+
+            //Frame para el codigo de error
+            JInternalFrame iFrame = new PanelCodigoSolucion(this.codigo,SyntaxConstants.SYNTAX_STYLE_JAVA);
+            iFrame.setPreferredSize(new Dimension(550,400));
+            iFrame.setSize(20, 20);
+            iFrame.setVisible(true);
+            iFrame.setBorder(null);
+            ((javax.swing.plaf.basic.BasicInternalFrameUI) iFrame.getUI()).setNorthPane(null);
+            SwingNode swingNode = new SwingNode();
+
+            swingNode.setContent(iFrame);
+            anchPaneCodigo.getChildren().add(swingNode);
+
+            listaArchivos=FXCollections.observableArrayList();
+            this.columnArchivo.setCellValueFactory(new PropertyValueFactory("nombre"));
+            this.columnExt.setCellValueFactory(new PropertyValueFactory("extension"));
+
+            //Divido los archivos en imagenes y archivos
             for(Archivo arch:archivos){
-                if(this.checkIfFileHasExtension(arch.getUrl())){
-                    ImageView imageView=new ImageView(new Image(arch.getUrl()));
-                    imageView.setCursor(Cursor.HAND);
-                    imageView.setPreserveRatio(true);
-                    //Ver como cargar dinamicamente
-                    tablaArchivos.addRow(0, imageView);
+                if(this.checkIfFileHasExtension(arch.getExtension())){
+                    Image imagen=null;
+                    if(arch.getContenidoByte()!=null){
+                        imagen=new Image(new ByteArrayInputStream(arch.getContenidoByte()));
+                    }else{
+                        imagen=new Image(arch.getUrl());
+                    }
+                    this.listaImagenes.add(imagen);
                 }else{
-                    Hyperlink link= new Hyperlink(arch.getUrl());
-                    this.anchPaneRefExt.getChildren().add(link);
+                    this.listaArchivos.add(arch);                   
+                }               
+            }
+            this.tablaArchivos.setItems(listaArchivos);
+            //Panel de imagenes
+            showPage(tablaImagenes);
+            //Button prevButton = new Button("Anterior");
+            prevButton.setOnAction(e -> {
+                if (this.paginaActual > 0) {
+                    paginaActual--;
+                    showPage(tablaImagenes);
                 }
-            }
+            });
 
-
-
-            //Cargar datos en panel de descripcion y consola
-            Text tituloDescripcion=new Text("Descripcion del error \n");
-            Text txtDescripcion=new Text("Creado por: Persona 1 \nDescripcion: "+descripcion);
-            tituloDescripcion.setFill(Color.BLACK);
-            tituloDescripcion.setFont(Font.font("Helvetica", FontPosture.ITALIC, 19));
-            txtDescripcion.setFill(Color.GRAY);
-            txtDescripcion.setFont(Font.font("Calibri", FontPosture.ITALIC, 15));
-            txtFlowDescripcion.getChildren().addAll(tituloDescripcion,txtDescripcion);
-            hBoxEtiquetas.setSpacing(10);
-            for(Etiqueta e:etiquetasError){
-                Text etiqueta=new Text(e.getNombre());
-                etiqueta.setFill(Color.BLACK);
-                hBoxEtiquetas.getChildren().add(etiqueta);
-            }
-            tablaArchivos.setGridLinesVisible(true);
-
-            Text txtConsola=new Text(this.consola);
-            txtConsola.setFill(Color.GRAY);
-            txtConsola.setFont(Font.font("Calibri", FontPosture.ITALIC, 15));
-            this.txtFlowConsola.getChildren().addAll(txtConsola);
-            
-            
-            this.txtFechaModif.setText(txtFechaModif.getText()+new SimpleDateFormat("dd-MM-yyyy").format(this.fechaModif)/*this.fechaModif.toString()*/);
-
-
-            //Creo el popup para expandir imagenes
-            for (Node node : tablaArchivos.getChildren()) {
-                if (node instanceof ImageView) {
-                    ImageView imageView = (ImageView) node;
-                    imageView.setOnMouseClicked(event -> {
-                        Popup popup = new Popup();
-                        ImageView popupImageView = new ImageView(imageView.getImage());
-                        popupImageView.setFitWidth(500);
-                        popupImageView.setPreserveRatio(true);
-                        popup.getContent().add(popupImageView);
-
-                        //Obtengo la escena para deshabilitar el click del raton
-                        Scene scene = tablaArchivos.getScene();
-                        scene.getRoot().setDisable(true);
-
-
-                        popup.show(tablaArchivos.getScene().getWindow());
-                        popup.setOnHidden(hiddenEvent -> {
-                            popup.hide();
-                            scene.getRoot().setDisable(false);
-                        });
-                    });              
+            //Button nextButton = new Button("Siguiente");
+            nextButton.setOnAction(e -> {
+                if (this.paginaActual < getNumPages() - 1) {
+                    this.paginaActual++;
+                    showPage(tablaImagenes);
                 }
-            }
+            });
 
             // Agregar un ChangeListener a la propiedad widthProperty y heightProperty del GridPane
-        tablaArchivos.widthProperty().addListener((obs, oldVal, newVal) -> {
-            for (Node node : tablaArchivos.getChildren()) {
-                if(node instanceof ImageView){
-                    ImageView imageView = (ImageView) node;
-                    imageView.setFitWidth(newVal.doubleValue() / 3);
+            tablaImagenes.widthProperty().addListener((obs, oldVal, newVal) -> {
+                for (Node node : tablaImagenes.getChildren()) {
+                    if(node instanceof ImageView){
+                        ImageView imageView = (ImageView) node;
+                        imageView.setFitWidth(newVal.doubleValue() / 3);
+                    }
+                }
+            });
+
+            tablaImagenes.heightProperty().addListener((var obs, var oldVal, var newVal) -> {
+                for (Node node : tablaImagenes.getChildren()) {
+                    if(node instanceof ImageView){
+                        ImageView imageView = (ImageView) node;
+                        imageView.setFitHeight(newVal.doubleValue() / 3);
+                    }
+                }
+            });
+
+                //Cargar datos en panel de descripcion y consola
+                Text tituloDescripcion=new Text("Descripcion del error \n");
+                tituloDescripcion.getStyleClass().add("titulos");
+                Text txtDescripcion=new Text("Creado por: Persona 1 \nDescripcion: "+descripcion);
+                //tituloDescripcion.setFill(Color.BLACK);
+                //tituloDescripcion.setFont(Font.font("Helvetica", FontPosture.ITALIC, 19));
+                txtDescripcion.setFill(Color.GRAY);
+                txtDescripcion.setFont(Font.font("Calibri", FontPosture.ITALIC, 15));
+                txtFlowDescripcion.getChildren().addAll(tituloDescripcion,txtDescripcion);
+                hBoxEtiquetas.setSpacing(10);
+                for(Etiqueta e:etiquetasError){
+                    Label etiqueta=new Label(e.getNombre());
+                    etiqueta.getStyleClass().add("etiquetas");
+                    hBoxEtiquetas.getChildren().add(etiqueta);
+                }
+
+
+                Text txtConsola=new Text(this.consola);
+                txtConsola.setFill(Color.GRAY);
+                txtConsola.setFont(Font.font("Calibri", FontPosture.ITALIC, 15));
+                this.txtFlowConsola.getChildren().addAll(txtConsola);
+
+
+                this.txtFechaModif.setText(txtFechaModif.getText()+new SimpleDateFormat("dd-MM-yyyy").format(this.fechaModif)/*this.fechaModif.toString()*/);
+
+            for(Solucion sol:error.getSoluciones()){
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/busquedaSolucion.fxml"));
+                    Parent subfileRoot = loader.load();
+                    // Obtén el controlador del archivo subfile.fxml
+                    BusquedaSolucionController subfileController = loader.getController();
+                    subfileController.setDatos("Solucion de ejemplo", sol.getDescripcion(), sol.getId(), this.dashboard, sol.getEtiquetas());
+                    subfileController.initialize();
+
+
+                    lista.getChildren().add(subfileRoot);
+                }catch (IOException e2) {
+                    System.out.println(e2);
+                }  
+            }
+
+            //PANEL DE ENLACES EXTERNOS
+
+
+            //FILTRADO DE SOLUCIONES
+            filtrarSoluciones();
+
+            for(Etiqueta e: allEtiquetas){
+                if(e.getPadre()==null){
+                    this.comboBoxEtiquetas.getItems().add(e.getNombre());
                 }
             }
-        });
+            comboBoxEtiquetas.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                cargarSubetiquetas();
+            });
 
-        tablaArchivos.heightProperty().addListener((var obs, var oldVal, var newVal) -> {
-            for (Node node : tablaArchivos.getChildren()) {
-                if(node instanceof ImageView){
-                    ImageView imageView = (ImageView) node;
-                    imageView.setFitHeight(newVal.doubleValue() / 3);
-                }
-            }
-        });
-
-    
-        for(Solucion sol:error.getSoluciones()){
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/busquedaSolucion.fxml"));
-                Parent subfileRoot = loader.load();
-                // Obtén el controlador del archivo subfile.fxml
-                BusquedaSolucionController subfileController = loader.getController();
-                subfileController.setDatos("Solucion de ejemplo", sol.getDescripcion(), sol.getId(), this.dashboard, sol.getEtiquetas());
-                subfileController.initialize();
-
-                
-                lista.getChildren().add(subfileRoot);
-            }catch (IOException e2) {
-                System.out.println(e2);
-            }  
+            //PANEL NOTAS
+            cargarNotas();
         }
-        
-        //PANEL DE ENLACES EXTERNOS
-        
-        
-        
-        //FILTRADO DE SOLUCIONES
-        filtrarSoluciones();
-        
-        for(Etiqueta e: allEtiquetas){
-            if(e.getPadre()==null){
-                this.comboBoxEtiquetas.getItems().add(e.getNombre());
-            }
-        }
-        comboBoxEtiquetas.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            cargarSubetiquetas();
-        });
-        //TODO: AGREGAR NOTA Y VER LAS NOTAS DEL ERROR
-    
     }
     
-    private void setError(long id){
-        this.idError=id;
+    private void setError(Error error){
+        this.error=error;
+        this.initializeConDatos();
     }
     public void setDashboard(DashboardController dash){
         this.dashboard=dash;
@@ -304,7 +349,9 @@ public class DetalleErrorController implements Initializable {
         String seleccionado=this.comboBoxSubEtiq.getSelectionModel().getSelectedItem();
         if(seleccionado!=null){
             this.etiquetasSeleccionadas.add(seleccionado);
-            Text etiqueta=new Text(seleccionado);
+            Label etiqueta=new Label(seleccionado);
+            etiqueta.getStyleClass().add("etiquetas");
+            //Text etiqueta=new Text(seleccionado);
             etiqueta.setOnMouseClicked(this::eliminarEtiquetaSeleccionada);
             this.buscador.getChildren().add(etiqueta);
             this.comboBoxSubEtiq.getItems().remove(seleccionado); 
@@ -340,8 +387,8 @@ private void filtrarSoluciones(){
     }
     
     private void eliminarEtiquetaSeleccionada (MouseEvent event) {
-        Text etiqueta = (Text) event.getSource();
-        //this.comboBoxEtiquetas.getItems().add(etiqueta.getText());
+        Label etiqueta = (Label) event.getSource();
+        this.comboBoxSubEtiq.getItems().add(etiqueta.getText());
         this.buscador.getChildren().remove(etiqueta);
         this.etiquetasSeleccionadas.remove(etiqueta.getText());
         filtrarSoluciones();
@@ -358,6 +405,115 @@ private void filtrarSoluciones(){
                 if(e.getNombre().equals(comboBoxEtiquetas.getSelectionModel().getSelectedItem()) && !this.etiquetasSeleccionadas.contains(e.getNombre())){
                     this.comboBoxSubEtiq.getItems().add(e.getNombre());
                 }
+            }
+        }
+    }
+    
+    private void cargarNotas(){
+        listaNotas.getItems().clear(); 
+        for(Nota nota:notasError){
+            ItemNota itemNota=new ItemNota();
+            itemNota.setContenidoNota(nota.getContenido());
+            itemNota.setTxtFecha(new SimpleDateFormat("dd-MM-yyyy").format(nota.getFechaSubida()));
+            listaNotas.getItems().add(itemNota);
+        }
+    }
+    
+    private void showPage(GridPane gridPane) {
+        gridPane.getChildren().clear();
+
+        int startIndex = this.paginaActual * this.imagenesPorPagina;
+        int endIndex = Math.min(startIndex + this.imagenesPorPagina , this.listaImagenes.size());
+
+        int col = 0;
+        int row = 0;
+        for (int i = startIndex; i < endIndex; i++) {
+            Image image = this.listaImagenes.get(i);
+            ImageView imageView = new ImageView(image);
+            //imageView.setFitWidth(100);
+            imageView.setFitWidth(gridPane.getWidth() / 3);
+            imageView.setFitHeight(gridPane.getHeight() / 3);
+            //imageView.setFitHeight(100);
+            imageView.setCursor(Cursor.HAND);
+            imageView.setPreserveRatio(true);
+            gridPane.add(imageView, col, row);
+            
+            col++;
+            if (col == 3) {
+                col = 0;
+                row++;
+            }
+        }
+        gridPane.setGridLinesVisible(true);
+        //Creo el popup para expandir imagenes
+        for (Node node : gridPane.getChildren()) {
+            if (node instanceof ImageView) {
+                ImageView imageView = (ImageView) node;
+                imageView.setOnMouseClicked(event -> {
+                    Popup popup = new Popup();
+                    ImageView popupImageView = new ImageView(imageView.getImage());
+                    popupImageView.setFitWidth(700);
+                    popupImageView.setPreserveRatio(true);
+                    popup.getContent().add(popupImageView);
+
+                    //Obtengo la escena para deshabilitar el click del raton
+                    Scene scene = gridPane.getScene();
+                    scene.getRoot().setDisable(true);
+
+
+                    popup.show(gridPane.getScene().getWindow());
+                    popup.setOnHidden(hiddenEvent -> {
+                        popup.hide();
+                        scene.getRoot().setDisable(false);
+                    });
+                });              
+            }
+        }
+        
+    }
+
+    private int getNumPages() {
+        return (int) Math.ceil((double) this.listaImagenes.size() / this.imagenesPorPagina);
+    }
+
+    @FXML
+    private void agregarNota(MouseEvent event) {
+        Nota nota= new Nota();
+        Date fecha=Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        if(!this.txtAreaNotas.getText().isEmpty()){
+            List <Nota>notas= this.errorDetalle.getNotas();
+            nota.setContenido(this.txtAreaNotas.getText());
+            nota.setFechaSubida(fecha);
+            notas.add(nota);
+            Conexion.getInstance().persist(nota);
+            this.errorDetalle.setNotas(notas);
+            Conexion.getInstance().merge(errorDetalle);
+        }
+        this.notasError=this.errorDetalle.getNotas();
+        cargarNotas();
+    }
+    
+    @FXML
+    private void mostrarArchivos(){
+        if(this.tablaArchivos.getSelectionModel().getSelectedItem()!=null){
+            Archivo archivoTemp=this.tablaArchivos.getSelectionModel().getSelectedItem();
+            if(!archivoTemp.getExtension().equals("web")){
+                try {
+                    File archivo = File.createTempFile(archivoTemp.getNombre(), "." + archivoTemp.getExtension());
+                    try (FileOutputStream fileOuputStream = new FileOutputStream(archivo)) {
+                        fileOuputStream.write(archivoTemp.getContenidoByte());
+                    }
+                    archivo.deleteOnExit();
+                    Desktop.getDesktop().open(archivo);
+                } catch (Exception ex) {
+                    System.out.println(ex);
+                }
+            }else{
+                try {
+                        Desktop.getDesktop().browse(new URI(archivoTemp.getUrl()));
+                    }catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
             }
         }
     }

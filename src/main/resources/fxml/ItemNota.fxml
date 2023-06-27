@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="108.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Text fx:id="txtDescripcion" layoutX="266.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fecha de publicacion" wrappingWidth="125.16064453125">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Text>
+      <Text fx:id="txtNota" layoutX="18.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Contenido nota" wrappingWidth="367.33740234375" />
+   </children>
+</AnchorPane>

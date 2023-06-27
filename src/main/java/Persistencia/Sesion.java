@@ -4,8 +4,13 @@
  */
 package Persistencia;
 
+import Logica.Clases.AjustesUsuario;
 import Logica.Clases.Perfil;
 import Logica.Clases.Usuario;
+import javafx.beans.binding.Bindings;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
+import javax.swing.JInternalFrame;
 
 /**
  *
@@ -17,10 +22,27 @@ public class Sesion {
     
     private Usuario usuario;
     
-    private Perfil perfil;
+    
+    
+    private boolean isFullHD ;
+   
+    private AnchorPane panelPrincipal;
+    
+    private Stage stagePrincipal;
+
+    public Stage getStagePrincipal() {
+        return stagePrincipal;
+    }
+
+    public void setStagePrincipal(Stage stagePrincipal) {
+        this.stagePrincipal = stagePrincipal;
+    }
+    
+   private AjustesUsuario ajustes;
 
     private Sesion() {
         // Constructor privado para evitar instanciación directa
+        
     }
 
     public static Sesion getInstance() {
@@ -52,7 +74,39 @@ public class Sesion {
     public Perfil getPerfil() {
         return usuario.getPerfil();
     }
+    
+    //panel del contenido
 
+    public AnchorPane getPanelPrincipal() {
+        return panelPrincipal;
+    }
+
+    public void setPanelPrincipal(AnchorPane panelPrincipal) {
+        this.panelPrincipal = panelPrincipal;
+    }
+
+    public boolean isIsFullHD() {
+        return isFullHD;
+    }
+
+    public void setIsFullHD(boolean isFullHD) {
+        this.isFullHD = isFullHD;
+        if(isFullHD){
+            this.stagePrincipal.setWidth(1936.0);
+            this.stagePrincipal.setHeight(1056.0);
+            System.out.println("llega aca");
+        }else{
+            this.stagePrincipal.setWidth(200.200);
+            System.out.println("llega aca sino");
+        }
+    }
+
+    
+
+    
+    
+    
+    
     
     
     

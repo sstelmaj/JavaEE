@@ -24,6 +24,16 @@ public class AjustesUsuario implements Serializable {
     
     private boolean english;
     private boolean darkMode;
+    private boolean fullHD;
+
+    public boolean isFullHD() {
+        return fullHD;
+    }
+
+    public void setFullHD(boolean fullHD) {
+        this.fullHD = fullHD;
+    }
+    
 
     public boolean isEnglish() {
         return english;
@@ -50,6 +60,8 @@ public class AjustesUsuario implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+    
+    
 
     @Override
     public int hashCode() {
@@ -70,7 +82,7 @@ public class AjustesUsuario implements Serializable {
         }
         return true;
     }
-
+    
     @Override
     public String toString() {
         return "Logica.Clases.AjustesUsuario[ id=" + id + " ]";

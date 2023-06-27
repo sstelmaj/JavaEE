@@ -92,7 +92,7 @@ public class PanelCodigoSolucion extends javax.swing.JInternalFrame  implements 
 
         
     }
-
+    
     @Override
      public void actionPerformed(ActionEvent e) {
 
