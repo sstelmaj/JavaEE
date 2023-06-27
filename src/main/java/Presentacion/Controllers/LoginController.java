@@ -49,8 +49,8 @@ public class LoginController implements Initializable {
     
     public void login(ActionEvent event) throws IOException {
       
-        usernameField.setText("paulo.ruiz@estudiantes.utec.edu.uy");
-        passwordField.setText("Passw0rd");
+        usernameField.setText("martinperez2@gmail.com");
+        passwordField.setText("Joaco21");
         
         String mail = usernameField.getText();
         String password = passwordField.getText();
@@ -88,20 +88,23 @@ public class LoginController implements Initializable {
                  stage.show();
                  stage.centerOnScreen();
             }else{
+                //se crea antes para que no sea null en el dash
+                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                 sesion.setStagePrincipal(stage);
+                 
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Dashboard.fxml"));
                  Parent root = loader.load();
 
                  // Crea una nueva escena y asigna la escena al escenario
                  Scene scene = new Scene(root);
-                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                
                  stage.setTitle("Dashboard");
-                 sesion.setStagePrincipal(stage);
+                
+                 
                  if(user.getAjustes().isFullHD()){
-                     stage.setMinHeight(1056.0);
-                     stage.setMinWidth(1936.0);
+                     sesion.setIsFullHD(true);
                  }else{
-                      stage.setMinHeight(800.0);
-                     stage.setMinWidth(1595.0);
+                      sesion.setIsFullHD(false);
                  }
                  
                  
@@ -121,7 +124,7 @@ public class LoginController implements Initializable {
             alert.setHeaderText("Inicio de sesión fallido");
             alert.setContentText("El usuario o la contraseña son incorrectos. Por favor, inténtelo de nuevo.");
             alert.showAndWait();
-
+          
             usernameField.clear();
             passwordField.clear();
         }
