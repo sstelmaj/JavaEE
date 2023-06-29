@@ -141,6 +141,6 @@
          </font>
       </Text>
       <Text fx:id="txtFechaModif" layoutX="66.0" layoutY="669.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ultima modificación: " />
-      <Button layoutX="622.0" layoutY="647.0" mnemonicParsing="false" onMouseClicked="#modificarError" text="Modificar" />
+      <Button fx:id="btnModificarError" layoutX="585.0" layoutY="647.0" mnemonicParsing="false" onMouseClicked="#modificarError" text="Modificar error" />
    </children>
 </AnchorPane>

@@ -12,6 +12,7 @@ import Logica.Clases.Nota;
 import Logica.Controladores.ErrorController;
 import Logica.Controladores.EtiquetaController;
 import Persistencia.Conexion;
+import Persistencia.Sesion;
 import Presentacion.Componentes.ItemNota;
 import Presentacion.PanelCodigoSolucion;
 import java.awt.Desktop;
@@ -32,6 +33,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -162,6 +164,8 @@ public class DetalleErrorController implements Initializable {
     private Button nextButton;
     @FXML
     private Button btnAgregarSolucion;
+    @FXML
+    private Button btnModificarError;
 
     public Error getErrorDetalle() {
         return errorDetalle;
@@ -330,8 +334,10 @@ public class DetalleErrorController implements Initializable {
                 }  
             }
 
-            //PANEL DE ENLACES EXTERNOS
-
+            //BOTON MODIFICAR ERROR
+            if(!Objects.equals(Sesion.getInstance().getUsuario().getId(), error.getUsuario().getId())){
+                this.btnModificarError.setDisable(true);
+            }
 
             //FILTRADO DE SOLUCIONES
             filtrarSoluciones();
