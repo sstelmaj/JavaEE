@@ -129,6 +129,10 @@ public class AdminDashboardController implements Initializable {
             popupStage.setResizable(false);
             Scene scene = new Scene(popupRoot);
             popupStage.setScene(scene);
+            popupStage.setOnHidden(e -> {
+                loadPieChartData();
+                loadLineChartData();
+            });
             popupStage.showAndWait();
         } catch (IOException ex) {
             Logger.getLogger(AdminDashboardController.class.getName()).log(Level.SEVERE, null, ex);
@@ -174,7 +178,6 @@ public class AdminDashboardController implements Initializable {
         );
         lineRecord.setData(lineRecordData);
         sortCategoryAxis(erroresSemanales, solucionesSemanales, usuariosSemanales);
-        
     }
     
     private ObservableList<XYChart.Data> parseListToObservableData(List<CantidadPorFecha> lista){
