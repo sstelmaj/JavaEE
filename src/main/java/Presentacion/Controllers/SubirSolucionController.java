@@ -432,9 +432,7 @@ public class SubirSolucionController implements Initializable {
                         alert.setHeaderText(null);
                         alert.setContentText("Se ha creado la solucion con exito!");
                         alert.showAndWait();
-                        System.out.println("Soluciones antes: "+this.error.getSoluciones().size());
                         Conexion.getInstance().refresh(this.error);
-                        System.out.println("Soluciones despues: "+this.error.getSoluciones().size());
             } catch (Exception e) {
                 // Manejo de la excepción
                 e.printStackTrace();

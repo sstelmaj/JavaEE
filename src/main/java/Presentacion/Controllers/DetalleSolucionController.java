@@ -85,7 +85,7 @@ public class DetalleSolucionController implements Initializable {
     @FXML
     private Text txtFechaSolucion;
     
-    private String codigoSol,codigoErr,descripcion;
+    private String codigoSol,codigoErr,descripcion,creador;
     private Date fechaSol;
     private int usosSol;
     private long idSol;
@@ -135,6 +135,7 @@ public class DetalleSolucionController implements Initializable {
         //Obtengo los datos de la solucion
         solucion = SolucionController.getInstance().obtenerSolucion(idSol);
         codigoSol=solucion.getCodigo();
+        creador=solucion.getUsuario().getNombre();
         descripcion=solucion.getDescripcion();
         archivos=solucion.getArchivos();
         fechaSol=solucion.getFechaSubida();
@@ -213,7 +214,7 @@ public class DetalleSolucionController implements Initializable {
 
         //Cargar datos en panel de detalles
         Text tituloDetalles=new Text("Estos son los detalles de la solucion \n");
-        Text detalles=new Text("Creado por: Persona 1 \nDescripcion: "+descripcion);
+        Text detalles=new Text("Creado por: "+this.creador+"\nDescripcion: "+descripcion);
         tituloDetalles.setFill(Color.BLACK);
         tituloDetalles.setFont(Font.font("Helvetica", FontPosture.ITALIC, 19));
         detalles.setFill(Color.GRAY);

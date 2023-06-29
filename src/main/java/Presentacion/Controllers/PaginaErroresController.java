@@ -172,11 +172,13 @@ public class PaginaErroresController implements Initializable {
 
                 // Obtener la porción del texto original que contiene la cadena ingresada en el centro
                 String displayedText = descripcion.substring(startIndex, endIndex);
+                displayedText= displayedText.replaceAll("\\r?\\n", " ");
 
                 // Actualizar el texto del Label con la porción correspondiente
                 return displayedText;
             }else{
                 String displayedText = descripcion.substring(0, 20);
+                displayedText= displayedText.replaceAll("\\r?\\n", " ");
                 return displayedText;
             }
     }

@@ -114,7 +114,7 @@ public class DetalleErrorController implements Initializable {
     private GridPane tablaImagenes;
     
     private Error error;
-    private String descripcion,codigo,consola;
+    private String descripcion,codigo,consola,creador;
     private Date fechaModif;
     private List<Archivo> archivos;
 
@@ -197,6 +197,7 @@ public class DetalleErrorController implements Initializable {
             allEtiquetas=EtiquetaController.getInstance().listaEtiquetas();
                 this.descripcion=error.getDescripcion();
                 this.codigo=error.getCodigo();
+                this.creador=error.getUsuario().getNombre();
                 this.consola=error.getConsola();
                 this.archivos=error.getArchivos();
                 this.fechaModif=error.getFechaSubida();
@@ -291,7 +292,7 @@ public class DetalleErrorController implements Initializable {
                 //Cargar datos en panel de descripcion y consola
                 Text tituloDescripcion=new Text("Descripcion del error \n");
                 tituloDescripcion.getStyleClass().add("titulos");
-                Text txtDescripcion=new Text("Creado por: Persona 1 \nDescripcion: "+descripcion);
+                Text txtDescripcion=new Text("Creado por: "+creador+ "\nDescripcion: "+descripcion);
                 //tituloDescripcion.setFill(Color.BLACK);
                 //tituloDescripcion.setFont(Font.font("Helvetica", FontPosture.ITALIC, 19));
                 txtDescripcion.setFill(Color.GRAY);
@@ -389,11 +390,12 @@ private void filtrarSoluciones(){
             
             if(contieneTodos){
                 try {
+                    String displayedText=this.cortarDescripcion(sol.getDescripcion());
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/busquedaSolucion.fxml"));
                     Parent subfileRoot = loader.load();
                     // Obtén el controlador del archivo subfile.fxml
                     BusquedaSolucionController subfileController = loader.getController();
-                    subfileController.setDatos("Solucion de ejemplo", sol.getDescripcion(), sol.getId(), this.dashboard, sol.getEtiquetas());
+                    subfileController.setDatos("Solucion", displayedText, sol.getId(), this.dashboard, sol.getEtiquetas());
                     subfileController.initialize();
 
                     lista.getChildren().add(subfileRoot);
@@ -576,5 +578,23 @@ private void filtrarSoluciones(){
              } catch (IOException ex) {
                  System.out.println(ex);
         }
+    }
+    
+    private String cortarDescripcion(String descripcion){
+    // Obtener la posición de la cadena ingresada en el texto original
+        int startIndex = 0;
+
+        // Calcular los índices de inicio y fin para mostrar una porción del texto original
+        int maxDisplayedLength = 40; // Cantidad máxima de caracteres a mostrar
+        int textLength = descripcion.length();
+
+        int endIndex = Math.min(startIndex + maxDisplayedLength, textLength);
+        startIndex = Math.max(endIndex - maxDisplayedLength, 0);
+
+        String displayedText = descripcion.substring(startIndex, endIndex);
+        displayedText= displayedText.replaceAll("\\r?\\n", " ");
+
+        // Actualizar el texto del Label con la porción correspondiente
+        return displayedText;
     }
 }
