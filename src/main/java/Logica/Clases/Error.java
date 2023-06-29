@@ -20,6 +20,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
+import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 /**
  *
@@ -36,7 +37,7 @@ public class Error implements Serializable {
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Nota> notas;
     
-    
+    @CascadeOnDelete
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Etiqueta> etiquetas;
     
