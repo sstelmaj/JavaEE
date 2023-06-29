@@ -6,6 +6,7 @@ package Logica.Controladores;
 
 import Logica.Clases.Error;
 import Logica.Clases.Solucion;
+import Logica.DTOs.CantidadPorFecha;
 import Persistencia.Conexion;
 import java.util.ArrayList;
 import java.util.List;
@@ -133,4 +134,29 @@ public class ErrorController {
             }
             return resultado;
         }     
+        
+    public List<CantidadPorFecha> obtenerCantidadErroresSemanalesPorFecha(String fecha) {
+        EntityManager em = Conexion.getInstance().getEntity();
+        List<CantidadPorFecha> resultado = new ArrayList<>();
+        em.getTransaction().begin();
+        try{
+            Query q = em.createNativeQuery("SELECT COUNT(*) AS CANTIDAD, FECHASUBIDA From error WHERE FECHASUBIDA <= ? AND FECHASUBIDA > DATE_SUB(?, INTERVAL 6 DAY) GROUP BY FECHASUBIDA", "CantidadPorFecha");
+            q.setParameter(1, fecha);
+            q.setParameter(2, fecha);
+            resultado = q.getResultList();
+            em.getTransaction().commit();
+        }catch(Exception e){
+            em.getTransaction().rollback();
+        }
+        return resultado;
+    }
+    
+    public int obtenerCantidadErrores(){
+        EntityManager em = Conexion.getInstance().getEntity();
+        int cantidad = 0;
+        
+        Object resultado = em.createNativeQuery("SELECT COUNT(*) FROM error").getSingleResult();
+        cantidad = ((Number) resultado).intValue();
+        return cantidad;
+    }
 }

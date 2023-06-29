@@ -6,11 +6,14 @@ package Logica.Clases;
  */
 
 
+import Logica.DTOs.CantidadPorFecha;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,12 +22,24 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Temporal;
 
 /**
  *
  * @author Usuario
  */
+
+@SqlResultSetMapping(
+    name = "CantidadPorFecha",
+    classes = @ConstructorResult(
+        targetClass = CantidadPorFecha.class,
+        columns = {
+            @ColumnResult(name = "cantidad"),
+            @ColumnResult(name = "fechaSubida"),
+        }
+    )
+)
 @Entity
 public class Solucion implements Serializable {
 

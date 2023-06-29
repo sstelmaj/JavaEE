@@ -4,13 +4,21 @@
  */
 package Presentacion.Controllers;
 
+import Logica.Controladores.ErrorController;
+import Logica.Controladores.SolucionController;
+import Logica.Controladores.UsuarioController;
+import Logica.DTOs.CantidadPorFecha;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collections;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,10 +30,14 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javax.imageio.ImageIO;
 
 /**
  * FXML Controller class
@@ -64,16 +76,21 @@ public class AdminDashboardController implements Initializable {
         btnImportar.setOnAction(event -> mostrarVentanaImportar());
         
         lineXAxis = new CategoryAxis();
+        lineXAxis.setLabel("Fecha");
         lineYAxis = new NumberAxis();
+        lineYAxis.setLabel("Cantidad");
         
         lineRecord = new LineChart(lineXAxis, lineYAxis);
+        lineRecord.setTitle("Publicaciones en 2023");
         graphsPane.setRight(lineRecord);
+        
         pieRatio = new PieChart();
         pieRatio.setClockwise(true);
         pieRatio.setStartAngle(90);
         graphsPane.setLeft(pieRatio);
         
-        loadChartsData();
+        loadPieChartData();
+        loadLineChartData();
     }
     
     private void mostrarVentanaExportar() {
@@ -131,44 +148,67 @@ public class AdminDashboardController implements Initializable {
         }
     }
     
-    private void loadChartsData(){
-        lineXAxis.setLabel("Fecha");
-        lineYAxis.setLabel("Cantidad");
-        
-        lineRecord.setTitle("Publicaciones en 2023");
-        ObservableList<XYChart.Series> lineRecordData = FXCollections.observableArrayList(
-            new XYChart.Series("Errores Publicados", FXCollections.observableArrayList(
-                new XYChart.Data("21/06", 52),
-                new XYChart.Data("22/06", 66),
-                new XYChart.Data("23/06", 43),
-                new XYChart.Data("24/06", 50),
-                new XYChart.Data("25/06", 15),
-                new XYChart.Data("26/06", 35)
-            )),
-            new XYChart.Series("Soluciones Publicados", FXCollections.observableArrayList(
-                new XYChart.Data("21/06", 10),
-                new XYChart.Data("22/06", 8),
-                new XYChart.Data("23/06", 7),
-                new XYChart.Data("24/06", 10),
-                new XYChart.Data("25/06", 5),
-                new XYChart.Data("26/06", 17)
-            )),
-            new XYChart.Series("Usuarios registrados", FXCollections.observableArrayList(
-                new XYChart.Data("21/06", 12),
-                new XYChart.Data("22/06", 15),
-                new XYChart.Data("23/06", 5),
-                new XYChart.Data("24/06", 50),
-                new XYChart.Data("25/06", 23),
-                new XYChart.Data("26/06", 43)
-            ))
-        );
-        lineRecord.setData(lineRecordData);
-        
+    private void loadPieChartData(){
+        int cantidadErrores = ErrorController.getInstance().obtenerCantidadErrores();
+        int cantidadSoluciones = SolucionController.getInstance().obtenerCantidadSoluciones();
         ObservableList<PieChart.Data> pieRatioData = FXCollections.observableArrayList(
-            new PieChart.Data("Errores Publicados", 600),
-            new PieChart.Data("Soluciones Publicados", 400)
+            new PieChart.Data("Errores Publicados (" + cantidadErrores + ")", (double) cantidadErrores),
+            new PieChart.Data("Soluciones Publicados (" + cantidadSoluciones + ")", (double) cantidadSoluciones)
         );
         pieRatio.setData(pieRatioData);
         pieRatio.setTitle("Proporcion Error/Solucion");
+    }
+    private void loadLineChartData(){
+        List<CantidadPorFecha> erroresSemanales = ErrorController.getInstance().obtenerCantidadErroresSemanalesPorFecha("2023-06-28");
+        List<CantidadPorFecha> solucionesSemanales = SolucionController.getInstance().obtenerCantidadSolucionesSemanalesPorFecha("2023-06-28");
+        List<CantidadPorFecha> usuariosSemanales = UsuarioController.getInstance().obtenerCantidadUsuariosSemanalesPorFecha("2023-06-28");
+        
+        ObservableList<XYChart.Series> lineRecordData = FXCollections.observableArrayList(
+            new XYChart.Series("Errores Publicados", parseListToObservableData(erroresSemanales)),
+            new XYChart.Series("Soluciones Publicados", parseListToObservableData(solucionesSemanales)),
+            new XYChart.Series("Usuarios registrados", parseListToObservableData(usuariosSemanales))
+        );
+        lineRecord.setData(lineRecordData);
+        sortCategoryAxis(erroresSemanales, solucionesSemanales, usuariosSemanales);
+        
+    }
+    
+    private ObservableList<XYChart.Data> parseListToObservableData(List<CantidadPorFecha> lista){
+        ObservableList<XYChart.Data> ol = FXCollections.observableArrayList();
+        lista.forEach(item -> ol.add(new XYChart.Data(item.getStringFechaSubida(), item.getIntCantidad())));
+        return ol;
+    }
+    private void sortCategoryAxis(List<CantidadPorFecha> ...listas){
+        ObservableList<String> categories = FXCollections.observableArrayList();
+        for (List<CantidadPorFecha> lista : listas) {
+            for (CantidadPorFecha item : lista) {
+                String fecha = item.getStringFechaSubida();
+                if (!categories.contains(fecha)) 
+                    categories.add(fecha);
+            }
+        }
+        
+        Collections.sort(categories);
+        categories.forEach(System.out::println);
+        var XAxis = (CategoryAxis) lineRecord.getXAxis();
+        XAxis.setCategories(categories);
+        XAxis.setAutoRanging(true);
+    }
+
+    @FXML
+    private void handleDownloadGraphs(ActionEvent event) throws IOException {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Guardar graficas");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG Image", "*.png"));
+
+        Stage stage = (Stage) btnDescargar.getScene().getWindow();
+        File file = fileChooser.showSaveDialog(stage);
+        WritableImage image = graphsPane.snapshot(null, null);
+        ImageIO.write(SwingFXUtils.fromFXImage(image, null), "PNG", file);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Éxito");
+        alert.setHeaderText(null);
+        alert.setContentText("Las graficas se han descargado exitosamente.");
+        alert.showAndWait();
     }
 }

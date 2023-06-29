@@ -9,10 +9,7 @@ import Logica.Controladores.UsuarioController;
 import Persistencia.Sesion;
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashSet;
 import java.util.ResourceBundle;
-import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.fxml.Initializable;
 
 import javafx.event.ActionEvent;
@@ -22,13 +19,10 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 /**
@@ -49,8 +43,8 @@ public class LoginController implements Initializable {
     
     public void login(ActionEvent event) throws IOException {
       
-        usernameField.setText("martinperez2@gmail.com");
-        passwordField.setText("Joaco21");
+        usernameField.setText("joaquin.maidana@estudiantes.utec.edu.uy");
+        passwordField.setText("Passw0rd");
         
         String mail = usernameField.getText();
         String password = passwordField.getText();
