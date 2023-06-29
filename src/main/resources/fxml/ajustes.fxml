@@ -6,10 +6,30 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="621.0" prefWidth="1282.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="Presentacion.Controllers.AjustesController">
+<AnchorPane id="AnchorPane" prefHeight="621.0" prefWidth="1282.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentacion.Controllers.AjustesController">
    <children>
-      <Label text="Label" />
       <Label layoutX="627.0" layoutY="62.0" text="Ajustes" />
+      <Label layoutX="222.0" layoutY="102.0" text="Resulución" />
+      <RadioButton fx:id="fullhd" layoutX="214.0" layoutY="130.0" mnemonicParsing="false" onAction="#clickFullHD" text="Full HD">
+         <toggleGroup>
+            <ToggleGroup fx:id="resolucion" />
+         </toggleGroup>
+      </RadioButton>
+      <RadioButton fx:id="normal" layoutX="214.0" layoutY="156.0" mnemonicParsing="false" onAction="#clickNormal" text="Normal" toggleGroup="$resolucion" />
+      <Button fx:id="botonGuardar" layoutX="601.0" layoutY="434.0" mnemonicParsing="false" onAction="#clickGuardar" prefHeight="50.0" prefWidth="91.0" text="Guardar" />
+      <Label layoutX="386.0" layoutY="102.0" text="Apariencia" />
+      <RadioButton fx:id="oscura" layoutX="378.0" layoutY="130.0" mnemonicParsing="false" text="Oscura">
+         <toggleGroup>
+            <ToggleGroup fx:id="apariencia" />
+         </toggleGroup>
+      </RadioButton>
+      <RadioButton fx:id="clara" layoutX="378.0" layoutY="156.0" mnemonicParsing="false" text="Clara" toggleGroup="$apariencia" />
+      <Label layoutX="512.0" layoutY="102.0" text="Idioma" />
+      <RadioButton fx:id="espaniol" layoutX="499.0" layoutY="130.0" mnemonicParsing="false" text="Español">
+         <toggleGroup>
+            <ToggleGroup fx:id="idioma" />
+         </toggleGroup>
+      </RadioButton>
+      <RadioButton fx:id="ingles" layoutX="499.0" layoutY="156.0" mnemonicParsing="false" text="Ingles" toggleGroup="$idioma" />
    </children>
 </AnchorPane>

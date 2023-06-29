@@ -15,6 +15,7 @@ import Logica.Controladores.PerfilController;
 import Logica.Controladores.SolucionController;
 import Logica.Controladores.UsuarioController;
 import Persistencia.Sesion;
+import Presentacion.Main;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -146,7 +148,17 @@ public class DashboardController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
-        
+        if(Sesion.getInstance().isIsDarkMode()){   
+              contentAPane.setStyle("-fx-background-color: #c6c6c6; -fx-background-radius: 10px;");
+
+               anchorDash.setStyle("-fx-background-color: #FFFFFF;");
+
+
+            }else{
+
+               contentAPane.setStyle("-fx-background-color: #ffffff; -fx-background-radius: 10px;");
+               anchorDash.setStyle("-fx-background-color: #c6c6c6;");
+            }
        
         
         
@@ -161,9 +173,12 @@ public class DashboardController implements Initializable {
         //    subirErrorController.setPantalla("Subir Error");
             inicioController.setPanelContent(contentAPane);
             contentAPane.getChildren().setAll(nuevaVista);
-            BackgroundFill backgroundFill = new BackgroundFill(Color.LIGHTBLUE, null, null);
-            Background background = new Background(backgroundFill);
-            contentAPane.setBackground(background);
+         
+          
+            
+        
+            
+         
         //      contentAPane.setStyle("-fx-background-color: #14151e;");
             anchorDash.setRightAnchor(contentAPane,100.0);
             anchorDash.setLeftAnchor(contentAPane,contentAPane.getLayoutX());
@@ -204,6 +219,22 @@ public class DashboardController implements Initializable {
         selectorVista.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
              fxml = vistas.get(newValue); // Obtener ruta del fxml correspondiente al valor seleccionado
             try{
+                
+                     if(Sesion.getInstance().isIsDarkMode()){   
+                       contentAPane.setStyle("-fx-background-color: #c6c6c6; -fx-background-radius: 10px;");
+
+                        anchorDash.setStyle("-fx-background-color: #FFFFFF;");
+
+
+                     }else{
+                        
+                        contentAPane.setStyle("-fx-background-color: #ffffff; -fx-background-radius: 10px;");
+                        anchorDash.setStyle("-fx-background-color: #c6c6c6;");
+                     }
+                
+                
+                
+                
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource(fxml));
                 Parent nuevaVista = loader.load();
@@ -214,6 +245,7 @@ public class DashboardController implements Initializable {
                     if(errores != null){
                         System.out.println("llega");
                         subirErrorController.setErrorModificar(errores.get(0));
+                         subirErrorController.setPanelContent(contentAPane);
                     }else{
                         System.out.println("no llega");
                     }
@@ -221,9 +253,11 @@ public class DashboardController implements Initializable {
                 }else if(newValue.equals("Modificar Solucion")){
                     SubirSolucionController subirSolucionController = (SubirSolucionController)loader.getController();
                     Solucion soluciones = SolucionController.getInstance().obtenerSolucion(101);
+                     subirSolucionController.setPanelContent(contentAPane);
                     if(soluciones != null){
                         System.out.println("llega");
                         subirSolucionController.setSolucionModificar(soluciones);
+                       
                     }else{
                         System.out.println("no llega");
                     }
@@ -275,8 +309,12 @@ public class DashboardController implements Initializable {
                 else if(newValue.equals("Subir Error")){
                     SubirErrorController subirErrorController = (SubirErrorController)loader.getController();
                    subirErrorController.setPanelContent(contentAPane);
-                    
-                
+                   
+                }
+                else if(newValue.equals("Subir Solucion")){
+                    SubirSolucionController subirErrorController = (SubirSolucionController)loader.getController();
+                   subirErrorController.setPanelContent(contentAPane);
+                   
                 }
                 
                 
@@ -402,6 +440,24 @@ public class DashboardController implements Initializable {
 
     @FXML
     private void cerrarSesion(ActionEvent event) {
+         Platform.runLater(() -> {
+            try {
+                // Reiniciar el estado de la aplicación
+                // ...
+                
+                // Cerrar la ventana actual
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.close();
+
+                
+                // Volver a iniciar la aplicación
+                Main mainApp = new Main();
+                mainApp.start(new Stage());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        
     }
 
     @FXML

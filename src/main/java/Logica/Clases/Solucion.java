@@ -18,6 +18,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -48,10 +49,12 @@ public class Solucion implements Serializable {
     @ManyToMany(cascade={CascadeType.ALL})
     private List<Etiqueta> etiquetas;
     
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    
     private Error error;
     
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+   
     private Usuario usuario;
     
     @OneToMany(cascade={CascadeType.ALL})

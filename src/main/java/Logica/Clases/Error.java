@@ -43,7 +43,7 @@ import org.eclipse.persistence.annotations.CascadeOnDelete;
 @Entity
 public class Error implements Serializable {
 
-    @OneToMany(mappedBy = "error")
+    @OneToMany(mappedBy = "error", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Solucion> soluciones;
 
 
