@@ -198,6 +198,12 @@ public class SubirSolucionController implements Initializable {
         tipoPantallaProperty.set(tipoPantalla);
     }
 
+    
+    public final void setErrorAsociado(Logica.Clases.Error error){
+        this.error=error;
+    }
+    
+
     public final void setSolucionModificar(Solucion solucion) {
         this.solucionModificar = solucion;
     }
@@ -429,10 +435,12 @@ public class SubirSolucionController implements Initializable {
             crear_solucion.setArchivos(archivos);
         }
 
-        if (!tipoPantalla.equals("Solucion Asociada")) {
-            List<Logica.Clases.Error> errores = ErrorController.getInstance().listaErrores(new ArrayList(), "201");
-            crear_solucion.setError(errores.get(0));
-        }
+        
+        if(!tipoPantalla.equals("Solucion Asociada")){
+            
+            crear_solucion.setError(this.error);
+         }
+    
 
         crear_solucion.setDescripcion(textDescripcion.getText());
 
@@ -463,14 +471,18 @@ public class SubirSolucionController implements Initializable {
                 // Cerrar la ventana actual
                 stage.close();
             }
-        } else {
-            try {
-                Conexion.getInstance().persist(crear_solucion);
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Información");
-                alert.setHeaderText(null);
-                alert.setContentText("Se ha creado la solucion con exito!");
-                alert.showAndWait();
+
+        }
+        else{
+            try { 
+            Conexion.getInstance().persist(crear_solucion);
+              Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("Información");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Se ha creado la solucion con exito!");
+                        alert.showAndWait();
+                        Conexion.getInstance().refresh(this.error);
+
             } catch (Exception e) {
                 // Manejo de la excepción
                 e.printStackTrace();

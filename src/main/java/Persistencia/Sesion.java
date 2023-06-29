@@ -7,10 +7,8 @@ package Persistencia;
 import Logica.Clases.AjustesUsuario;
 import Logica.Clases.Perfil;
 import Logica.Clases.Usuario;
-import javafx.beans.binding.Bindings;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javax.swing.JInternalFrame;
 
 /**
  *

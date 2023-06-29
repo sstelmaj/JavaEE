@@ -91,6 +91,7 @@ import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.NumberBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -515,37 +516,44 @@ public class SubirErrorController implements Initializable {
             error.setArchivos(archivos);
         }
         obtenerEtiquetasDescripcion();
-        error.setDescripcion(textDescripcion.getText());
 
-        
-
-        try {
-            Conexion.getInstance().merge(error);
-          
-            
-            if (this.solucion_asociada != null) {
+         error.setDescripcion(textDescripcion.getText());
+            try { 
+                Conexion.getInstance().merge(error);
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                            alert.setTitle("Información");
+                            alert.setHeaderText(null);
+                            alert.setContentText("Se ha creado el error con exito!");
+                            alert.showAndWait();
+              
+              
+               if (this.solucion_asociada != null) {
                 solucion_asociada.setError(error);
                 solucion_asociada.setUsuario(usuario);
                 Conexion.getInstance().merge(solucion_asociada);
             
+              }
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("/fxml/PaginaErrores.fxml"));
+                Parent nuevaVista = loader.load();
+                this.panelContent.getChildren().setAll(nuevaVista);
+            } catch (Exception e) {
+                // Manejo de la excepción
+                e.printStackTrace();
+                 Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText(null);
+                        
+                        alert.setContentText("Ha ocurrido un error en la base de datos");
+                        alert.showAndWait();
             }
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Información");
-            alert.setHeaderText(null);
-            alert.setContentText("Se ha creado el error con exito!");
-            alert.showAndWait();
+            System.out.println(tipoPantalla);
+      //  if(tipoPantalla.equals("Subir Error")){
             
-        } catch (Exception e) {
-            // Manejo de la excepción
-            e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText(null);
 
-            alert.setContentText("Ha ocurrido un error en la base de datos");
-            alert.showAndWait();
-        }
-        System.out.println(tipoPantalla);
+            
+           
+       
 
     }
 

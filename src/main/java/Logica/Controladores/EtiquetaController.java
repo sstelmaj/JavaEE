@@ -135,7 +135,57 @@ public class EtiquetaController {
              return resultado;
          }
     
+    public List<Etiqueta> obtenerSubEtiquetas(String padre) {
+        EntityManager em = Conexion.getInstance().getEntity();
+        List<Etiqueta> resultado = null;
+        em.getTransaction().begin();
+        try {
+            resultado = em.createNativeQuery("SELECT * FROM etiqueta WHERE PADRE = '"+padre+"'", Etiqueta.class).getResultList();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+        }
+        return resultado;
+    }
     
+    public boolean existeSubEtiqueta(String nombre, String padre) {
+    EntityManager em = Conexion.getInstance().getEntity();
+    Object etiqueta = null;
+    boolean resultado = false;
+    em.getTransaction().begin();
+        try {
+            etiqueta=em.createNativeQuery("SELECT * FROM etiqueta WHERE nombre ='"+nombre+"' and PADRE='"+nombre+"'").getSingleResult();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+        }
+        if(etiqueta != null){
+            System.out.println("existe");
+            resultado = true;
+        }else{
+            System.out.println("no existe");
+        }   
+    return resultado;
+    }
+    
+    public Etiqueta obtenerEtiquetaPadre(String nombre_etiqueta){
+        Etiqueta etiqueta=null;
+        Object resultado = null;
+        EntityManager em= Conexion.getInstance().getEntity(); ;
+        em.getTransaction().begin();
+        try{
+            Query q = em.createNativeQuery("SELECT E.* from etiqueta_etiqueta as EE, etiqueta AS E where EE.sub_etiqueta_NOMBRE = E.NOMBRE AND sub_etiqueta_NOMBRE='"+nombre_etiqueta+"'", Etiqueta.class);
+            resultado=q.getSingleResult();
+            em.getTransaction().commit();  
+        }catch(Exception e){
+            em.getTransaction().rollback();
+        }
+        if(resultado!=null){
+            etiqueta = (Etiqueta) resultado;
+            System.out.println("funciona");
+        }
+      return etiqueta;  
+    }
     
 
 }
