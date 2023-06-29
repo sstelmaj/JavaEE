@@ -14,7 +14,7 @@
 <AnchorPane id="AnchorPane" fx:id="anchorError" prefHeight="701.0" prefWidth="1382.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentacion.Controllers.SubirErrorController">
    <children>
       <PointLight color="CHARTREUSE" layoutX="248.0" layoutY="343.0" lightOn="true" />
-      <AnchorPane fx:id="anchor1" layoutX="69.0" layoutY="142.0" prefHeight="385.0" prefWidth="656.0" AnchorPane.bottomAnchor="174.0" AnchorPane.leftAnchor="69.0" AnchorPane.rightAnchor="657.0" AnchorPane.topAnchor="142.0" />
+      <AnchorPane fx:id="anchor1" layoutX="69.0" layoutY="142.0" prefHeight="385.0" prefWidth="656.0" />
       <Accordion fx:id="acordion" layoutX="655.0" layoutY="142.0" prefHeight="385.0" prefWidth="569.0" AnchorPane.bottomAnchor="174.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="142.0">
         <panes>
           <TitledPane fx:id="titledPaneDescripcion" animated="false" prefHeight="212.0" prefWidth="402.0" text="Descripcion">

@@ -4,6 +4,7 @@
  */
 package Presentacion.Controllers;
 
+import Logica.Clases.AjustesUsuario;
 import Logica.Clases.Etiqueta;
 import Logica.Clases.Perfil;
 import Logica.Clases.Solucion;
@@ -13,6 +14,7 @@ import Logica.Controladores.EtiquetaController;
 import Logica.Controladores.PerfilController;
 import Logica.Controladores.SolucionController;
 import Logica.Controladores.UsuarioController;
+import Persistencia.Sesion;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -20,13 +22,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -36,7 +39,6 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 /**
  * FXML Controller class
@@ -91,6 +93,16 @@ public class DashboardController implements Initializable {
     private Button botonInicio;
     @FXML
     private Button botonAjustes;
+    
+    private Stage stage;
+
+    public Stage getStage() {
+        return stage;
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
 
     public void setControladorAnterior(Initializable parent) {
         this.controladorAnterior = parent;
@@ -133,6 +145,12 @@ public class DashboardController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        
+       
+        
+        
+        
         // TODO
         instancia = this;
           try{
@@ -157,6 +175,7 @@ public class DashboardController implements Initializable {
         
         }
           
+       
   
           
         // Agregar elementos al ComboBox
@@ -253,6 +272,12 @@ public class DashboardController implements Initializable {
                     
                     //crearEtiquetaController.setDashboard(this);
                 }
+                else if(newValue.equals("Subir Error")){
+                    SubirErrorController subirErrorController = (SubirErrorController)loader.getController();
+                   subirErrorController.setPanelContent(contentAPane);
+                    
+                
+                }
                 
                 
                 
@@ -322,8 +347,13 @@ public class DashboardController implements Initializable {
 
     @FXML
     private void verContent(ActionEvent event) {
-        System.out.println(contentAPane.getWidth());
-        System.out.println(contentAPane.getHeight());
+        System.out.println("ancho orign"+contentAPane.getWidth());
+        System.out.println("alto origin"+contentAPane.getHeight());
+        
+        System.out.println(this.stage.getWidth());
+        System.out.println(this.stage.getHeight());
+        
+        
     }
 
     @FXML
@@ -356,6 +386,14 @@ public class DashboardController implements Initializable {
 
     @FXML
     private void clickErrores(ActionEvent event) {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/fxml/paginaErrores.fxml"));
+        try {
+            Parent nuevaVista = loader.load();
+            contentAPane.getChildren().setAll(nuevaVista);
+        } catch (IOException ex) {
+            Logger.getLogger(DashboardController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @FXML
@@ -367,11 +405,22 @@ public class DashboardController implements Initializable {
     }
 
     @FXML
-    private void clickInicio(ActionEvent event) {
+    private void clickInicio(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+         loader.setLocation(getClass().getResource("/fxml/inicio.fxml"));
+         Parent nuevaVista = loader.load();
+         InicioController inicioController = (InicioController)loader.getController();
+        //    subirErrorController.setPantalla("Subir Error");
+        inicioController.setPanelContent(contentAPane);
+         contentAPane.getChildren().setAll(nuevaVista);
     }
 
     @FXML
-    private void clickAjustes(ActionEvent event) {
+    private void clickAjustes(ActionEvent event) throws IOException {
+         FXMLLoader loader = new FXMLLoader();
+         loader.setLocation(getClass().getResource("/fxml/ajustes.fxml"));
+         Parent nuevaVista = loader.load();
+         contentAPane.getChildren().setAll(nuevaVista);
     }
 
         

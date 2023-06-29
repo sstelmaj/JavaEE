@@ -48,17 +48,30 @@ public class LoginController implements Initializable {
     private ImageView imageView;
     
     public void login(ActionEvent event) throws IOException {
-        usernameField.setText("joaquin.maidana@estudiantes.utec.edu.uy");
-        passwordField.setText("Passw0rd");
+      
+        usernameField.setText("martinperez2@gmail.com");
+        passwordField.setText("Joaco21");
         
         String mail = usernameField.getText();
         String password = passwordField.getText();
-            
+             
         if (UsuarioController.getInstance().iniciarSesion(mail, password) == true){
          Sesion sesion = Sesion.getInstance();
          sesion.setUser(mail);
          Usuario user = UsuarioController.getInstance().obtenerUsuario(mail);
          sesion.setUsuario(user);
+         
+         if(!user.isActive()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error de inicio de sesión");
+                alert.setHeaderText("Inicio de sesión fallido");
+                alert.setContentText("El usuario con el que intentas ingresar no está activo actualmente. Contactate con un administrador.");
+                alert.showAndWait();
+                usernameField.clear();
+                passwordField.clear();
+                
+            } else {
+         
             if(user.getPerfil().getNombre().equals("Administrador")){
                 System.out.println("Inicia como admin");
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AdminDashboard.fxml"));
@@ -75,20 +88,35 @@ public class LoginController implements Initializable {
                  stage.show();
                  stage.centerOnScreen();
             }else{
+                //se crea antes para que no sea null en el dash
+                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                 sesion.setStagePrincipal(stage);
+                 
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Dashboard.fxml"));
                  Parent root = loader.load();
 
                  // Crea una nueva escena y asigna la escena al escenario
                  Scene scene = new Scene(root);
-                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                
                  stage.setTitle("Dashboard");
-                 stage.setMinHeight(800.0);
-                 stage.setMinWidth(1552.0);
+                
+                 
+                 if(user.getAjustes().isFullHD()){
+                     sesion.setIsFullHD(true);
+                 }else{
+                      sesion.setIsFullHD(false);
+                 }
+                 
+                 
                  //stage.setFullScreen(true);
+                  stage.setResizable(false);
                  stage.setScene(scene);
                  stage.show();
                  stage.centerOnScreen();
+                  DashboardController dashboardController=(DashboardController)loader.getController();
+                    dashboardController.setStage(stage);
             } 
+         }
         }
         else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -96,7 +124,7 @@ public class LoginController implements Initializable {
             alert.setHeaderText("Inicio de sesión fallido");
             alert.setContentText("El usuario o la contraseña son incorrectos. Por favor, inténtelo de nuevo.");
             alert.showAndWait();
-
+          
             usernameField.clear();
             passwordField.clear();
         }

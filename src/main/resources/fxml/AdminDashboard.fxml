@@ -13,15 +13,20 @@
       <Button fx:id="btnImportar" layoutX="751.0" layoutY="35.0" mnemonicParsing="false" text="Importar Datos" />
       <Button fx:id="btnExportar" layoutX="866.0" layoutY="35.0" mnemonicParsing="false" text="Exportar Datos" />
       <Button fx:id="btnUsuarios" layoutX="36.0" layoutY="35.0" mnemonicParsing="false" onAction="#gotoAdminUsuarios" text="Gestionar Usuarios" />
-      <PieChart fx:id="pieUsuarios" layoutX="20.0" layoutY="68.0" prefHeight="418.0" prefWidth="480.0" title="Actividad Usuarios" />
       <Button fx:id="btnDescargar" layoutX="453.0" layoutY="35.0" mnemonicParsing="false" text="Descargar Graficas" />
-      <AreaChart fx:id="areaRegistros" layoutX="506.0" layoutY="68.0" prefHeight="418.0" prefWidth="480.0" title="Informe de Registros">
-        <xAxis>
-          <CategoryAxis side="BOTTOM" />
-        </xAxis>
-        <yAxis>
-          <NumberAxis side="LEFT" />
-        </yAxis>
-      </AreaChart>
+      <BorderPane fx:id="graphsPane" layoutX="14.0" layoutY="72.0" prefHeight="414.0" prefWidth="972.0">
+         <left>
+            <PieChart fx:id="pieRatio" prefHeight="414.0" prefWidth="370.0" BorderPane.alignment="CENTER" />
+         </left>
+         <right>
+            <LineChart fx:id="lineRecord" prefHeight="414.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+              <xAxis>
+                <CategoryAxis fx:id="lineXAxis" side="BOTTOM" />
+              </xAxis>
+              <yAxis>
+                <NumberAxis fx:id="lineYAxis" side="LEFT" />
+              </yAxis>
+            </LineChart>
+         </right></BorderPane>
    </children>
 </AnchorPane>

@@ -29,6 +29,7 @@ import org.eclipse.persistence.annotations.CascadeOnDelete;
 @Entity
 public class Solucion implements Serializable {
 
+
     @ManyToMany(cascade={CascadeType.ALL})
     private List<Etiqueta> etiquetas;
     

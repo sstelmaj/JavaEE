@@ -8,13 +8,21 @@ import Logica.Clases.Archivo;
 import Logica.Clases.Solucion;
 import Logica.Controladores.SolucionController;
 import Presentacion.PanelCodigoSolucion;
+import java.awt.Desktop;
 import java.awt.Dimension;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.net.URI;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,6 +33,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -68,8 +79,6 @@ public class DetalleSolucionController implements Initializable {
     private AnchorPane anchorPaneDestacado;
     
     @FXML
-    private AnchorPane archivosWeb;
-    @FXML
     private Text txtUsosSolucion;
     @FXML
     private Text txtFechaSolucion;
@@ -79,9 +88,26 @@ public class DetalleSolucionController implements Initializable {
     private int usosSol;
     private long idSol;
     List<Archivo> archivos=null;
-    @FXML
     private Button btnBack;
     private Scene escenaPrevia;
+    @FXML
+    private AnchorPane anchorFile;
+    @FXML
+    private TableView<Archivo> tablaArchivos1;
+    @FXML
+    private TableColumn<Archivo, String> columnArchivo;
+    @FXML
+    private TableColumn<Archivo, String> columnExt;
+    private ObservableList<Archivo> listaArchivos;
+    private List<Image> listaImagenes=new ArrayList();
+    private int imagenesPorPagina = 9; // Número de imágenes por pagina del GridPane
+    private int paginaActual = 0; 
+    @FXML
+    private Button botonVer;
+    @FXML
+    private Button prevButton;
+    @FXML
+    private Button nextButton;
     
     /**
      * Initializes the controller class.
@@ -101,95 +127,93 @@ public class DetalleSolucionController implements Initializable {
     }    
     
     public void initialize(){
-            //Obtengo los datos de la solucion
-            Solucion solucion = SolucionController.getInstance().obtenerSolucion(idSol);
-                codigoSol=solucion.getCodigo();
-                descripcion=solucion.getDescripcion();
-                archivos=solucion.getArchivos();
-                fechaSol=solucion.getFechaSubida();
-                usosSol=solucion.getPuntos();
+        //Obtengo los datos de la solucion
+        Solucion solucion = SolucionController.getInstance().obtenerSolucion(idSol);
+        codigoSol=solucion.getCodigo();
+        descripcion=solucion.getDescripcion();
+        archivos=solucion.getArchivos();
+        fechaSol=solucion.getFechaSubida();
+        usosSol=solucion.getPuntos();
 
-                codigoErr=solucion.getError().getCodigo();
+        codigoErr=solucion.getError().getCodigo();
 
-            //Frame para el codigo de error
-            JInternalFrame iFrame = new PanelCodigoSolucion(codigoErr,SyntaxConstants.SYNTAX_STYLE_JAVA);
-            iFrame.setPreferredSize(new Dimension(550,400));
-            iFrame.setSize(20, 20);
-            iFrame.setVisible(true);
-            iFrame.setBorder(null);
-            ((javax.swing.plaf.basic.BasicInternalFrameUI) iFrame.getUI()).setNorthPane(null);
-            SwingNode swingNode = new SwingNode();
+        //Frame para el codigo de error
+        JInternalFrame iFrame = new PanelCodigoSolucion(codigoErr,SyntaxConstants.SYNTAX_STYLE_JAVA);
+        iFrame.setPreferredSize(new Dimension(550,400));
+        iFrame.setSize(20, 20);
+        iFrame.setVisible(true);
+        iFrame.setBorder(null);
+        ((javax.swing.plaf.basic.BasicInternalFrameUI) iFrame.getUI()).setNorthPane(null);
+        SwingNode swingNode = new SwingNode();
 
-            swingNode.setContent(iFrame);
-            anchor1.getChildren().add(swingNode); 
+        swingNode.setContent(iFrame);
+        anchor1.getChildren().add(swingNode); 
 
-            //Frame para el codigo de solucion
-            JInternalFrame iFrame2 = new PanelCodigoSolucion(codigoSol,SyntaxConstants.SYNTAX_STYLE_JAVA);
-            iFrame2.setPreferredSize(new Dimension(550,400));
-            iFrame2.setSize(20, 20);
-            iFrame2.setVisible(true);
-            iFrame2.setBorder(null);
-            ((javax.swing.plaf.basic.BasicInternalFrameUI) iFrame2.getUI()).setNorthPane(null);
-            SwingNode swingNode2 = new SwingNode();
+        //Frame para el codigo de solucion
+        JInternalFrame iFrame2 = new PanelCodigoSolucion(codigoSol,SyntaxConstants.SYNTAX_STYLE_JAVA);
+        iFrame2.setPreferredSize(new Dimension(550,400));
+        iFrame2.setSize(20, 20);
+        iFrame2.setVisible(true);
+        iFrame2.setBorder(null);
+        ((javax.swing.plaf.basic.BasicInternalFrameUI) iFrame2.getUI()).setNorthPane(null);
+        SwingNode swingNode2 = new SwingNode();
 
-            swingNode2.setContent(iFrame2);
-            optCodigo.getChildren().add(swingNode2);
+        swingNode2.setContent(iFrame2);
+        optCodigo.getChildren().add(swingNode2);
 
-           //Cargo las imagenes en el GridPane
-            for(Archivo arch:archivos){
-                if(this.checkIfFileHasExtension(arch.getUrl())){
-                    ImageView imageView=new ImageView(new Image(arch.getUrl()));
-                    imageView.setCursor(Cursor.HAND);
-                    imageView.setPreserveRatio(true);
-                    tablaArchivos.addRow(0, imageView);
+        listaArchivos=FXCollections.observableArrayList();
+        this.columnArchivo.setCellValueFactory(new PropertyValueFactory("nombre"));
+        this.columnExt.setCellValueFactory(new PropertyValueFactory("extension"));
+        for(Archivo arch:archivos){
+            if(this.checkIfFileHasExtension(arch.getExtension())){
+                Image imagen=null;
+                if(arch.getContenidoByte()!=null){
+                    imagen=new Image(new ByteArrayInputStream(arch.getContenidoByte()));
                 }else{
-                    Hyperlink link= new Hyperlink(arch.getUrl());
-                    this.archivosWeb.getChildren().add(link);
+                    imagen=new Image(arch.getUrl());
                 }
+                this.listaImagenes.add(imagen);
+            }else{
+                this.listaArchivos.add(arch);                   
             }
+        }
 
+        this.tablaArchivos1.setItems(listaArchivos);
 
-
-            //Cargar datos en panel de detalles
-            Text tituloDetalles=new Text("Estos son los detalles de la solucion \n");
-            Text detalles=new Text("Creado por: Persona 1 \nDescripcion: "+descripcion);
-            tituloDetalles.setFill(Color.BLACK);
-            tituloDetalles.setFont(Font.font("Helvetica", FontPosture.ITALIC, 19));
-            detalles.setFill(Color.GRAY);
-            detalles.setFont(Font.font("Calibri", FontPosture.ITALIC, 15));
-            txtFlowDetalles.getChildren().addAll(tituloDetalles,detalles);
-            tablaArchivos.setGridLinesVisible(true);
-
-            txtUsosSolucion.setText("Usos: "+usosSol);
-            txtFechaSolucion.setText(txtFechaSolucion.getText()+new SimpleDateFormat("dd-MM-yyyy").format(this.fechaSol));
-
-
-            //Creo el popup para expandir imagenes
-            for (Node node : tablaArchivos.getChildren()) {
-                if (node instanceof ImageView) {
-                    ImageView imageView = (ImageView) node;
-                    imageView.setOnMouseClicked(event -> {
-                        Popup popup = new Popup();
-                        ImageView popupImageView = new ImageView(imageView.getImage());
-                        popupImageView.setFitWidth(500);
-                        popupImageView.setPreserveRatio(true);
-                        popup.getContent().add(popupImageView);
-
-                        //Obtengo la escena para deshabilitar el click del raton
-                        Scene scene = tablaArchivos.getScene();
-                        scene.getRoot().setDisable(true);
-
-
-                        popup.show(tablaArchivos.getScene().getWindow());
-                        popup.setOnHidden(hiddenEvent -> {
-                            popup.hide();
-                            scene.getRoot().setDisable(false);
-                        });
-                    });              
-                }
+        showPage(tablaArchivos);
+        //Button prevButton = new Button("Anterior");
+        prevButton.setOnAction(e -> {
+            if (this.paginaActual > 0) {
+                paginaActual--;
+                showPage(tablaArchivos);
             }
+        });
 
-            // Agregar un ChangeListener a la propiedad widthProperty y heightProperty del GridPane
+        //Button nextButton = new Button("Siguiente");
+        nextButton.setOnAction(e -> {
+            if (this.paginaActual < getNumPages() - 1) {
+                this.paginaActual++;
+                showPage(tablaArchivos);
+            }
+        });
+
+
+
+        //Cargar datos en panel de detalles
+        Text tituloDetalles=new Text("Estos son los detalles de la solucion \n");
+        Text detalles=new Text("Creado por: Persona 1 \nDescripcion: "+descripcion);
+        tituloDetalles.setFill(Color.BLACK);
+        tituloDetalles.setFont(Font.font("Helvetica", FontPosture.ITALIC, 19));
+        detalles.setFill(Color.GRAY);
+        detalles.setFont(Font.font("Calibri", FontPosture.ITALIC, 15));
+        txtFlowDetalles.getChildren().addAll(tituloDetalles,detalles);
+        tablaArchivos.setGridLinesVisible(true);
+
+        txtUsosSolucion.setText("Usos: "+usosSol);
+        txtFechaSolucion.setText(txtFechaSolucion.getText()+new SimpleDateFormat("dd-MM-yyyy").format(this.fechaSol));
+
+
+        // Agregar un ChangeListener a la propiedad widthProperty y heightProperty del GridPane
         tablaArchivos.widthProperty().addListener((obs, oldVal, newVal) -> {
             for (Node node : tablaArchivos.getChildren()) {
                 if(node instanceof ImageView){
@@ -210,24 +234,85 @@ public class DetalleSolucionController implements Initializable {
     }
     
     private boolean checkIfFileHasExtension(String s) {
-        String[] extensiones={"jpg","png","jpeg","webx"};
+        String[] extensiones={"jpg","png","jpeg"};
         return Arrays.stream(extensiones).anyMatch(entry -> s.endsWith(entry));
     }
     
-    /*private void agregarArchivoATabla(){
-        int fil =tablaArchivos.getRowCount();
-        int col = tablaArchivos.getColumnCount();
-        int espacios= fil*col;
-        if(espacios==tablaArchivos.getChildren().size()){
-            tablaArchivos.addRow(fil, nodes);
-        }
-    }*/
-
     @FXML
-    private void regresar(ActionEvent event) {
-        if(this.escenaPrevia!=null){
-            Stage stage=(Stage)this.btnBack.getScene().getWindow();
-            stage.setScene(escenaPrevia);
+    private void mostrarArchivos(){
+        Archivo archivoTemp=this.tablaArchivos1.getSelectionModel().getSelectedItem();
+        if(!archivoTemp.getExtension().equals("web")){
+            try {
+                File archivo = File.createTempFile(archivoTemp.getNombre(), "." + archivoTemp.getExtension());
+                try (FileOutputStream fileOuputStream = new FileOutputStream(archivo)) {
+                    fileOuputStream.write(archivoTemp.getContenidoByte());
+                }
+                archivo.deleteOnExit();
+                Desktop.getDesktop().open(archivo);
+            }catch (Exception ex) {
+                System.out.println(ex);
+            }
+        }else{
+            try {
+                Desktop.getDesktop().browse(new URI(archivoTemp.getUrl()));
+            }catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
+    }
+    
+    private void showPage(GridPane gridPane) {
+        gridPane.getChildren().clear();
+
+        int startIndex = this.paginaActual * this.imagenesPorPagina;
+        int endIndex = Math.min(startIndex + this.imagenesPorPagina , this.listaImagenes.size());
+
+        int col = 0;
+        int row = 0;
+        for (int i = startIndex; i < endIndex; i++) {
+            Image image = this.listaImagenes.get(i);
+            ImageView imageView = new ImageView(image);
+            //imageView.setFitWidth(100);
+            imageView.setFitWidth(gridPane.getWidth() / 3);
+            imageView.setFitHeight(gridPane.getHeight() / 3);
+            //imageView.setFitHeight(100);
+            imageView.setCursor(Cursor.HAND);
+            imageView.setPreserveRatio(true);
+            gridPane.add(imageView, col, row);
+            
+            col++;
+            if (col == 3) {
+                col = 0;
+                row++;
+            }
+        }
+        gridPane.setGridLinesVisible(true);
+        //Creo el popup para expandir imagenes
+        for (Node node : gridPane.getChildren()) {
+            if (node instanceof ImageView) {
+                ImageView imageView = (ImageView) node;
+                imageView.setOnMouseClicked(event -> {
+                    Popup popup = new Popup();
+                    ImageView popupImageView = new ImageView(imageView.getImage());
+                    popupImageView.setFitWidth(700);
+                    popupImageView.setPreserveRatio(true);
+                    popup.getContent().add(popupImageView);
+
+                    //Obtengo la escena para deshabilitar el click del raton
+                    Scene scene = gridPane.getScene();
+                    scene.getRoot().setDisable(true);
+
+                    popup.show(gridPane.getScene().getWindow());
+                    popup.setOnHidden(hiddenEvent -> {
+                        popup.hide();
+                        scene.getRoot().setDisable(false);
+                    });
+                });              
+            }
+        }  
+    }
+
+    private int getNumPages() {
+        return (int) Math.ceil((double) this.listaImagenes.size() / this.imagenesPorPagina);
     }
 }

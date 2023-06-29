@@ -149,7 +149,7 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
         jPanel1.setBackground(new java.awt.Color(0, 153, 153));
         jPanel1.setLayout(new java.awt.BorderLayout());
 
-        jPanel2.setPreferredSize(new java.awt.Dimension(400, 80));
+        jPanel2.setPreferredSize(new java.awt.Dimension(400, 40));
 
         jButton1.setText("Copy");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -187,7 +187,9 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(26, 26, 26)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -195,11 +197,6 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
                 .addGap(18, 18, 18)
                 .addComponent(jComboBoxLeng, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(26, Short.MAX_VALUE))
-            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel2Layout.createSequentialGroup()
-                    .addGap(0, 282, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 283, Short.MAX_VALUE)))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -213,13 +210,9 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
                             .addComponent(jComboBoxLeng, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(jButton2)
-                                .addComponent(jButton4)))))
+                                .addComponent(jButton4)
+                                .addComponent(jButton1)))))
                 .addGap(558, 558, 558))
-            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel2Layout.createSequentialGroup()
-                    .addGap(0, 312, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 284, Short.MAX_VALUE)))
         );
 
         jPanel1.add(jPanel2, java.awt.BorderLayout.NORTH);
@@ -232,7 +225,7 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
         );
         jPanel_CPLayout.setVerticalGroup(
             jPanel_CPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 575, Short.MAX_VALUE)
+            .addGap(0, 615, Short.MAX_VALUE)
         );
 
         jPanel1.add(jPanel_CP, java.awt.BorderLayout.CENTER);

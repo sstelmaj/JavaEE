@@ -9,6 +9,7 @@ import Logica.Clases.*;
 import Logica.Controladores.ErrorController;
 import Logica.Controladores.EtiquetaController;
 import Persistencia.Conexion;
+import Persistencia.Sesion;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
@@ -80,7 +81,9 @@ import Presentacion.RSTA;
 import Presentacion.Main;
 import java.awt.Insets;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.beans.binding.Bindings;
@@ -218,22 +221,31 @@ public class SubirErrorController implements Initializable {
       //    double maxRightAnchor = 500;
 
             anchorError.setRightAnchor(botonIngresar, 500.0);
-        //    anchorError.setLeftAnchor(botonIngresar, botonIngresar.getLayoutX());
-        //    anchorError.setTopAnchor(botonIngresar, botonIngresar.getLayoutY());
-         //   anchorError.setLeftAnchor(acordion,acordion.getLayoutX() );
-         
-         //   anchorError.setLeftAnchor(acordion,anchor1.getLayoutX()+ 500.0 );
-           
+        
+            var widthObservable = Bindings.selectDouble(panelContent.sceneProperty(), "width");
 
-   //         botonIngresar.maxWidthProperty().bind(anchorError.widthProperty().subtract(maxRightAnchor));
-//      botonIngresar.minWidth(100.0);
-//         anchorError.widthProperty().addListener((observable, oldValue, newValue) -> {
-//                Double newWidth = (double) newValue;
-//               String widthString = String.valueOf(newWidth);
-//               anchorError.setLeftAnchor(acordion,anchor1.getWidth()+200.0 );
-//              
-//           });
-      
+       
+        widthObservable.addListener((obs, oldWidth, newWidth) -> {
+            double panelWidth = newWidth.doubleValue();
+            
+             System.out.println(panelWidth);
+            
+            if (panelWidth == 1920.0) {
+               
+                anchor1.setPrefWidth(950.0);
+               JInternalFrame updatedInternalFrame = (JInternalFrame) swingNode.getContent();
+                updatedInternalFrame.repaint();
+             
+            } else if (panelWidth == 1536.0){
+               anchor1.setPrefWidth(530.0);
+//                anchor1.setPrefWidth(500.0);
+//               
+//               JInternalFrame updatedInternalFrame = (JInternalFrame) swingNode.getContent();
+//                updatedInternalFrame.repaint();
+               
+
+            }
+        });
 
       
         
@@ -569,7 +581,8 @@ public class SubirErrorController implements Initializable {
             
             if(this.solucion_asociada !=null){
                 try { 
-                   
+                solucion_asociada.setError(error);
+                solucion_asociada.setUsuario(Sesion.getInstance().getUsuario());
                 Conexion.getInstance().persist(this.solucion_asociada);
                 System.out.println("sube la solucion adjunta");
                 } catch (Exception e) {

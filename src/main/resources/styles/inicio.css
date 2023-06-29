@@ -1,0 +1,14 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 14-jun-2023, 21:18:14
+    Author     : joaco
+*/
+
+.paneBotonesLarge {
+    
+     -fx-translate-x: 140px;
+    -fx-translate-y: 200px;
+}

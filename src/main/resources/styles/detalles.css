@@ -1,0 +1,33 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 25 jun. 2023, 20:33:33
+    Author     : paulo
+*/
+
+.mainFxmlClasss{
+    -fx-background-color: #ACACE6;
+}
+.etiquetas {
+    -fx-display: inline-block;
+    -fx-wrap-text: true;
+    -fx-border-radius: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #adadb8;
+    -fx-background-color: #53535f;
+    -fx-background-radius: 10px;
+    -fx-border-color: transparent; 
+    -fx-border-width: 1px; 
+    -fx-label-padding: 4px;
+}
+
+.titulos {
+    -fx-text-fill: yellow; /* Corregido: usar -fx-text-fill en lugar de -fx-color */
+}
+
+#txtFlowDescripcion{
+    -fx-text-fill: yellow;
+}
+
