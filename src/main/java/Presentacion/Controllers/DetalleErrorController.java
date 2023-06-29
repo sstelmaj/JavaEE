@@ -438,10 +438,12 @@ private void filtrarSoluciones(){
     private void cargarNotas(){
         listaNotas.getItems().clear(); 
         for(Nota nota:notasError){
+          
             ItemNota itemNota=new ItemNota();
             itemNota.setContenidoNota(nota.getContenido());
             itemNota.setTxtFecha(new SimpleDateFormat("dd-MM-yyyy").format(nota.getFechaSubida()));
             listaNotas.getItems().add(itemNota);
+           
         }
     }
     

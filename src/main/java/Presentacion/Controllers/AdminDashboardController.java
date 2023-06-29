@@ -33,6 +33,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.WritableImage;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -55,7 +56,7 @@ public class AdminDashboardController implements Initializable {
     @FXML
     private Button btnDescargar;
     @FXML
-    private BorderPane graphsPane;
+    private AnchorPane graphsPane;
     @FXML
     private PieChart pieRatio;
     @FXML
@@ -82,12 +83,15 @@ public class AdminDashboardController implements Initializable {
         
         lineRecord = new LineChart(lineXAxis, lineYAxis);
         lineRecord.setTitle("Publicaciones en 2023");
-        graphsPane.setRight(lineRecord);
+         graphsPane.getChildren().set(0, lineRecord);
+         lineRecord.setLayoutX(580.0);
+    //    graphsPane.setRight(lineRecord);
         
         pieRatio = new PieChart();
         pieRatio.setClockwise(true);
         pieRatio.setStartAngle(90);
-        graphsPane.setLeft(pieRatio);
+        graphsPane.getChildren().set(1, pieRatio);
+     //   graphsPane.setLeft(pieRatio);
         
         loadPieChartData();
         loadLineChartData();

@@ -14,12 +14,9 @@
       <Button fx:id="btnExportar" layoutX="866.0" layoutY="35.0" mnemonicParsing="false" text="Exportar Datos" />
       <Button fx:id="btnUsuarios" layoutX="36.0" layoutY="35.0" mnemonicParsing="false" onAction="#gotoAdminUsuarios" text="Gestionar Usuarios" />
       <Button fx:id="btnDescargar" layoutX="453.0" layoutY="35.0" mnemonicParsing="false" onAction="#handleDownloadGraphs" text="Descargar Graficas" />
-      <BorderPane fx:id="graphsPane" layoutX="14.0" layoutY="72.0" prefHeight="414.0" prefWidth="972.0">
-         <left>
-            <PieChart fx:id="pieRatio" prefHeight="414.0" prefWidth="370.0" BorderPane.alignment="CENTER" />
-         </left>
-         <right>
-            <LineChart fx:id="lineRecord" prefHeight="414.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+      <AnchorPane fx:id="graphsPane" layoutX="48.0" layoutY="84.0" prefHeight="375.0" prefWidth="881.0">
+         <children>
+            <LineChart fx:id="lineRecord" layoutX="474.0" layoutY="11.0" prefHeight="389.0" prefWidth="449.0">
               <xAxis>
                 <CategoryAxis fx:id="lineXAxis" side="BOTTOM" />
               </xAxis>
@@ -27,6 +24,8 @@
                 <NumberAxis fx:id="lineYAxis" side="LEFT" />
               </yAxis>
             </LineChart>
-         </right></BorderPane>
+            <PieChart fx:id="pieRatio" layoutX="39.0" layoutY="21.0" prefHeight="359.0" prefWidth="370.0" />
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>
