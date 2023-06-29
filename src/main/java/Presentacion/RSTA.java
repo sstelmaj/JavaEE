@@ -47,6 +47,17 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
     public void setTextAreaContenido(String contenido){
         textArea.setText(contenido);
     }
+    
+    public void setModoOscuro(){
+              try {
+            Theme theme = Theme.load(getClass().getResourceAsStream(
+                    "/org/fife/ui/rsyntaxtextarea/themes/dark.xml"));
+            theme.apply(textArea);
+           
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
     public RSTA() {
         
         

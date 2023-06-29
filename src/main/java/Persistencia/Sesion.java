@@ -25,6 +25,9 @@ public class Sesion {
     
     
     private boolean isFullHD ;
+    
+    private boolean isDarkMode;
+    
    
     private AnchorPane panelPrincipal;
     
@@ -99,12 +102,24 @@ public class Sesion {
         if(isFullHD){
             stagePrincipal.setMinHeight(1056.0);
             stagePrincipal.setMinWidth(1936.0);
+            stagePrincipal.centerOnScreen();
             System.out.println("llega aca");
         }else{
+            stagePrincipal.setMinHeight(800.0);
+            stagePrincipal.setMinWidth(1595.0);
             stagePrincipal.setHeight(800.0);
             stagePrincipal.setWidth(1595.0);
+            stagePrincipal.centerOnScreen();
             System.out.println("llega aca sino");
         }
+    }
+
+    public boolean isIsDarkMode() {
+        return isDarkMode;
+    }
+
+    public void setIsDarkMode(boolean isDarkMode) {
+        this.isDarkMode = isDarkMode;
     }
 
     

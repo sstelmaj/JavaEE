@@ -9,6 +9,7 @@ import Logica.Clases.*;
 import Logica.Controladores.ErrorController;
 import Logica.Controladores.EtiquetaController;
 import Persistencia.Conexion;
+import Persistencia.Sesion;
 import Presentacion.Main;
 import Presentacion.RSTA;
 import java.awt.Dimension;
@@ -25,13 +26,17 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -62,7 +67,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
@@ -83,8 +91,7 @@ import org.fife.ui.rtextarea.RTextScrollPane;
  * @author joaco
  */
 public class SubirSolucionController implements Initializable {
-    
-    
+
     @FXML
     private AnchorPane anchor1;
     private WebView web1;
@@ -109,43 +116,42 @@ public class SubirSolucionController implements Initializable {
     @FXML
     private Accordion acordion;
     private ListView<String> listaEtiquetas;
-    
+
     private SwingNode swingNode;
-    
+
     private SwingNode swingNodeConsole;
     @FXML
     private TextArea textDescripcion;
     private TextField textFieldRepositorio;
     private TextField filtroEtiquetas;
-    
-    private  ObservableList<String> items;
+
+    private ObservableList<String> items;
     private ListView<String> etiquetasSeleccionadas;
-   
+
     @FXML
     private ListView<String> listaCompletado;
     private AnchorPane anchorPrueba2;
-    
+
     private Stage popupStage;
-    
+
     private ListView<String> listView;
-   
-    
+
     private ObservableList<String> originalItems;
-    
+
     private String ignoredText = "";
-    private String tipoPantalla ="-";
-    
+    private String tipoPantalla = "-";
+
     @FXML
     private Label textTitulo;
-    
+
     private Solucion solucionModificar;
-    
+
     private Logica.Clases.Error error;
-    
+
     private SubirErrorController error_controller;
-    
+
     private Solucion crear_solucion;
-    
+
     private StringProperty tipoPantallaProperty = new SimpleStringProperty("");
     @FXML
     private AnchorPane anchorFile;
@@ -156,17 +162,29 @@ public class SubirSolucionController implements Initializable {
     @FXML
     private TableView<Archivo> tablaArchivos;
     @FXML
-    private TableColumn <Archivo, String> columnArchivo;
+    private TableColumn<Archivo, String> columnArchivo;
     @FXML
-    private TableColumn <Archivo, String> columnExt;
-    
+    private TableColumn<Archivo, String> columnExt;
+
     private ObservableList<Archivo> archivos_;
     @FXML
     private Button botonVer;
-    
+
     private Archivo archivo;
     @FXML
     private Button mostrarError;
+
+    Map<String, Etiqueta> mapEtiquetas = new HashMap<>();
+
+    List<Etiqueta> etiquetas_solucion = new ArrayList<>();
+
+    List<Etiqueta> etiquetas;
+    @FXML
+    private AnchorPane anchorSolucion;
+
+    private AnchorPane panelContent;
+    @FXML
+    private ScrollPane scrollDesc;
 
     public StringProperty tipoPantallaProperty() {
         return tipoPantallaProperty;
@@ -179,38 +197,54 @@ public class SubirSolucionController implements Initializable {
     public final void setTipoPantalla(String tipoPantalla) {
         tipoPantallaProperty.set(tipoPantalla);
     }
-    
+
     public final void setSolucionModificar(Solucion solucion) {
         this.solucionModificar = solucion;
     }
-    
+
     public final void setErrorController(SubirErrorController error_controller) {
         this.error_controller = error_controller;
     }
-   
+
+    public void setPanelContent(AnchorPane pane) {
+        this.panelContent = pane;
+        //anclamos el anchor de la vista al anchor content por el tema de la jerarquia
+        panelContent.setRightAnchor(anchorSolucion, 0.0);
+        panelContent.setLeftAnchor(anchorSolucion, 0.0);
+        panelContent.setTopAnchor(anchorSolucion, 0.0);
+        panelContent.setBottomAnchor(anchorSolucion, 0.0);
+        //   anchor1.setPrefWidth(900);
+        BackgroundFill backgroundFill = new BackgroundFill(Color.LIGHTGREEN, null, null);
+        Background background = new Background(backgroundFill);
+        anchor1.setBackground(background);
+        //    double maxRightAnchor = 500;
+
+        anchorSolucion.setRightAnchor(botonIngresar, 500.0);
+
+    }
+
     /**
-      
-   * Initializes the controller class.
+     *
+     * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-         //para el primer renderizado visual
-         tipoPantallaProperty.addListener((observable, oldValue, newValue) -> {
-            if (newValue=="Modificar Solucion") {
-                
-               
+        //para el primer renderizado visual
+        tipoPantallaProperty.addListener((observable, oldValue, newValue) -> {
+            if (newValue == "Modificar Solucion") {
+
                 System.out.println("Modificar Solucion");
-                tipoPantalla =newValue;
+                tipoPantalla = newValue;
                 textTitulo.setText(newValue);
                 botonIngresar.setText("Guardar Cambios");
-               
-                if(solucionModificar != null){
+
+                if (solucionModificar != null) {
                     textDescripcion.setText(solucionModificar.getDescripcion());
-                     linkTextFieldUrl.setText(solucionModificar.getLink());
-                    
+                    linkTextFieldUrl.setText(solucionModificar.getLink());
+
                     String fechaSubida = solucionModificar.getFechaSubida().toString();
-                    if(fechaSubida != null){
-                       DateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+                    if (fechaSubida != null) {
+                        DateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
                         String fechaString;
                         Date fechaDate;
                         try {
@@ -219,77 +253,85 @@ public class SubirSolucionController implements Initializable {
                             ZoneId zoneId = ZoneId.systemDefault();
                             LocalDate fechaLocalDate = instant.atZone(zoneId).toLocalDate();
                             inputFecha.setValue(fechaLocalDate);
-                            System.out.println(fechaLocalDate); 
-                                
+                            System.out.println(fechaLocalDate);
+
                         } catch (ParseException ex) {
                             Logger.getLogger(SubirSolucionController.class.getName()).log(Level.SEVERE, null, ex);
                         }
 
                     }
-                       
+
                     JInternalFrame internalFrameCodigo = (JInternalFrame) swingNode.getContent();
-       
+
                     //obtenemos el contenido de el internal frame
                     if (internalFrameCodigo instanceof RSTA) {
                         RSTA rsta = (RSTA) internalFrameCodigo;
                         rsta.setTextAreaContenido(solucionModificar.getCodigo());
-                              
-                    } 
+
+                    }
+                    
+                    
+                    
 
                 }
 
-            }
-            else if(newValue=="Subir Error"){
+            } else if (newValue == "Subir Solucion") {
                 System.out.println("Subir Error");
-                tipoPantalla =newValue;
+                tipoPantalla = newValue;
                 textTitulo.setText(newValue);
-            }
-            else if(newValue=="Solucion Asociada"){
+                
+            } else if (newValue == "Solucion Asociada") {
                 System.out.println("Solucion asociada");
-                tipoPantalla =newValue;
+                tipoPantalla = newValue;
                 textTitulo.setText(newValue);
                 botonIngresar.setText("Adjuntar");
                 mostrarError.setVisible(false);
+                
+                anchor1.setPrefWidth(580.0);
+                anchor1.setPrefHeight(380.0);
+                acordion.setPrefHeight(380.0);
+                
+                scrollDesc.getStyleClass().remove("textDescfullHD");
+                textDescripcion.getStyleClass().remove("textDescfullHD");
+
+                listaCompletado.getStyleClass().remove("textDescfullHD");
             }
-              
+
         });
-         
-         archivos_ = FXCollections.observableArrayList();
+
+        archivos_ = FXCollections.observableArrayList();
         //asocia las columnas con el tituo
         this.columnArchivo.setCellValueFactory(new PropertyValueFactory("nombre"));
-        this.columnExt.setCellValueFactory(new PropertyValueFactory("extension")); 
+        this.columnExt.setCellValueFactory(new PropertyValueFactory("extension"));
         //para poder filtrar luego aca obtengo el observable list para el filtrado
         try {
-            List<Etiqueta> etiquetas = EtiquetaController.getInstance().listaEtiquetas();
+            etiquetas = EtiquetaController.getInstance().listaEtiquetasActivas();
 
             // Crear un ObservableList a partir de la lista existente
-             items = FXCollections.observableArrayList();
+            items = FXCollections.observableArrayList();
 
             // Agregar los elementos a la lista ObservableList
             for (Etiqueta etiqueta : etiquetas) {
                 items.add(etiqueta.getNombre());
+                mapEtiquetas.put(etiqueta.getNombre().toUpperCase(), etiqueta);
             }
 
             //asigno a la lista en la descripcion
             listaCompletado.setItems(items);
-           
+
         } catch (Exception e) {
             // Manejo de la excepción
             e.printStackTrace();
         }
-        
-      
-          
+
         textDescripcion.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.contains("#")) {
                 filterListViewD(listaCompletado, newValue, items);
-            }
-             else {
+            } else {
                 // Restaurar la lista original cuando se borra el carácter "@"
                 listaCompletado.setItems(items);
             }
         });
-        
 
         listaCompletado.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
@@ -305,7 +347,7 @@ public class SubirSolucionController implements Initializable {
                 }
             }
         });
-        
+
         textDescripcion.setOnKeyPressed(event -> {
             KeyCode keyCode = event.getCode();
             if (keyCode == KeyCode.UP || keyCode == KeyCode.DOWN) {
@@ -319,26 +361,34 @@ public class SubirSolucionController implements Initializable {
                 listaCompletado.getSelectionModel().selectFirst(); // Selecciona el primer elemento del ListView
             }
         });
-        
+
         //para actualizar los datos luego de instanciar
-        
         rstaCode();
         
-        //rstaConsola();
+        //modo oscuro
+        if (Sesion.getInstance().isIsDarkMode()) {
+            textDescripcion.setStyle("-fx-control-inner-background: #293134;");
+
+        }
         
-         
-     
-      
-    }  
-    
-   
+        if ( Sesion.getInstance().isIsFullHD()) {
+
+            scrollDesc.getStyleClass().add("textDescfullHD");
+            textDescripcion.getStyleClass().add("textDescfullHD");
+
+            listaCompletado.getStyleClass().add("textDescfullHD");
+
+        }
+        
+        //rstaConsola();
+    }
 
     @FXML
     private void click(ActionEvent event) {
         System.out.println("Hola");
-         linkWebView.getEngine().load("https://github.com/");
+        linkWebView.getEngine().load("https://github.com/");
         String userAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 14_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Mobile/15E148 Safari/604.1";
-       
+
         linkWebView.getEngine().setUserAgent(userAgent);
         linkWebView.getEngine().setJavaScriptEnabled​(true);
         linkWebView.setZoom(0.75);
@@ -346,18 +396,15 @@ public class SubirSolucionController implements Initializable {
 
     @FXML
     private void clickIngresar(ActionEvent event) {
-      
-       
-       
-       //buscamos el internal frame del codigo
-       JInternalFrame internalFrame = (JInternalFrame) swingNode.getContent();
-       
-       
-             this.crear_solucion = new Solucion();
-        if(tipoPantalla.equals("Modificar Solucion")){
-           this.crear_solucion = this.solucionModificar;
-           System.out.println("Quiere Modificar");
-       }
+
+        //buscamos el internal frame del codigo
+        JInternalFrame internalFrame = (JInternalFrame) swingNode.getContent();
+
+        this.crear_solucion = new Solucion();
+        if (tipoPantalla.equals("Modificar Solucion")) {
+            this.crear_solucion = this.solucionModificar;
+            System.out.println("Quiere Modificar");
+        }
         //obtenemos el contenido de el internal frame
         if (internalFrame instanceof RSTA) {
             RSTA rsta = (RSTA) internalFrame;
@@ -366,198 +413,282 @@ public class SubirSolucionController implements Initializable {
             // Accedemos al text area
             String contenido = textArea.getText();
 
-            System.out.print("codigo es"+contenido);
+            System.out.print("codigo es" + contenido);
             //seteamos el contenido
             crear_solucion.setCodigo(contenido);
         } else {
-            
+
         }
-        
-        List<Archivo> archivos =  new ArrayList<>();
-        if(this.archivos_ != null){
+        obtenerEtiquetasDescripcion();
+        List<Archivo> archivos = new ArrayList<>();
+        if (this.archivos_ != null) {
             for (Archivo archivo : this.archivos_) {
                 archivos.add(archivo);
                 System.out.println(archivo.getNombre());
             }
             crear_solucion.setArchivos(archivos);
         }
-        
-        if(!tipoPantalla.equals("Solucion Asociada")){
-            List<Logica.Clases.Error> errores = ErrorController.getInstance().listaErrores(new ArrayList(),"201");
-               crear_solucion.setError(errores.get(0));
-         }
-    
-        crear_solucion.setDescripcion(textDescripcion.getText());
-        
-    //    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", new Locale("es")); (util para despues o capaz el input fecha lo modifica)
 
+        if (!tipoPantalla.equals("Solucion Asociada")) {
+            List<Logica.Clases.Error> errores = ErrorController.getInstance().listaErrores(new ArrayList(), "201");
+            crear_solucion.setError(errores.get(0));
+        }
+
+        crear_solucion.setDescripcion(textDescripcion.getText());
+
+        //    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", new Locale("es")); (util para despues o capaz el input fecha lo modifica)
         // Formatear LocalDate a String en español
-    //    String fechaFormateada = localDate.format(formatter);
-        if(inputFecha.getValue()!= null){
+        //    String fechaFormateada = localDate.format(formatter);
+        if (inputFecha.getValue() != null) {
             Date date = Date.from(inputFecha.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
             System.out.println(date);
             crear_solucion.setFechaSubida(date);
         }
-        
+
         crear_solucion.setLink(linkTextFieldUrl.getText());
-        
-        if(tipoPantalla.equals("Solucion Asociada")){
-            if(textDescripcion.getText().equals("")){
-                   Alert alert = new Alert(Alert.AlertType.WARNING);
-                        alert.setTitle("Información");
-                        alert.setHeaderText(null);
-                        alert.setContentText("la descripcion no puede estar vacía!");
-                        alert.showAndWait();
-            }
-            else if(this.error_controller != null){
+
+        if (tipoPantalla.equals("Solucion Asociada")) {
+            if (textDescripcion.getText().equals("")) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Información");
+                alert.setHeaderText(null);
+                alert.setContentText("la descripcion no puede estar vacía!");
+                alert.showAndWait();
+            } else if (this.error_controller != null) {
                 error_controller.setSolucion(crear_solucion);
                 error_controller.setActualizador("recibir solucion");
-                
+
                 Stage stage = (Stage) textDescripcion.getScene().getWindow();
 
                 // Cerrar la ventana actual
                 stage.close();
             }
-        }
-        else{
-            try { 
-            Conexion.getInstance().persist(crear_solucion);
-              Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                        alert.setTitle("Información");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Se ha creado la solucion con exito!");
-                        alert.showAndWait();
+        } else {
+            try {
+                Conexion.getInstance().persist(crear_solucion);
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Información");
+                alert.setHeaderText(null);
+                alert.setContentText("Se ha creado la solucion con exito!");
+                alert.showAndWait();
             } catch (Exception e) {
                 // Manejo de la excepción
                 e.printStackTrace();
             }
- 
-        
+
         }
-            
+
     }
-
-    
-
 
     //filtrado de las etiquetas para ingresar en la descripcion
     private void filterListViewD(ListView<String> listView, String filterText, ObservableList<String> items) {
-    // Verificar si el texto de búsqueda contiene al menos un carácter "@"
-    if (filterText.contains("#")) {
-        
-        // Obtener la última ocurrencia del carácter "@"
-        int lastIndex = filterText.lastIndexOf("#");
+        // Verificar si el texto de búsqueda contiene al menos un carácter "@"
+        if (filterText.contains("#")) {
 
-        // Obtener el texto después del último carácter "@" y hasta el próximo espacio (o hasta el final del texto)
-        String searchText = filterText.substring(lastIndex + 1);
+            // Obtener la última ocurrencia del carácter "@"
+            int lastIndex = filterText.lastIndexOf("#");
 
-        // Verificar si se ingresa un espacio después del texto filtrado
-        if (searchText.endsWith(" ")) {
-            // Restaurar la lista original
-            listView.setItems(items);
-        } else {
-            // Crear un nuevo filtro utilizando el texto ingresado
-            Predicate<String> filter = item ->
-                    item.toLowerCase().contains(searchText.toLowerCase());
+            // Obtener el texto después del último carácter "@" y hasta el próximo espacio (o hasta el final del texto)
+            String searchText = filterText.substring(lastIndex + 1);
 
-            // Filtrar la lista de etiquetas utilizando el filtro
-            List<String> filteredList = items.filtered(filter);
+            // Verificar si se ingresa un espacio después del texto filtrado
+            if (searchText.endsWith(" ")) {
+                // Restaurar la lista original
+                listView.setItems(items);
+            } else {
+                // Crear un nuevo filtro utilizando el texto ingresado
+                Predicate<String> filter = item
+                        -> item.toLowerCase().contains(searchText.toLowerCase());
 
-            // Actualizar la lista del ListView con los elementos filtrados
-            listView.setItems(FXCollections.observableArrayList(filteredList));
-        }
-        
-        
-    } else {
-        // Restaurar la lista original cuando no se encuentra el carácter "@"
-        listView.setItems(items);
-    }
-    
-    
-}
-    
-    public void rstaCode(){
-        try {
-        
-        JInternalFrame iFrame = new RSTA();
-        iFrame.setPreferredSize(new Dimension(550,400));
-        iFrame.setSize(20, 20);
-        iFrame.setVisible(true);
-        iFrame.setBorder(null);
-        ((javax.swing.plaf.basic.BasicInternalFrameUI) iFrame.getUI()).setNorthPane(null);
-         swingNode = new SwingNode();
-       
-        swingNode.setContent(iFrame);
-         anchor1.getChildren().add(swingNode);
-         
-         acordion.setExpandedPane(titledPaneDescripcion);
-         
-        }catch (Exception e) {
-              // Manejo de la excepción
-              e.printStackTrace();
-        }
-    
-    
-    }
-    
-    public void rstaConsola(){
-        try {
-                JInternalFrame iFrameConsole = new RSTA();
-                iFrameConsole.setPreferredSize(new Dimension(550,400));
-                iFrameConsole.setSize(20, 20);
-                iFrameConsole.setVisible(true);
-              //  iFrameConsole.setAlwaysOnTop(true);
-                iFrameConsole.setBorder(null);
-                ((javax.swing.plaf.basic.BasicInternalFrameUI) iFrameConsole.getUI()).setNorthPane(null);
-                 
-                swingNodeConsole = new SwingNode();
+                // Filtrar la lista de etiquetas utilizando el filtro
+                List<String> filteredList = items.filtered(filter);
 
-                swingNodeConsole.setContent(iFrameConsole);
-                scrollConsole.setContent(swingNodeConsole);
-            } catch (Exception e) {
-                // Manejo de la excepción
-                e.printStackTrace();
+                // Actualizar la lista del ListView con los elementos filtrados
+                listView.setItems(FXCollections.observableArrayList(filteredList));
             }
-    }
-     public void setPantalla(String pantalla) {
-            this.tipoPantalla=pantalla;
-            
-      }
-    private void clickPrueba(ActionEvent event) {
-           System.out.println(tipoPantalla);
 
-        }      
+        } else {
+            // Restaurar la lista original cuando no se encuentra el carácter "@"
+            listView.setItems(items);
+        }
+
+    }
+
+    public void rstaCode() {
+        try {
+
+            JInternalFrame iFrame = new RSTA();
+            iFrame.setPreferredSize(new Dimension(500, 400));
+            iFrame.setSize(20, 20);
+            iFrame.setVisible(true);
+            iFrame.setBorder(null);
+            
+            if ( Sesion.getInstance().isIsFullHD()) {
+                anchor1.setPrefWidth(950.0);
+                anchor1.setPrefHeight(550.0);
+                acordion.setPrefHeight(550.0);
+               
+            } else {
+                anchor1.setPrefWidth(580.0);
+                anchor1.setPrefHeight(380.0);
+                acordion.setPrefHeight(380.0);
+            }
+            if (Sesion.getInstance().isIsDarkMode()) {
+                if (iFrame instanceof RSTA) {
+                    RSTA rsta = (RSTA) iFrame;
+                    rsta.setModoOscuro();
+                }
+
+            }
+            // color #293134
+//            if (Sesion.getInstance().isIsDarkMode()) {
+//                if (iFrame instanceof RSTA) {
+//                    RSTA rsta = (RSTA) iFrame;
+//                    rsta.setModoOscuro();
+//                }
+//
+//            }
+
+            ((javax.swing.plaf.basic.BasicInternalFrameUI) iFrame.getUI()).setNorthPane(null);
+            swingNode = new SwingNode();
+
+            swingNode.setContent(iFrame);
+            anchor1.getChildren().add(swingNode);
+            anchor1.setRightAnchor(swingNode, 0.0);
+            anchor1.setLeftAnchor(swingNode, 0.0);
+            anchor1.setTopAnchor(swingNode, 0.0);
+            anchor1.setBottomAnchor(swingNode, 0.0);
+
+            acordion.setExpandedPane(titledPaneDescripcion);
+
+        } catch (Exception e) {
+            // Manejo de la excepción
+            e.printStackTrace();
+        }
+
+    }
+
+    public void rstaConsola() {
+        try {
+            JInternalFrame iFrameConsole = new RSTA();
+            if (Sesion.getInstance().isIsFullHD()) {
+                anchor1.setPrefWidth(950.0);
+                anchor1.setPrefHeight(550.0);
+                acordion.setPrefHeight(550.0);
+                iFrameConsole.setPreferredSize(new Dimension(550, 100));
+            } else {
+                anchor1.setPrefWidth(580.0);
+                anchor1.setPrefHeight(380.0);
+                acordion.setPrefHeight(380.0);
+            }
+            if (Sesion.getInstance().isIsDarkMode()) {
+                if (iFrameConsole instanceof RSTA) {
+                    RSTA rsta = (RSTA) iFrameConsole;
+                    rsta.setModoOscuro();
+                }
+
+            }
+
+            iFrameConsole.setPreferredSize(new Dimension(550, 400));
+            iFrameConsole.setSize(20, 20);
+            iFrameConsole.setVisible(true);
+            //  iFrameConsole.setAlwaysOnTop(true);
+            iFrameConsole.setBorder(null);
+            ((javax.swing.plaf.basic.BasicInternalFrameUI) iFrameConsole.getUI()).setNorthPane(null);
+
+            swingNodeConsole = new SwingNode();
+
+            swingNodeConsole.setContent(iFrameConsole);
+            scrollConsole.setContent(swingNodeConsole);
+        } catch (Exception e) {
+            // Manejo de la excepción
+            e.printStackTrace();
+        }
+    }
+
+    public void setPantalla(String pantalla) {
+        this.tipoPantalla = pantalla;
+
+    }
+
+    private void clickPrueba(ActionEvent event) {
+        System.out.println(tipoPantalla);
+
+    }
+
+    private void obtenerEtiquetasDescripcion() {
+        // String patron = "#\\w+\\s";
+        String patron = "#\\w+\\s|#\\w+$";
+        List<String> etiquetasAEliminar = new ArrayList();
+        // Compilar el patrón en un objeto Pattern
+        Pattern pattern = Pattern.compile(patron);
+
+        // Crear un objeto Matcher para buscar coincidencias en el texto
+        Matcher matcher = pattern.matcher(textDescripcion.getText());
+
+        // Recorrer las coincidencias encontradas
+        while (matcher.find()) {
+            String item = matcher.group();
+            if (item.length() > 1) {
+                String subItem = item.substring(1).trim();
+                System.out.println(subItem);
+
+                boolean containsIgnoreCase = items.stream()
+                        .anyMatch(item2 -> item2.equalsIgnoreCase(subItem));
+
+                System.out.println(containsIgnoreCase);
+
+                if (containsIgnoreCase) {
+                    System.out.println("la etiqueta existe");
+                    Etiqueta etiqueta = mapEtiquetas.get(subItem.toUpperCase());
+                    this.etiquetas_solucion.add(etiqueta);
+                } else {
+                    System.out.println("la etiqueta no existe");
+                    etiquetasAEliminar.add(item);
+                }
+            }
+        }
+        this.crear_solucion.setEtiquetas(etiquetas_solucion);
+        String descContenido = textDescripcion.getText();
+        for (String etiq : etiquetasAEliminar) {
+            System.out.println(etiq);
+            System.out.println(descContenido);
+            descContenido = descContenido.replace(etiq, "");
+
+        }
+        System.out.println("sin etiquetas erroneas" + descContenido);
+        textDescripcion.setText(descContenido);
+    }
 
     @FXML
     private void clickAbrir(ActionEvent event) throws IOException {
         FileChooser fileChooser = new FileChooser();
         Archivo archivo = new Archivo();
-        
-         File selectedFile = fileChooser.showOpenDialog(Main.getStage()); 
-        
-        if(selectedFile != null){
+
+        File selectedFile = fileChooser.showOpenDialog(Main.getStage());
+
+        if (selectedFile != null) {
             String nombre = selectedFile.getName();
-            
-            
+
             String extension = "";
             int i = nombre.lastIndexOf(".");
 
             if (i > 0) {
-            extension = nombre.substring(i + 1);
+                extension = nombre.substring(i + 1);
             }
             archivo.setExtension(extension);
             archivo.setNombre(nombre.substring(0, i));
             byte[] fileContent = Files.readAllBytes(selectedFile.toPath());
-            
+
             archivo.setContenidoByte(fileContent);
-            
-            System.out.println("nombre"+nombre+"exttension"+extension);
+
+            System.out.println("nombre" + nombre + "exttension" + extension);
             textArchivoSeleccionado.setText(nombre);
-            
+
             this.archivos_.add(archivo);
             this.tablaArchivos.setItems(archivos_);
             this.archivo = archivo;
         }
     }
-    
+
 }

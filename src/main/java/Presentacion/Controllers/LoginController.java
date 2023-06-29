@@ -91,6 +91,19 @@ public class LoginController implements Initializable {
                 //se crea antes para que no sea null en el dash
                  Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                  sesion.setStagePrincipal(stage);
+                 if(user.getAjustes().isFullHD()){
+                     sesion.setIsFullHD(true);
+                 }else{
+                      sesion.setIsFullHD(false);
+                 }
+                 
+                 if(user.getAjustes().isDarkMode()){
+                     sesion.setIsDarkMode(true);
+                 }else{
+                      sesion.setIsDarkMode(false);
+                 }
+                 
+             
                  
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Dashboard.fxml"));
                  Parent root = loader.load();
@@ -101,11 +114,7 @@ public class LoginController implements Initializable {
                  stage.setTitle("Dashboard");
                 
                  
-                 if(user.getAjustes().isFullHD()){
-                     sesion.setIsFullHD(true);
-                 }else{
-                      sesion.setIsFullHD(false);
-                 }
+                 
                  
                  
                  //stage.setFullScreen(true);
