@@ -7,8 +7,8 @@ package Logica.Controladores;
 
 
 import Logica.Clases.Perfil;
-import Logica.Clases.Etiqueta;
 import Logica.Clases.Usuario;
+import Logica.DTOs.CantidadPorFecha;
 import Persistencia.Conexion;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -143,5 +143,20 @@ public class UsuarioController {
         }
       return usuario;  
     }
-
+    
+     public List<CantidadPorFecha> obtenerCantidadUsuariosSemanalesPorFecha(String fecha) {
+        EntityManager em = Conexion.getInstance().getEntity();
+        List<CantidadPorFecha> resultado = null;
+        em.getTransaction().begin();
+        try{
+            Query q = em.createNativeQuery("SELECT COUNT(*) AS CANTIDAD, FECHAREGISTRO AS FECHASUBIDA From usuario WHERE FECHAREGISTRO <= ? AND FECHAREGISTRO > DATE_SUB(?, INTERVAL 6 DAY) GROUP BY FECHAREGISTRO", "CantidadPorFecha");
+            q.setParameter(1, fecha);
+            q.setParameter(2, fecha);
+            resultado = q.getResultList();
+            em.getTransaction().commit();
+        }catch(Exception e){
+            em.getTransaction().rollback();
+        }
+        return resultado;
+    }
 }

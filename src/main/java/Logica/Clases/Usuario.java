@@ -6,9 +6,14 @@ package Logica.Clases;
  */
 
 
+import Logica.DTOs.CantidadPorFecha;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,11 +21,22 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.SqlResultSetMapping;
 
 /**
  *
  * @author Usuario
  */
+@SqlResultSetMapping(
+    name = "CantidadPorFecha",
+    classes = @ConstructorResult(
+        targetClass = CantidadPorFecha.class,
+        columns = {
+            @ColumnResult(name = "cantidad"),
+            @ColumnResult(name = "fechaSubida"),
+        }
+    )
+)
 @Entity
 public class Usuario implements Serializable {
 
@@ -47,6 +63,18 @@ public class Usuario implements Serializable {
     
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private AjustesUsuario ajustes;
+    
+    @Column(nullable = true)
+    private Date fechaRegistro = new Date();
+    
+    
+    public Date getFechaRegistro() {
+        return fechaRegistro;
+    }
+
+    public void setFechaRegistro(Date fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
+    }
 
     public Boolean getActive() {
         return active;
