@@ -119,7 +119,6 @@ public class crearEtiquetaController implements Initializable {
         tipoPantallaProperty.addListener((observable, oldValue, newValue) -> {
             if (newValue == "Modificar Etiqueta") {
 
-                System.out.println("Modificar Usuario");
                 tipoPantalla = newValue;
                 textTitulo.setText(newValue);
                 ingresarEtiqueta.setText("Guardar Cambios");
@@ -138,7 +137,6 @@ public class crearEtiquetaController implements Initializable {
                     }
                 }
             } else if (newValue == "Crear Usuario") {
-                System.out.println("Crear Usuario");
                 tipoPantalla = newValue;
                 textTitulo.setText(newValue);
             }
@@ -163,7 +161,6 @@ public class crearEtiquetaController implements Initializable {
     @FXML
     private void clickVerificar(ActionEvent event) {
         if(!textEtiquetaPadre.getText().equals("")){
-            System.out.println("prueba");
             boolean exist = EtiquetaController.getInstance().existeEtiqueta(textEtiquetaPadre.getText());
             if(exist){
                 Alert alert = new Alert(AlertType.ERROR);
@@ -219,7 +216,6 @@ public class crearEtiquetaController implements Initializable {
         if (selectedIndex >= 0) {
             // Eliminar el elemento seleccionado de la lista
             listaSubEtiquetas.getItems().remove(selectedIndex);
-            System.out.println("Elemento eliminado: " + selectedIndex);
         } else {
              Alert alert = new Alert(AlertType.WARNING);
                 alert.setTitle("Información");
@@ -241,7 +237,6 @@ public class crearEtiquetaController implements Initializable {
             
             if (items != null) {
             for (String item : items) {
-                System.out.println(item);
                 if (item.equals(textEtiquetaPadre.getText())) {
                     Alert alert = new Alert(AlertType.ERROR);
                     alert.setTitle("Información");
@@ -318,16 +313,12 @@ public class crearEtiquetaController implements Initializable {
                 Conexion.getInstance().getEntity().refresh(padre);
             }
             actualizarArbol();
-        } else {
-            System.out.println("etiqueta no eliminada");
         }
-        
     }
     
     private void borrarEtiqueta(TreeItem<String> item) {
         item.getChildren().forEach(child -> borrarEtiqueta(child));
-        // Aquí implementa tu lógica de eliminación para el item
-        System.out.println("Eliminando etiqueta: " + item.getValue());
+        
         Etiqueta etiqueta;
         etiqueta = EtiquetaController.getInstance().obtenerEtiqueta(item.getValue());
         Conexion.getInstance().eliminar(etiqueta);
