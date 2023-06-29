@@ -24,6 +24,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Temporal;
+import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 /**
  *
@@ -43,7 +44,8 @@ import javax.persistence.Temporal;
 @Entity
 public class Solucion implements Serializable {
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+
+    @ManyToMany(cascade={CascadeType.ALL})
     private List<Etiqueta> etiquetas;
     
     @ManyToOne
@@ -52,7 +54,7 @@ public class Solucion implements Serializable {
     @ManyToOne
     private Usuario usuario;
     
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(cascade={CascadeType.ALL})
     private List<Archivo> archivos;
 
    

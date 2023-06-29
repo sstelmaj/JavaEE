@@ -91,6 +91,7 @@ import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.NumberBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -559,12 +560,16 @@ public class SubirErrorController implements Initializable {
         obtenerEtiquetasDescripcion();
          error.setDescripcion(textDescripcion.getText());
             try { 
-            Conexion.getInstance().merge(error);
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                        alert.setTitle("Información");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Se ha creado el error con exito!");
-                        alert.showAndWait();
+                Conexion.getInstance().merge(error);
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                            alert.setTitle("Información");
+                            alert.setHeaderText(null);
+                            alert.setContentText("Se ha creado el error con exito!");
+                            alert.showAndWait();
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("/fxml/PaginaErrores.fxml"));
+                Parent nuevaVista = loader.load();
+                this.panelContent.getChildren().setAll(nuevaVista);
             } catch (Exception e) {
                 // Manejo de la excepción
                 e.printStackTrace();

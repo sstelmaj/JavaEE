@@ -79,6 +79,7 @@
          </children>
       </AnchorPane>
       <Text fx:id="txtFechaSolucion" layoutX="691.0" layoutY="641.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fecha de subida: " />
-      <Text fx:id="txtUsosSolucion" layoutX="1064.0" layoutY="640.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+      <Text fx:id="txtUsosSolucion" layoutX="1064.0" layoutY="641.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+      <Button fx:id="btnValorar" layoutX="1214.0" layoutY="619.0" mnemonicParsing="false" onMouseClicked="#sumarPunto" text="Valorar" />
    </children>
 </AnchorPane>

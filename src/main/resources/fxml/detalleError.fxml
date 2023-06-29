@@ -112,7 +112,7 @@
       </AnchorPane>
       <AnchorPane layoutX="828.0" layoutY="66.0" prefHeight="597.0" prefWidth="461.0">
          <children>
-            <ScrollPane layoutY="103.0" prefHeight="476.0" prefWidth="399.0">
+            <ScrollPane layoutX="14.0" layoutY="99.0" prefHeight="476.0" prefWidth="399.0">
               <content>
                 <AnchorPane fx:id="anchPaneLista" minHeight="0.0" minWidth="0.0" prefHeight="476.0" prefWidth="397.0">
                      <children>
@@ -127,6 +127,7 @@
             <HBox fx:id="buscador" layoutX="2.0" layoutY="68.0" prefHeight="31.0" prefWidth="355.0" />
             <Text layoutX="14.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Etiquetas" />
             <Text layoutX="183.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Subetiquetas" />
+            <Button fx:id="btnAgregarSolucion" layoutX="278.0" layoutY="586.0" mnemonicParsing="false" onMouseClicked="#agregarSolucion" text="Agregar Solucion" />
          </children>
       </AnchorPane>
       <Text layoutX="957.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Soluciones">
@@ -140,5 +141,6 @@
          </font>
       </Text>
       <Text fx:id="txtFechaModif" layoutX="66.0" layoutY="669.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ultima modificación: " />
+      <Button fx:id="btnModificarError" layoutX="585.0" layoutY="647.0" mnemonicParsing="false" onMouseClicked="#modificarError" text="Modificar error" />
    </children>
 </AnchorPane>
