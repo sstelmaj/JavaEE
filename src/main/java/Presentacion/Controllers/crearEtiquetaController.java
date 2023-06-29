@@ -314,7 +314,9 @@ public class crearEtiquetaController implements Initializable {
         boolean eliminarEtiqueta = ConfirmationDialog.show("¿Seguro que desea eliminar la etiqueta y sus sub-etiquetas? Se eliminará la/s etiqueta/s en aquellos errores y soluciones que la/s tengan.", "Confirmacion");
         if (eliminarEtiqueta) {
             borrarEtiqueta(seleccionado);
-            Conexion.getInstance().getEntity().refresh(padre);
+            if (padre!=null){
+                Conexion.getInstance().getEntity().refresh(padre);
+            }
             actualizarArbol();
         } else {
             System.out.println("etiqueta no eliminada");
