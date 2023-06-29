@@ -5,6 +5,7 @@
 package Presentacion.Controllers;
 
 import Logica.Clases.Etiqueta;
+import Logica.Clases.Solucion;
 import Logica.Clases.Usuario;
 import Logica.Controladores.EtiquetaController;
 import Persistencia.Conexion;
@@ -150,7 +151,7 @@ public class crearEtiquetaController implements Initializable {
     @FXML
     private void clickIngresarEtiqueta(ActionEvent event) {
         if(EtiquetaController.getInstance().existeEtiqueta(textEtiquetaPadre.getText())){
-            boolean agregarSubEtiquetas = ConfirmationDialog.show("La etiqueta padre ya existe. ¿Desea agregar las sub-etiquetas?");
+            boolean agregarSubEtiquetas = ConfirmationDialog.show("La etiqueta padre ya existe. ¿Desea agregar las sub-etiquetas?", "Confirmacion");
             if (agregarSubEtiquetas) {
                 agregarEtiquetas(true);
             } 
@@ -264,7 +265,6 @@ public class crearEtiquetaController implements Initializable {
             alert.setHeaderText(null);
             alert.setContentText("Se ha creado la etiqueta con exito!");
             alert.showAndWait();
-            System.out.println("sube la etiqueta con las sub etiquetas");
             actualizarArbol();
             listaSubEtiquetas.getItems().clear();
             textEtiquetaPadre.clear();
@@ -306,15 +306,29 @@ public class crearEtiquetaController implements Initializable {
         TreeView treeView = arbolEtiquetas;
 
         TreeItem<String> seleccionado = (TreeItem<String>) treeView.getSelectionModel().getSelectedItem();
-        String etiqueta = seleccionado.getValue();
+        String nombre_etiqueta = seleccionado.getValue();
+        Etiqueta et = EtiquetaController.getInstance().obtenerEtiqueta(nombre_etiqueta);
+        Etiqueta padre = EtiquetaController.getInstance().obtenerEtiqueta(et.getPadre());
+        
+        
+        boolean eliminarEtiqueta = ConfirmationDialog.show("¿Seguro que desea eliminar la etiqueta y sus sub-etiquetas? Se eliminará la/s etiqueta/s en aquellos errores y soluciones que la/s tengan.", "Confirmacion");
+        if (eliminarEtiqueta) {
+            borrarEtiqueta(seleccionado);
+            Conexion.getInstance().getEntity().refresh(padre);
+            actualizarArbol();
+        } else {
+            System.out.println("etiqueta no eliminada");
+        }
         
     }
-    
     
     private void borrarEtiqueta(TreeItem<String> item) {
         item.getChildren().forEach(child -> borrarEtiqueta(child));
         // Aquí implementa tu lógica de eliminación para el item
         System.out.println("Eliminando etiqueta: " + item.getValue());
+        Etiqueta etiqueta;
+        etiqueta = EtiquetaController.getInstance().obtenerEtiqueta(item.getValue());
+        Conexion.getInstance().eliminar(etiqueta);
     }
     
 }

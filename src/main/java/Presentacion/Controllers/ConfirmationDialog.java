@@ -22,8 +22,9 @@ public class ConfirmationDialog extends Dialog<Boolean> {
         setResultConverter(buttonType -> buttonType == ButtonType.YES);
     }
     
-    public static boolean show(String message) {
-        ConfirmationDialog dialog = new ConfirmationDialog(message);
+    public static boolean show(String mensaje, String titulo) {
+        ConfirmationDialog dialog = new ConfirmationDialog(mensaje);
+        dialog.setTitle(titulo);
         return dialog.showAndWait().orElse(false);
     }
 }

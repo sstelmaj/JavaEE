@@ -168,5 +168,24 @@ public class EtiquetaController {
     return resultado;
     }
     
+    public Etiqueta obtenerEtiquetaPadre(String nombre_etiqueta){
+        Etiqueta etiqueta=null;
+        Object resultado = null;
+        EntityManager em= Conexion.getInstance().getEntity(); ;
+        em.getTransaction().begin();
+        try{
+            Query q = em.createNativeQuery("SELECT E.* from etiqueta_etiqueta as EE, etiqueta AS E where EE.sub_etiqueta_NOMBRE = E.NOMBRE AND sub_etiqueta_NOMBRE='"+nombre_etiqueta+"'", Etiqueta.class);
+            resultado=q.getSingleResult();
+            em.getTransaction().commit();  
+        }catch(Exception e){
+            em.getTransaction().rollback();
+        }
+        if(resultado!=null){
+            etiqueta = (Etiqueta) resultado;
+            System.out.println("funciona");
+        }
+      return etiqueta;  
+    }
+    
 
 }

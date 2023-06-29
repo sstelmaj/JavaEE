@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 
 //ESTO A LA LARGA PUEDE LLEGAR A SER UNA CLASE SI QUEREMOS AGREGAR MAS CATEGORIAS DE FORMA DINAMICA
@@ -27,6 +28,7 @@ import javax.persistence.OneToMany;
  *
  * @author Usuario
  */
+@CascadeOnDelete
 @Entity
 public class Etiqueta implements Serializable {
 
@@ -48,14 +50,8 @@ public class Etiqueta implements Serializable {
         this.active = active;
     }
     
-
-    
-    
-    
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(orphanRemoval=true, cascade = CascadeType.ALL)
     private List<Etiqueta> sub_etiqueta;
-
-    
 
     public List<Etiqueta> getSub_etiqueta() {
         return sub_etiqueta;
