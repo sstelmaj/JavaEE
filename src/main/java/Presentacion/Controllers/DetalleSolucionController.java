@@ -7,6 +7,7 @@ package Presentacion.Controllers;
 import Logica.Clases.Archivo;
 import Logica.Clases.Solucion;
 import Logica.Controladores.SolucionController;
+import Persistencia.Conexion;
 import Presentacion.PanelCodigoSolucion;
 import java.awt.Desktop;
 import java.awt.Dimension;
@@ -38,6 +39,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -83,10 +85,11 @@ public class DetalleSolucionController implements Initializable {
     @FXML
     private Text txtFechaSolucion;
     
-    private String codigoSol,codigoErr,descripcion;
+    private String codigoSol,codigoErr,descripcion,creador;
     private Date fechaSol;
     private int usosSol;
     private long idSol;
+    private Solucion solucion=null;
     List<Archivo> archivos=null;
     private Button btnBack;
     private Scene escenaPrevia;
@@ -108,6 +111,8 @@ public class DetalleSolucionController implements Initializable {
     private Button prevButton;
     @FXML
     private Button nextButton;
+    @FXML
+    private Button btnValorar;
     
     /**
      * Initializes the controller class.
@@ -128,8 +133,9 @@ public class DetalleSolucionController implements Initializable {
     
     public void initialize(){
         //Obtengo los datos de la solucion
-        Solucion solucion = SolucionController.getInstance().obtenerSolucion(idSol);
+        solucion = SolucionController.getInstance().obtenerSolucion(idSol);
         codigoSol=solucion.getCodigo();
+        creador=solucion.getUsuario().getNombre();
         descripcion=solucion.getDescripcion();
         archivos=solucion.getArchivos();
         fechaSol=solucion.getFechaSubida();
@@ -177,7 +183,14 @@ public class DetalleSolucionController implements Initializable {
                 this.listaArchivos.add(arch);                   
             }
         }
-
+        //Agregar el repositorio y link a la lista de archivos
+            if(solucion.getLink()!=null && !solucion.getLink().isEmpty()){
+                Archivo linkTemp=new Archivo();
+                linkTemp.setUrl(solucion.getLink());
+                linkTemp.setNombre("Link asociado");
+                linkTemp.setExtension("web");
+                this.listaArchivos.add(linkTemp);
+            }
         this.tablaArchivos1.setItems(listaArchivos);
 
         showPage(tablaArchivos);
@@ -201,7 +214,7 @@ public class DetalleSolucionController implements Initializable {
 
         //Cargar datos en panel de detalles
         Text tituloDetalles=new Text("Estos son los detalles de la solucion \n");
-        Text detalles=new Text("Creado por: Persona 1 \nDescripcion: "+descripcion);
+        Text detalles=new Text("Creado por: "+this.creador+"\nDescripcion: "+descripcion);
         tituloDetalles.setFill(Color.BLACK);
         tituloDetalles.setFont(Font.font("Helvetica", FontPosture.ITALIC, 19));
         detalles.setFill(Color.GRAY);
@@ -314,5 +327,14 @@ public class DetalleSolucionController implements Initializable {
 
     private int getNumPages() {
         return (int) Math.ceil((double) this.listaImagenes.size() / this.imagenesPorPagina);
+    }
+
+    @FXML
+    private void sumarPunto(MouseEvent event) {
+        this.usosSol++;
+        this.solucion.setPuntos(this.usosSol);
+        Conexion.getInstance().merge(this.solucion);
+        this.txtUsosSolucion.setText("Usos: "+usosSol);
+        this.btnValorar.setDisable(true);
     }
 }

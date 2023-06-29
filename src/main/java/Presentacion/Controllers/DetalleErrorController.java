@@ -12,6 +12,7 @@ import Logica.Clases.Nota;
 import Logica.Controladores.ErrorController;
 import Logica.Controladores.EtiquetaController;
 import Persistencia.Conexion;
+import Persistencia.Sesion;
 import Presentacion.Componentes.ItemNota;
 import Presentacion.PanelCodigoSolucion;
 import java.awt.Desktop;
@@ -32,6 +33,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -114,7 +116,7 @@ public class DetalleErrorController implements Initializable {
     private GridPane tablaImagenes;
     
     private Error error;
-    private String descripcion,codigo,consola;
+    private String descripcion,codigo,consola,creador;
     private Date fechaModif;
     private List<Archivo> archivos;
 
@@ -160,6 +162,10 @@ public class DetalleErrorController implements Initializable {
     private Button prevButton;
     @FXML
     private Button nextButton;
+    @FXML
+    private Button btnAgregarSolucion;
+    @FXML
+    private Button btnModificarError;
 
     public Error getErrorDetalle() {
         return errorDetalle;
@@ -195,6 +201,7 @@ public class DetalleErrorController implements Initializable {
             allEtiquetas=EtiquetaController.getInstance().listaEtiquetas();
                 this.descripcion=error.getDescripcion();
                 this.codigo=error.getCodigo();
+                this.creador=error.getUsuario().getNombre();
                 this.consola=error.getConsola();
                 this.archivos=error.getArchivos();
                 this.fechaModif=error.getFechaSubida();
@@ -232,7 +239,23 @@ public class DetalleErrorController implements Initializable {
                     this.listaArchivos.add(arch);                   
                 }               
             }
+            //Agregar el repositorio y link a la lista de archivos
+            if(error.getLink()!=null && !error.getLink().isEmpty()){
+                Archivo linkTemp=new Archivo();
+                linkTemp.setUrl(error.getLink());
+                linkTemp.setNombre("Link asociado");
+                linkTemp.setExtension("web");
+                this.listaArchivos.add(linkTemp);
+            }
+            if(error.getRepositorio()!=null && !error.getRepositorio().isEmpty()){
+                Archivo linkTemp=new Archivo();
+                linkTemp.setUrl(error.getRepositorio());
+                linkTemp.setNombre("Repositorio");
+                linkTemp.setExtension("web");
+                this.listaArchivos.add(linkTemp);
+            }
             this.tablaArchivos.setItems(listaArchivos);
+            
             //Panel de imagenes
             showPage(tablaImagenes);
             //Button prevButton = new Button("Anterior");
@@ -273,7 +296,7 @@ public class DetalleErrorController implements Initializable {
                 //Cargar datos en panel de descripcion y consola
                 Text tituloDescripcion=new Text("Descripcion del error \n");
                 tituloDescripcion.getStyleClass().add("titulos");
-                Text txtDescripcion=new Text("Creado por: Persona 1 \nDescripcion: "+descripcion);
+                Text txtDescripcion=new Text("Creado por: "+creador+ "\nDescripcion: "+descripcion);
                 //tituloDescripcion.setFill(Color.BLACK);
                 //tituloDescripcion.setFont(Font.font("Helvetica", FontPosture.ITALIC, 19));
                 txtDescripcion.setFill(Color.GRAY);
@@ -311,8 +334,10 @@ public class DetalleErrorController implements Initializable {
                 }  
             }
 
-            //PANEL DE ENLACES EXTERNOS
-
+            //BOTON MODIFICAR ERROR
+            if(!Objects.equals(Sesion.getInstance().getUsuario().getId(), error.getUsuario().getId())){
+                this.btnModificarError.setDisable(true);
+            }
 
             //FILTRADO DE SOLUCIONES
             filtrarSoluciones();
@@ -371,11 +396,12 @@ private void filtrarSoluciones(){
             
             if(contieneTodos){
                 try {
+                    String displayedText=this.cortarDescripcion(sol.getDescripcion());
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/busquedaSolucion.fxml"));
                     Parent subfileRoot = loader.load();
                     // Obtén el controlador del archivo subfile.fxml
                     BusquedaSolucionController subfileController = loader.getController();
-                    subfileController.setDatos("Solucion de ejemplo", sol.getDescripcion(), sol.getId(), this.dashboard, sol.getEtiquetas());
+                    subfileController.setDatos("Solucion", displayedText, sol.getId(), this.dashboard, sol.getEtiquetas());
                     subfileController.initialize();
 
                     lista.getChildren().add(subfileRoot);
@@ -510,11 +536,71 @@ private void filtrarSoluciones(){
                 }
             }else{
                 try {
-                        Desktop.getDesktop().browse(new URI(archivoTemp.getUrl()));
-                    }catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
+                    Desktop.getDesktop().browse(new URI(archivoTemp.getUrl()));
+                }catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
         }
+    }
+
+    @FXML
+    private void agregarSolucion(MouseEvent event) {
+        FXMLLoader loader = new FXMLLoader();
+        try {
+                 loader.setLocation(getClass().getResource("/fxml/subirSolucion.fxml"));
+                 Parent nuevaVista = loader.load();
+                 SubirSolucionController subirSolucionController=(SubirSolucionController)loader.getController();
+                 
+                 subirSolucionController.setErrorAsociado(this.error);
+                 
+                 DashboardController dashboardController = DashboardController.getInstance();
+                 dashboardController.setControladorAnterior(this);
+                // dashboardController.setControladorSiguiente();
+                 
+                 dashboardController.getAnchorPane().getChildren().setAll(nuevaVista);
+             } catch (IOException ex) {
+                 System.out.println(ex);
+             }
+    }
+
+    @FXML
+    private void modificarError(MouseEvent event) {
+        FXMLLoader loader = new FXMLLoader();
+        try {
+                 loader.setLocation(getClass().getResource("/fxml/subirError.fxml"));
+                 Parent nuevaVista = loader.load();
+                 SubirErrorController subirErrorController=(SubirErrorController)loader.getController();
+                 
+                 subirErrorController.setErrorModificar(this.error);
+                 subirErrorController.setTipoPantalla("Modificar Error");
+                 subirErrorController.setPanelContent(this.getAnchPaneGeneral());
+                 
+                 DashboardController dashboardController = DashboardController.getInstance();
+                 dashboardController.setControladorAnterior(this);
+                // dashboardController.setControladorSiguiente();
+                 
+                 dashboardController.getAnchorPane().getChildren().setAll(nuevaVista);
+             } catch (IOException ex) {
+                 System.out.println(ex);
+        }
+    }
+    
+    private String cortarDescripcion(String descripcion){
+    // Obtener la posición de la cadena ingresada en el texto original
+        int startIndex = 0;
+
+        // Calcular los índices de inicio y fin para mostrar una porción del texto original
+        int maxDisplayedLength = 40; // Cantidad máxima de caracteres a mostrar
+        int textLength = descripcion.length();
+
+        int endIndex = Math.min(startIndex + maxDisplayedLength, textLength);
+        startIndex = Math.max(endIndex - maxDisplayedLength, 0);
+
+        String displayedText = descripcion.substring(startIndex, endIndex);
+        displayedText= displayedText.replaceAll("\\r?\\n", " ");
+
+        // Actualizar el texto del Label con la porción correspondiente
+        return displayedText;
     }
 }
