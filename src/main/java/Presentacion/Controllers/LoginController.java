@@ -49,8 +49,8 @@ public class LoginController implements Initializable {
     
     public void login(ActionEvent event) throws IOException {
       
-        usernameField.setText("martinperez2@gmail.com");
-        passwordField.setText("Joaco21");
+        usernameField.setText("paulo");
+        passwordField.setText("1234");
         
         String mail = usernameField.getText();
         String password = passwordField.getText();

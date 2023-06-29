@@ -78,56 +78,47 @@ public class PaginaErroresController implements Initializable {
         String seleccionFramework = (String) comboFramework.getValue();
 
         if(this.listaEtiquetas.getItems()!=null){
-        // Verificar si se han seleccionado valores en ambos ComboBoxes
-        /*if (seleccionSo != null || seleccionFramework != null) {
-            if(seleccionSo!=null && !seleccionSo.equals("Ninguno")){
-                this.valores.add(seleccionSo.trim());
-            }
-            
-            if(seleccionFramework!=null && !seleccionFramework.equals("Ninguno")){
-               // valores.add(seleccionFramework);
-               this.valores.add(seleccionFramework.trim());
-            }
-           */
-       //     valores.add("Angular");
-       if(this.valores.isEmpty()){
-           if(erroresBusqueda !=null){
-                listaErrores.getItems().clear(); 
-                for (Logica.Clases.Error error : erroresBusqueda) {
-                    ItemLista item = new ItemLista("Error",this);
-                    item.getStylesheets().add(getClass().getResource("/styles/detalles.css").toExternalForm());
-                    item.setError(error);
-                    item.setTitulo(error.getTitulo());
-                    item.setEtiquetas(error.getEtiquetas());
-                    item.setTxtDescripcion(error.getDescripcion());
-                    listaErrores.getItems().add(item);
-                }
-            }
+            if(this.valores.isEmpty()){
+                if(erroresBusqueda !=null){
+                     listaErrores.getItems().clear(); 
+                     for (Logica.Clases.Error error : erroresBusqueda) {
+                         // Obtener la parte del texto original que coincide con el texto ingresado
+                         //String displayedText = error.getDescripcion().substring(0, Math.min(error.getDescripcion().length(), this.txtBuscador.getText().length()));
+                         String displayedText= this.cortarDescripcion(this.txtBuscador.getText(),error.getDescripcion());
+                         ItemLista item = new ItemLista("Error",this);
+                         item.getStylesheets().add(getClass().getResource("/styles/detalles.css").toExternalForm());
+                         item.setError(error);
+                         item.setTitulo(error.getTitulo());
+                         item.setEtiquetas(error.getEtiquetas());
+                         item.setTxtDescripcion(displayedText);
+                         listaErrores.getItems().add(item);
+                     }
+                 }
            //listaErrores.getItems().setAll(errores);
            //this.valores.clear();
-       }else{
-            List<Logica.Clases.Error> errores = ErrorController.getInstance().filtradoErroresPorEtiquetas(valores);
-            System.out.println(errores.size());
-            //this.valores.clear();
-            // Actualizar la lista de errores en el ListView
-            if(errores != null){
-                listaErrores.getItems().clear(); 
-                for (Logica.Clases.Error error : errores) {
-                    if(erroresBusqueda!= null && erroresBusqueda.contains(error)){
-                        ItemLista item = new ItemLista("Error",this);
-                        item.getStylesheets().add(getClass().getResource("/styles/detalles.css").toExternalForm());
-                        item.setError(error);
-                        item.setTitulo(error.getTitulo());
-                        item.setEtiquetas(error.getEtiquetas());
-                        item.setTxtDescripcion(error.getDescripcion());
-                        listaErrores.getItems().add(item);
+            }else{
+                List<Logica.Clases.Error> errores = ErrorController.getInstance().filtradoErroresPorEtiquetas(valores);
+                System.out.println(errores.size());
+                //this.valores.clear();
+                // Actualizar la lista de errores en el ListView
+                if(errores != null){
+                    listaErrores.getItems().clear(); 
+                    for (Logica.Clases.Error error : errores) {
+                        //String displayedText = error.getDescripcion().substring(0, Math.min(error.getDescripcion().length(), this.txtBuscador.getText().length()));
+                        String displayedText= this.cortarDescripcion(this.txtBuscador.getText(),error.getDescripcion());
+                        if(erroresBusqueda!= null && erroresBusqueda.contains(error)){
+                            ItemLista item = new ItemLista("Error",this);
+                            item.getStylesheets().add(getClass().getResource("/styles/detalles.css").toExternalForm());
+                            item.setError(error);
+                            item.setTitulo(error.getTitulo());
+                            item.setEtiquetas(error.getEtiquetas());
+                            item.setTxtDescripcion(displayedText);
+                            listaErrores.getItems().add(item);
+                        }
                     }
+                //listaErrores.getItems().setAll(errores);
                 }
-            //listaErrores.getItems().setAll(errores);
-            }
-       }
-           
-            
+            }   
         }
     }
         
@@ -165,6 +156,29 @@ public class PaginaErroresController implements Initializable {
         this.listaEtiquetas.getItems().remove(etiqueta);
         this.valores.remove(etiqueta.getText());
         filtrarErrores();
+    }
+    
+    private String cortarDescripcion(String buscador,String descripcion){
+    // Obtener la posición de la cadena ingresada en el texto original
+            int startIndex = descripcion.indexOf(buscador);
+
+            if (startIndex != -1) {
+                // Calcular los índices de inicio y fin para mostrar una porción del texto original
+                int maxDisplayedLength = 50; // Cantidad máxima de caracteres a mostrar
+                int textLength = descripcion.length();
+
+                int endIndex = Math.min(startIndex + maxDisplayedLength + 10, textLength);
+                startIndex = Math.max(endIndex - maxDisplayedLength - 10, 0);
+
+                // Obtener la porción del texto original que contiene la cadena ingresada en el centro
+                String displayedText = descripcion.substring(startIndex, endIndex);
+
+                // Actualizar el texto del Label con la porción correspondiente
+                return displayedText;
+            }else{
+                String displayedText = descripcion.substring(0, 20);
+                return displayedText;
+            }
     }
     
 }

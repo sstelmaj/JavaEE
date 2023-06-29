@@ -160,6 +160,8 @@ public class DetalleErrorController implements Initializable {
     private Button prevButton;
     @FXML
     private Button nextButton;
+    @FXML
+    private Button btnAgregarSolucion;
 
     public Error getErrorDetalle() {
         return errorDetalle;
@@ -232,7 +234,23 @@ public class DetalleErrorController implements Initializable {
                     this.listaArchivos.add(arch);                   
                 }               
             }
+            //Agregar el repositorio y link a la lista de archivos
+            if(error.getLink()!=null && !error.getLink().isEmpty()){
+                Archivo linkTemp=new Archivo();
+                linkTemp.setUrl(error.getLink());
+                linkTemp.setNombre("Link asociado");
+                linkTemp.setExtension("web");
+                this.listaArchivos.add(linkTemp);
+            }
+            if(error.getRepositorio()!=null && !error.getRepositorio().isEmpty()){
+                Archivo linkTemp=new Archivo();
+                linkTemp.setUrl(error.getRepositorio());
+                linkTemp.setNombre("Repositorio");
+                linkTemp.setExtension("web");
+                this.listaArchivos.add(linkTemp);
+            }
             this.tablaArchivos.setItems(listaArchivos);
+            
             //Panel de imagenes
             showPage(tablaImagenes);
             //Button prevButton = new Button("Anterior");
@@ -510,11 +528,53 @@ private void filtrarSoluciones(){
                 }
             }else{
                 try {
-                        Desktop.getDesktop().browse(new URI(archivoTemp.getUrl()));
-                    }catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
+                    Desktop.getDesktop().browse(new URI(archivoTemp.getUrl()));
+                }catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
+        }
+    }
+
+    @FXML
+    private void agregarSolucion(MouseEvent event) {
+        FXMLLoader loader = new FXMLLoader();
+        try {
+                 loader.setLocation(getClass().getResource("/fxml/subirSolucion.fxml"));
+                 Parent nuevaVista = loader.load();
+                 SubirSolucionController subirSolucionController=(SubirSolucionController)loader.getController();
+                 
+                 subirSolucionController.setErrorAsociado(this.error);
+                 
+                 DashboardController dashboardController = DashboardController.getInstance();
+                 dashboardController.setControladorAnterior(this);
+                // dashboardController.setControladorSiguiente();
+                 
+                 dashboardController.getAnchorPane().getChildren().setAll(nuevaVista);
+             } catch (IOException ex) {
+                 System.out.println(ex);
+             }
+    }
+
+    @FXML
+    private void modificarError(MouseEvent event) {
+        FXMLLoader loader = new FXMLLoader();
+        try {
+                 loader.setLocation(getClass().getResource("/fxml/subirError.fxml"));
+                 Parent nuevaVista = loader.load();
+                 SubirErrorController subirErrorController=(SubirErrorController)loader.getController();
+                 
+                 subirErrorController.setErrorModificar(this.error);
+                 subirErrorController.setTipoPantalla("Modificar Error");
+                 subirErrorController.setPanelContent(this.getAnchPaneGeneral());
+                 
+                 DashboardController dashboardController = DashboardController.getInstance();
+                 dashboardController.setControladorAnterior(this);
+                // dashboardController.setControladorSiguiente();
+                 
+                 dashboardController.getAnchorPane().getChildren().setAll(nuevaVista);
+             } catch (IOException ex) {
+                 System.out.println(ex);
         }
     }
 }

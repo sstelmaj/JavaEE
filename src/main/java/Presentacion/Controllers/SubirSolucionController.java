@@ -180,6 +180,10 @@ public class SubirSolucionController implements Initializable {
         tipoPantallaProperty.set(tipoPantalla);
     }
     
+    public final void setErrorAsociado(Logica.Clases.Error error){
+        this.error=error;
+    }
+    
     public final void setSolucionModificar(Solucion solucion) {
         this.solucionModificar = solucion;
     }
@@ -383,8 +387,9 @@ public class SubirSolucionController implements Initializable {
         }
         
         if(!tipoPantalla.equals("Solucion Asociada")){
-            List<Logica.Clases.Error> errores = ErrorController.getInstance().listaErrores(new ArrayList(),"201");
-               crear_solucion.setError(errores.get(0));
+            /*List<Logica.Clases.Error> errores = ErrorController.getInstance().listaErrores(new ArrayList(),"201");
+               crear_solucion.setError(errores.get(0));*/
+            crear_solucion.setError(this.error);
          }
     
         crear_solucion.setDescripcion(textDescripcion.getText());
@@ -427,6 +432,9 @@ public class SubirSolucionController implements Initializable {
                         alert.setHeaderText(null);
                         alert.setContentText("Se ha creado la solucion con exito!");
                         alert.showAndWait();
+                        System.out.println("Soluciones antes: "+this.error.getSoluciones().size());
+                        Conexion.getInstance().refresh(this.error);
+                        System.out.println("Soluciones despues: "+this.error.getSoluciones().size());
             } catch (Exception e) {
                 // Manejo de la excepción
                 e.printStackTrace();
