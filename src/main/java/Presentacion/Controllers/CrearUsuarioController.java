@@ -34,6 +34,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 
 /**
@@ -92,6 +93,8 @@ public class CrearUsuarioController implements Initializable {
     private Tooltip toolPass1;
     @FXML
     private Tooltip toolPass2;
+    @FXML
+    private AnchorPane root;
     
     public void setDashboard(DashboardController dash){
         this.dash = dash;
@@ -111,6 +114,10 @@ public class CrearUsuarioController implements Initializable {
     
     public final void setUsuarioModificar(Usuario usuario) {
         this.usuarioModificar = usuario;
+    }
+    
+    public AnchorPane getRoot() {
+        return root;
     }
     
     private Long idtemporal;

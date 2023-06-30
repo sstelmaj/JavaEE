@@ -71,7 +71,7 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <Button layoutX="52.0" layoutY="159.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="63.0" text="Cancelar" />
+            <Button fx:id="btnCancelarAjustes" layoutX="52.0" layoutY="159.0" mnemonicParsing="false" onAction="#cancelarAjustes" prefHeight="25.0" prefWidth="63.0" text="Cancelar" />
             <Label layoutX="94.0" layoutY="20.0" text="Ajustes">
                <font>
                   <Font size="24.0" />

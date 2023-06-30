@@ -16,10 +16,11 @@
       <ComboBox fx:id="selectorVista" layoutX="18.0" layoutY="234.0" prefHeight="25.0" prefWidth="113.0" promptText="Vistas" />
       <Button fx:id="botonAtras" layoutX="161.0" layoutY="20.0" mnemonicParsing="false" onAction="#clickAtras" text="Atras" />
       <Button fx:id="botonAdelante" layoutX="214.0" layoutY="20.0" mnemonicParsing="false" onAction="#clickAdelante" text="Adelante" />
-      <Button fx:id="botonErrores" layoutX="542.0" layoutY="14.0" mnemonicParsing="false" onAction="#clickErrores" prefHeight="37.0" prefWidth="72.0" text="Errores" />
-      <Button fx:id="botonSoluciones" layoutX="632.0" layoutY="14.0" mnemonicParsing="false" onAction="#clickSoluciones" prefHeight="37.0" prefWidth="83.0" text="Soluciones" />
+      <Button fx:id="botonErrores" layoutX="557.0" layoutY="14.0" mnemonicParsing="false" onAction="#clickErrores" prefHeight="37.0" prefWidth="100.0" text="Importar Datos" />
+      <Button fx:id="botonSoluciones" layoutX="672.0" layoutY="14.0" mnemonicParsing="false" onAction="#clickSoluciones" prefHeight="37.0" prefWidth="100.0" text="Exportar Datos" />
       <Button fx:id="botonCerrarSesion" layoutX="951.0" layoutY="14.0" mnemonicParsing="false" onAction="#cerrarSesion" prefHeight="37.0" prefWidth="92.0" text="Cerrar Session" />
-      <Button fx:id="botonInicio" layoutX="449.0" layoutY="14.0" mnemonicParsing="false" onAction="#clickInicio" prefHeight="37.0" prefWidth="72.0" text="Inicio" />
+      <Button fx:id="botonInicio" layoutX="318.0" layoutY="14.0" mnemonicParsing="false" onAction="#clickInicio" prefHeight="37.0" prefWidth="72.0" text="Inicio" />
       <Button fx:id="botonAjustes" layoutX="865.0" layoutY="14.0" mnemonicParsing="false" onAction="#clickAjustes" prefHeight="37.0" prefWidth="72.0" text="Ajustes" />
+      <Button fx:id="btnGestionar" layoutX="411.0" layoutY="14.0" mnemonicParsing="false" onAction="#clickGestionar" prefHeight="37.0" prefWidth="129.0" text="Gestionar Usuarios" />
    </children>
 </AnchorPane>

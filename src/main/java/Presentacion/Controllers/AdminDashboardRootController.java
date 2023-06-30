@@ -33,6 +33,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -40,6 +41,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
@@ -89,6 +91,8 @@ public class AdminDashboardRootController implements Initializable {
     private Button botonAjustes;
     
     private Stage stage;
+    @FXML
+    private Button btnGestionar;
 
     public Stage getStage() {
         return stage;
@@ -161,9 +165,9 @@ public class AdminDashboardRootController implements Initializable {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/fxml/AdminDashboard.fxml"));
             Parent nuevaVista = loader.load();
-            AdminDashboardController inicioController = (AdminDashboardController)loader.getController();
+            AdminDashboardController dashController = (AdminDashboardController)loader.getController();
         //    subirErrorController.setPantalla("Subir Error");
-            
+            dashController.setPanelContent(contentAPane);
             contentAPane.getChildren().setAll(nuevaVista);
          
           
@@ -374,9 +378,9 @@ public class AdminDashboardRootController implements Initializable {
     @FXML
     private void clickAtras(ActionEvent event) {
         if(this.controladorAnterior != null){
-            if (this.controladorAnterior instanceof PruebaFiltradoController) {
+            if (this.controladorAnterior instanceof AdminUsuariosController) {
                 // El objeto es una instancia de la clase SubirErrorController
-                PruebaFiltradoController pruebaFiltradoController = (PruebaFiltradoController) this.controladorAnterior;
+                AdminUsuariosController pruebaFiltradoController = (AdminUsuariosController) this.controladorAnterior;
                 
                  contentAPane.getChildren().setAll(pruebaFiltradoController.getRoot());
                 // Realiza las acciones deseadas con el controlador
@@ -388,11 +392,11 @@ public class AdminDashboardRootController implements Initializable {
     @FXML
     private void clickAdelante(ActionEvent event) {
         if(this.controladorSiguiente != null){
-            if (this.controladorSiguiente instanceof DetalleErrorController) {
+            if (this.controladorSiguiente instanceof CrearUsuarioController) {
                 // El objeto es una instancia de la clase SubirErrorController
-                DetalleErrorController detalleErrorController = (DetalleErrorController) this.controladorSiguiente;
+                CrearUsuarioController detalleErrorController = (CrearUsuarioController) this.controladorSiguiente;
                 
-                 contentAPane.getChildren().setAll(detalleErrorController.getAnchPaneGeneral());
+                 contentAPane.getChildren().setAll(detalleErrorController.getRoot());
                 // Realiza las acciones deseadas con el controlador
             }
            
@@ -439,12 +443,13 @@ public class AdminDashboardRootController implements Initializable {
 
     @FXML
     private void clickInicio(ActionEvent event) throws IOException {
+        
         FXMLLoader loader = new FXMLLoader();
-         loader.setLocation(getClass().getResource("/fxml/inicio.fxml"));
-         Parent nuevaVista = loader.load();
-         InicioController inicioController = (InicioController)loader.getController();
+        loader.setLocation(getClass().getResource("/fxml/AdminDashboard.fxml"));
+        Parent nuevaVista = loader.load();
+        AdminDashboardController dashController = (AdminDashboardController)loader.getController();
         //    subirErrorController.setPantalla("Subir Error");
-        inicioController.setPanelContent(contentAPane);
+         dashController.setPanelContent(contentAPane);
          contentAPane.getChildren().setAll(nuevaVista);
     }
 
@@ -454,6 +459,18 @@ public class AdminDashboardRootController implements Initializable {
          loader.setLocation(getClass().getResource("/fxml/ajustes.fxml"));
          Parent nuevaVista = loader.load();
          contentAPane.getChildren().setAll(nuevaVista);
+    }
+
+    @FXML
+    private void clickGestionar(ActionEvent event) throws IOException {
+        
+       
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AdminGestionarUsuarios.fxml"));
+        Parent nuevaVista = loader.load();
+        contentAPane.getChildren().setAll(nuevaVista);
+          
+         
+       
     }
 
         

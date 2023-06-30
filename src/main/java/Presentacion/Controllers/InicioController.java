@@ -88,6 +88,8 @@ public class InicioController implements Initializable {
     private AjustesUsuario ajustesModificar = Sesion.getInstance().getUsuario().getAjustes();
     
     private Usuario usuarioSesion = Sesion.getInstance().getUsuario();
+    @FXML
+    private Button btnCancelarAjustes;
    
 
     public void setPanelContent(AnchorPane panelContent) {
@@ -323,6 +325,18 @@ public class InicioController implements Initializable {
             imagen.fitHeightProperty().bind(anchorImage.heightProperty());
             
         }
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1), anchorConfig);
+        fadeTransition.setFromValue(1); // Opacidad inicial de 1 (totalmente visible)
+        fadeTransition.setToValue(0); // Opacidad final de 0 (invisible)
+
+        TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(1), anchorConfig);
+        translateTransition.setFromY(0); // Posición inicial en la posición original, abajo
+        translateTransition.setToY(-anchorConfig.getHeight()); // Posición final fuera de la pantalla, arriba
+
+        ParallelTransition parallelTransition = new ParallelTransition(fadeTransition, translateTransition);
+        parallelTransition.setCycleCount(1); // Ejecutar la animación solo una vez
+
+        parallelTransition.play();
         
         
         try { 
@@ -345,6 +359,23 @@ public class InicioController implements Initializable {
 
     @FXML
     private void clickFullHD(ActionEvent event) {
+    }
+
+    @FXML
+    private void cancelarAjustes(ActionEvent event) {
+        
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1), anchorConfig);
+        fadeTransition.setFromValue(1); // Opacidad inicial de 1 (totalmente visible)
+        fadeTransition.setToValue(0); // Opacidad final de 0 (invisible)
+
+        TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(1), anchorConfig);
+        translateTransition.setFromY(0); // Posición inicial en la posición original, abajo
+        translateTransition.setToY(-anchorConfig.getHeight()); // Posición final fuera de la pantalla, arriba
+
+        ParallelTransition parallelTransition = new ParallelTransition(fadeTransition, translateTransition);
+        parallelTransition.setCycleCount(1); // Ejecutar la animación solo una vez
+
+        parallelTransition.play();
     }
     
 }
