@@ -48,7 +48,7 @@ public class ExportarDatosController implements Initializable {
     @FXML
     private AnchorPane container;
     
-    private SimpleDateFormat formatter = new SimpleDateFormat("d/M/yyyy"); 
+    private final SimpleDateFormat formatter = new SimpleDateFormat("d/M/yyyy"); 
     
     
     @Override
@@ -153,10 +153,18 @@ public class ExportarDatosController implements Initializable {
         int rowNum = 1;
         for (Solucion solucion : soluciones) {
             Row row = sheet.createRow(rowNum++);
+            
+            
             row.createCell(0).setCellValue(solucion.getId());
             row.createCell(1).setCellValue(solucion.getCodigo());
-            row.createCell(2).setCellValue(solucion.getDescripcion());
-            row.createCell(3).setCellValue(formatter.format(solucion.getFechaSubida()));
+            
+            if (solucion.getDescripcion() != null){
+                row.createCell(2).setCellValue(solucion.getDescripcion());
+            }
+            
+            if (solucion.getFechaSubida() != null){
+                row.createCell(3).setCellValue(formatter.format(solucion.getFechaSubida()));
+            }
             
             if (solucion.getLink() != null) {
                 row.createCell(4).setCellValue(solucion.getLink());

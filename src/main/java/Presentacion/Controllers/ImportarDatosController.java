@@ -145,6 +145,13 @@ public class ImportarDatosController implements Initializable {
                         alert.setContentText("El error de ID: "+id+" ya existe en la Base de Datos");
                         alert.showAndWait();
                         continue;
+                    } else if (UsuarioController.getInstance().obtenerUsuario(usuarioMail) == null) {
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Aviso!");
+                        alert.setHeaderText(null);
+                        alert.setContentText("El error de ID: "+id+" Debe de tener un usuario que lo crea.");
+                        alert.showAndWait();
+                        continue;
                     }
                     
                     Logica.Clases.Error error = new Logica.Clases.Error();
@@ -162,7 +169,9 @@ public class ImportarDatosController implements Initializable {
                     error.setId(id.longValue());
                     error.setCodigo(codigo);
                     error.setTitulo(titulo);
+                    
                     error.setUsuario(UsuarioController.getInstance().obtenerUsuario(usuarioMail));
+                    
                     error.setActive(Boolean.TRUE);
                     try {
                         Date fecha = formatoOriginal.parse(fechaSubida);

@@ -44,7 +44,7 @@ public class LoginController implements Initializable {
     public void login(ActionEvent event) throws IOException {
       
 
-        usernameField.setText("joaquin.maidana@estudiantes.utec.edu.uy");
+        usernameField.setText("paulo.ruiz@estudiantes.utec.edu.uy");
         passwordField.setText("Passw0rd");
 
         
