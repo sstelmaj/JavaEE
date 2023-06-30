@@ -8,18 +8,14 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentacion.Controllers.AdminDashboardController">
+<AnchorPane id="AnchorPane" fx:id="anchorRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="512.0" prefWidth="1178.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentacion.Controllers.AdminDashboardController">
    <children>
       <Button fx:id="btnImportar" layoutX="751.0" layoutY="35.0" mnemonicParsing="false" text="Importar Datos" />
       <Button fx:id="btnExportar" layoutX="866.0" layoutY="35.0" mnemonicParsing="false" text="Exportar Datos" />
-      <Button fx:id="btnUsuarios" layoutX="36.0" layoutY="35.0" mnemonicParsing="false" onAction="#gotoAdminUsuarios" text="Gestionar Usuarios" />
       <Button fx:id="btnDescargar" layoutX="453.0" layoutY="35.0" mnemonicParsing="false" onAction="#handleDownloadGraphs" text="Descargar Graficas" />
-      <BorderPane fx:id="graphsPane" layoutX="14.0" layoutY="72.0" prefHeight="414.0" prefWidth="972.0">
-         <left>
-            <PieChart fx:id="pieRatio" prefHeight="414.0" prefWidth="370.0" BorderPane.alignment="CENTER" />
-         </left>
-         <right>
-            <LineChart fx:id="lineRecord" prefHeight="414.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+      <AnchorPane fx:id="graphsPane" layoutX="48.0" layoutY="84.0" prefHeight="393.0" prefWidth="1082.0" AnchorPane.bottomAnchor="26.0" AnchorPane.leftAnchor="48.0" AnchorPane.rightAnchor="48.0" AnchorPane.topAnchor="84.0">
+         <children>
+            <LineChart fx:id="lineRecord" layoutX="474.0" layoutY="11.0" prefHeight="389.0" prefWidth="445.0">
               <xAxis>
                 <CategoryAxis fx:id="lineXAxis" side="BOTTOM" />
               </xAxis>
@@ -27,6 +23,8 @@
                 <NumberAxis fx:id="lineYAxis" side="LEFT" />
               </yAxis>
             </LineChart>
-         </right></BorderPane>
+            <PieChart fx:id="pieRatio" layoutX="40.0" layoutY="21.0" prefHeight="359.0" prefWidth="370.0" />
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>

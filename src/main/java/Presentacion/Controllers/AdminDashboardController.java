@@ -8,6 +8,7 @@ import Logica.Controladores.ErrorController;
 import Logica.Controladores.SolucionController;
 import Logica.Controladores.UsuarioController;
 import Logica.DTOs.CantidadPorFecha;
+import Persistencia.Sesion;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -20,6 +21,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -33,7 +35,12 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.WritableImage;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -51,11 +58,9 @@ public class AdminDashboardController implements Initializable {
     @FXML
     private Button btnExportar;
     @FXML
-    private Button btnUsuarios;
-    @FXML
     private Button btnDescargar;
     @FXML
-    private BorderPane graphsPane;
+    private AnchorPane graphsPane;
     @FXML
     private PieChart pieRatio;
     @FXML
@@ -65,10 +70,25 @@ public class AdminDashboardController implements Initializable {
     @FXML
     private NumberAxis lineYAxis;
 
+    private AnchorPane panelContent;
+    @FXML
+    private AnchorPane anchorRoot;
+    
+    private boolean mostrarGraficasInicial = false;
     /**
      * Initializes the controller class.
      */
-    
+    public void setPanelContent(AnchorPane pane) {
+        this.panelContent = pane;
+        //anclamos el anchor de la vista al anchor content por el tema de la jerarquia
+        panelContent.setRightAnchor(anchorRoot, 0.0);
+        panelContent.setLeftAnchor(anchorRoot, 0.0);
+        panelContent.setTopAnchor(anchorRoot, 0.0);
+        panelContent.setBottomAnchor(anchorRoot, 0.0);
+        //   anchor1.setPrefWidth(900);
+
+
+    }
             
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -82,15 +102,49 @@ public class AdminDashboardController implements Initializable {
         
         lineRecord = new LineChart(lineXAxis, lineYAxis);
         lineRecord.setTitle("Publicaciones en 2023");
-        graphsPane.setRight(lineRecord);
+         graphsPane.getChildren().set(0, lineRecord);
+         lineRecord.setLayoutX(580.0);
+         if(Sesion.getInstance().isIsFullHD()){
+             lineRecord.setLayoutX(760.0);
+             lineRecord.setPrefWidth(700.0);
+            lineRecord.setPrefHeight(710.0);
+
+         }
+    //    graphsPane.setRight(lineRecord);
         
         pieRatio = new PieChart();
         pieRatio.setClockwise(true);
         pieRatio.setStartAngle(90);
-        graphsPane.setLeft(pieRatio);
+        graphsPane.getChildren().set(1, pieRatio);
         
+        if(Sesion.getInstance().isIsFullHD()){
+             pieRatio.setLayoutX(39.0);
+             pieRatio.setPrefWidth(700.0);
+             pieRatio.setPrefHeight(710.0);
+
+         }
+     //   graphsPane.setLeft(pieRatio);
+         graphsPane.setStyle("-fx-background-color: #ffffff; -fx-background-radius: 10px;");
         loadPieChartData();
         loadLineChartData();
+        
+        
+       
+        pieRatio.setOnMouseEntered(event -> {
+           loadPieChartData();
+           
+            this.mostrarGraficasInicial = true;
+            System.out.println("Mouse está encima del panel");
+        });
+        
+        lineRecord.setOnMouseEntered(event -> {
+          
+            loadLineChartData();
+            this.mostrarGraficasInicial = true;
+            System.out.println("Mouse está encima del panel");
+        });
+        
+        
     }
     
     private void mostrarVentanaExportar() {
@@ -135,29 +189,14 @@ public class AdminDashboardController implements Initializable {
         }
     }
     
-    @FXML
-    private void gotoAdminUsuarios(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AdminGestionarUsuarios.fxml"));
-            Parent nuevaVista = loader.load();
-            
-            Scene scene = new Scene(nuevaVista);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.show();
-                    
-            
-        } catch (IOException ex) {
-            Logger.getLogger(AdminDashboardController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+ 
     
     private void loadPieChartData(){
         int cantidadErrores = ErrorController.getInstance().obtenerCantidadErrores();
         int cantidadSoluciones = SolucionController.getInstance().obtenerCantidadSoluciones();
         ObservableList<PieChart.Data> pieRatioData = FXCollections.observableArrayList(
             new PieChart.Data("Errores Publicados (" + cantidadErrores + ")", (double) cantidadErrores),
-            new PieChart.Data("Soluciones Publicados (" + cantidadSoluciones + ")", (double) cantidadSoluciones)
+            new PieChart.Data("Soluciones Publicadas (" + cantidadSoluciones + ")", (double) cantidadSoluciones)
         );
         pieRatio.setData(pieRatioData);
         pieRatio.setTitle("Proporcion Error/Solucion");
@@ -169,7 +208,7 @@ public class AdminDashboardController implements Initializable {
         
         ObservableList<XYChart.Series> lineRecordData = FXCollections.observableArrayList(
             new XYChart.Series("Errores Publicados", parseListToObservableData(erroresSemanales)),
-            new XYChart.Series("Soluciones Publicados", parseListToObservableData(solucionesSemanales)),
+            new XYChart.Series("Soluciones Publicadas", parseListToObservableData(solucionesSemanales)),
             new XYChart.Series("Usuarios registrados", parseListToObservableData(usuariosSemanales))
         );
         lineRecord.setData(lineRecordData);
@@ -214,4 +253,5 @@ public class AdminDashboardController implements Initializable {
         alert.setContentText("Las graficas se han descargado exitosamente.");
         alert.showAndWait();
     }
+
 }

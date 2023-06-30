@@ -44,8 +44,8 @@ public class LoginController implements Initializable {
     public void login(ActionEvent event) throws IOException {
       
 
-        usernameField.setText("joaquin.maidana@estudiantes.utec.edu.uy");
-        passwordField.setText("Passw0rd");
+        usernameField.setText("martinperez2@gmail.com");
+        passwordField.setText("Joaco21");
 
         
         String mail = usernameField.getText();
@@ -69,16 +69,29 @@ public class LoginController implements Initializable {
             } else {
          
             if(user.getPerfil().getNombre().equals("Administrador")){
-                System.out.println("Inicia como admin");
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AdminDashboard.fxml"));
+               
+                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                  sesion.setStagePrincipal(stage);
+                 if(user.getAjustes().isFullHD()){
+                     sesion.setIsFullHD(true);
+                 }else{
+                      sesion.setIsFullHD(false);
+                 }
+                 
+                 if(user.getAjustes().isDarkMode()){
+                     sesion.setIsDarkMode(true);
+                 }else{
+                      sesion.setIsDarkMode(false);
+                 }
+                 
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AdminDashboardRoot.fxml"));
                  Parent root = loader.load();
 
                  // Crea una nueva escena y asigna la escena al escenario
                  Scene scene = new Scene(root);
-                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                
                  stage.setTitle("Admin Dashboard");
-                 stage.setMinHeight(720.0);
-                 stage.setMinWidth(1260.0);
+                 stage.setResizable(false);
                  stage.setScene(scene);
                  //stage.setFullScreen(true);
                  stage.show();
