@@ -13,6 +13,7 @@
 <AnchorPane id="AnchorPane" fx:id="root" prefHeight="621.0" prefWidth="1282.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentacion.Controllers.InicioController">
     <stylesheets>
         <URL value="@/styles/inicio.css" />
+        <URL value="@/styles/paleta.css" />
     </stylesheets>
     <children>
       <AnchorPane fx:id="anchorImage" layoutX="453.0" layoutY="7.0" prefHeight="376.0" prefWidth="378.0">
@@ -35,53 +36,54 @@
             <Button fx:id="botonAjustes" layoutX="402.0" layoutY="23.0" mnemonicParsing="false" onAction="#clickAjustes" prefHeight="121.0" prefWidth="143.0" AnchorPane.rightAnchor="228.0" AnchorPane.topAnchor="22.0" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="anchorConfig" layoutX="1002.0" layoutY="7.0" prefHeight="199.0" prefWidth="274.0" visible="false" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="7.0">
+      <AnchorPane fx:id="anchorConfig" layoutX="1002.0" layoutY="7.0" prefHeight="222.0" prefWidth="274.0" visible="false" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="7.0">
          <children>
-            <RadioButton fx:id="ingles" layoutX="190.0" layoutY="116.0" mnemonicParsing="false" text="Ingles">
+            <RadioButton fx:id="ingles" layoutX="190.0" layoutY="141.0" mnemonicParsing="false" text="Ingles">
                <toggleGroup>
                   <ToggleGroup fx:id="idioma" />
                </toggleGroup>
             </RadioButton>
-            <RadioButton fx:id="espaniol" layoutX="190.0" layoutY="90.0" mnemonicParsing="false" text="Español" toggleGroup="$idioma" />
-            <Label layoutX="195.0" layoutY="66.0" text="Idioma">
+            <RadioButton fx:id="espaniol" layoutX="190.0" layoutY="115.0" mnemonicParsing="false" text="Español" toggleGroup="$idioma" />
+            <Label fx:id="txtIdioma" layoutX="195.0" layoutY="91.0" text="Idioma">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <RadioButton fx:id="clara" layoutX="21.0" layoutY="90.0" mnemonicParsing="false" text="Clara">
+            <RadioButton fx:id="clara" layoutX="21.0" layoutY="115.0" mnemonicParsing="false" text="Clara">
                <toggleGroup>
                   <ToggleGroup fx:id="apariencia" />
                </toggleGroup>
             </RadioButton>
-            <RadioButton fx:id="oscura" layoutX="21.0" layoutY="116.0" mnemonicParsing="false" text="Oscura" toggleGroup="$apariencia" />
-            <Label layoutX="22.0" layoutY="66.0" text="Apariencia">
+            <RadioButton fx:id="oscura" layoutX="21.0" layoutY="141.0" mnemonicParsing="false" text="Oscura" toggleGroup="$apariencia" />
+            <Label fx:id="txtApariencia" layoutX="22.0" layoutY="91.0" text="Apariencia">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font>
             </Label>
-            <Button fx:id="botonGuardar" layoutX="136.0" layoutY="158.0" mnemonicParsing="false" onAction="#clickGuardar" prefHeight="27.0" prefWidth="77.0" text="Guardar" />
-            <RadioButton fx:id="normal" layoutX="102.0" layoutY="116.0" mnemonicParsing="false" onAction="#clickNormal" text="Normal">
+            <Button fx:id="botonGuardar" layoutX="141.0" layoutY="181.0" mnemonicParsing="false" onAction="#clickGuardar" prefHeight="27.0" prefWidth="77.0" text="Guardar" />
+            <RadioButton fx:id="normal" layoutX="102.0" layoutY="141.0" mnemonicParsing="false" onAction="#clickNormal" text="Normal">
                <toggleGroup>
                   <ToggleGroup fx:id="resolucion" />
                </toggleGroup>
             </RadioButton>
-            <RadioButton fx:id="fullhd" layoutX="102.0" layoutY="90.0" mnemonicParsing="false" onAction="#clickFullHD" text="Full HD" toggleGroup="$resolucion" />
-            <Label layoutX="103.0" layoutY="66.0" text="Resulución">
+            <RadioButton fx:id="fullhd" layoutX="102.0" layoutY="115.0" mnemonicParsing="false" onAction="#clickFullHD" text="Full HD" toggleGroup="$resolucion" />
+            <Label fx:id="txtResolucion" layoutX="103.0" layoutY="91.0" text="Resulución">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <Button fx:id="btnCancelarAjustes" layoutX="52.0" layoutY="159.0" mnemonicParsing="false" onAction="#cancelarAjustes" prefHeight="25.0" prefWidth="63.0" text="Cancelar" />
-            <Label layoutX="94.0" layoutY="20.0" text="Ajustes">
+            <Button fx:id="btnCancelar" layoutX="57.0" layoutY="182.0" mnemonicParsing="false" onAction="#cancelarAjustes" prefHeight="25.0" prefWidth="63.0" text="Cancelar" />
+            <Label fx:id="txtAjustes" layoutX="98.0" layoutY="14.0" text="Ajustes">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
-            <ImageView fitHeight="27.0" fitWidth="30.0" layoutX="182.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="27.0" fitWidth="30.0" layoutX="186.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../recursos/engranaje.png" />
                </image>
             </ImageView>
+            <Button fx:id="btnDesactivar" layoutX="80.0" layoutY="57.0" mnemonicParsing="false" onAction="#clickDesactivar" style="-fx-border-radius: 10; -fx-border-color: red; -fx-background-color: d3d3d3; -fx-background-radius: 10;" text="Desactivar Cuenta" textFill="#ab120a" />
          </children>
       </AnchorPane>
    </children>

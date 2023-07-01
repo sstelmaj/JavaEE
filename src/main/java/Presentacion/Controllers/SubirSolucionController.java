@@ -220,11 +220,11 @@ public class SubirSolucionController implements Initializable {
         panelContent.setTopAnchor(anchorSolucion, 0.0);
         panelContent.setBottomAnchor(anchorSolucion, 0.0);
         //   anchor1.setPrefWidth(900);
-        BackgroundFill backgroundFill = new BackgroundFill(Color.LIGHTGREEN, null, null);
-        Background background = new Background(backgroundFill);
-        anchor1.setBackground(background);
+//        BackgroundFill backgroundFill = new BackgroundFill(Color.LIGHTGREEN, null, null);
+//        Background background = new Background(backgroundFill);
+//        anchor1.setBackground(background);
         //    double maxRightAnchor = 500;
-
+           
         anchorSolucion.setRightAnchor(botonIngresar, 500.0);
 
     }

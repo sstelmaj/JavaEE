@@ -12,3 +12,27 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
      -fx-translate-x: 140px;
     -fx-translate-y: 200px;
 }
+
+    
+    
+    
+    
+#txtApariencia {
+   
+    -fx-text-fill: black;
+}
+
+#txtResolucion {
+    
+    -fx-text-fill: black;
+}
+
+#txtAjustes {
+    
+    -fx-text-fill: black;
+}
+
+#txtIdioma {
+    
+    -fx-text-fill: black;
+}

@@ -10,7 +10,7 @@
 
 <AnchorPane id="AnchorPane" fx:id="anchorDash" prefHeight="545.0" prefWidth="1064.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentacion.Controllers.DashboardController">
     <stylesheets>
-        <URL value="@/styles/dashboard.css" />
+        <URL value="@/styles/paleta.css" />
     </stylesheets>
    <children>
       <AnchorPane fx:id="contentAPane" layoutX="154.0" layoutY="60.0" prefHeight="444.0" prefWidth="873.0" />
@@ -26,8 +26,6 @@
       <Button fx:id="botonAdelante" layoutX="214.0" layoutY="20.0" mnemonicParsing="false" onAction="#clickAdelante" text="Adelante" />
       <Button fx:id="botonErrores" layoutX="542.0" layoutY="14.0" mnemonicParsing="false" onAction="#clickErrores" prefHeight="37.0" prefWidth="72.0" text="Errores" />
       <Button fx:id="botonSoluciones" layoutX="632.0" layoutY="14.0" mnemonicParsing="false" onAction="#clickSoluciones" prefHeight="37.0" prefWidth="83.0" text="Soluciones" />
-      <Button fx:id="botonCerrarSesion" layoutX="951.0" layoutY="14.0" mnemonicParsing="false" onAction="#cerrarSesion" prefHeight="37.0" prefWidth="92.0" text="Cerrar Session" />
       <Button fx:id="botonInicio" layoutX="449.0" layoutY="14.0" mnemonicParsing="false" onAction="#clickInicio" prefHeight="37.0" prefWidth="72.0" text="Inicio" />
-      <Button fx:id="botonAjustes" layoutX="865.0" layoutY="14.0" mnemonicParsing="false" onAction="#clickAjustes" prefHeight="37.0" prefWidth="72.0" text="Ajustes" />
    </children>
 </AnchorPane>
