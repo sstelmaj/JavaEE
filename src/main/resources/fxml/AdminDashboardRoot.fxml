@@ -10,10 +10,10 @@
 <AnchorPane id="AnchorPane" fx:id="anchorDash" prefHeight="545.0" prefWidth="1064.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentacion.Controllers.AdminDashboardRootController">
     <stylesheets>
         <URL value="@/styles/dashboard.css" />
+        <URL value="@/styles/paleta.css" />
     </stylesheets>
    <children>
       <AnchorPane fx:id="contentAPane" layoutX="154.0" layoutY="60.0" prefHeight="444.0" prefWidth="873.0" />
-      <ComboBox fx:id="selectorVista" layoutX="18.0" layoutY="234.0" prefHeight="25.0" prefWidth="113.0" promptText="Vistas" />
       <Button fx:id="botonAtras" layoutX="161.0" layoutY="20.0" mnemonicParsing="false" onAction="#clickAtras" text="Atras" />
       <Button fx:id="botonAdelante" layoutX="214.0" layoutY="20.0" mnemonicParsing="false" onAction="#clickAdelante" text="Adelante" />
       <Button fx:id="botonErrores" layoutX="557.0" layoutY="14.0" mnemonicParsing="false" onAction="#clickErrores" prefHeight="37.0" prefWidth="100.0" text="Importar Datos" />

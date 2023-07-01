@@ -43,12 +43,12 @@ public class UsuarioController {
     }
     
 
-    public void actualizarEstadoUsuarioPorId(Long id, Boolean nuevoEstado){
+    public void actualizarEstadoUsuarioPorMail(String mail, Boolean nuevoEstado){
         EntityManager em = Conexion.getInstance().getEntity();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
-            Usuario usuario = em.find(Usuario.class, id);
+            Usuario usuario = em.find(Usuario.class, mail);
             usuario.setIsActive(nuevoEstado);
             tx.commit();
         } catch (Exception e){
@@ -56,12 +56,12 @@ public class UsuarioController {
         }
     }
     
-    public void actualizarPerfilUsuarioPorId(Long id, String nuevoPerfil){
+    public void actualizarPerfilUsuarioPorMail(String mail, String nuevoPerfil){
         EntityManager em = Conexion.getInstance().getEntity();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
-            Usuario usuario = em.find(Usuario.class, id);
+            Usuario usuario = em.find(Usuario.class, mail);
             Perfil perfil = em.find(Perfil.class, nuevoPerfil);
             usuario.setPerfil(perfil);
             tx.commit();
