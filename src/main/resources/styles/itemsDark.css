@@ -1,0 +1,5 @@
+/* items que no son afectados por la cascada */
+Label{
+    -fx-text-fill: #ffffff; 
+    
+}

@@ -207,12 +207,12 @@ public class AdminUsuariosController implements Initializable {
     
     private void actualizarEstadoUsuario(UsuarioParaGestionar usuario){
         Boolean nuevoEstado = usuario.getCheckbox().isSelected();
-        UsuarioController.getInstance().actualizarEstadoUsuarioPorId(usuario.getId(), nuevoEstado);
+        UsuarioController.getInstance().actualizarEstadoUsuarioPorMail(usuario.getMail(), nuevoEstado);
     }
     
     private void actualizarPerfilUsuario(UsuarioParaGestionar usuario){
         String nuevoPerfil = (String) usuario.getCombobox().getValue();
-        UsuarioController.getInstance().actualizarPerfilUsuarioPorId(usuario.getId(), nuevoPerfil);
+        UsuarioController.getInstance().actualizarPerfilUsuarioPorMail(usuario.getMail(), nuevoPerfil);
         
     }
 
