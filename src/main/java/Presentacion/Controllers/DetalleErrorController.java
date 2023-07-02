@@ -194,6 +194,7 @@ public class DetalleErrorController implements Initializable {
     }
     public void initializeConDatos(){
         if(this.anchPaneGeneral!=null && this.error!=null){
+            Conexion.getInstance().refresh(error);
             this.errorDetalle=error;
             soluciones=error.getSoluciones();
             notasError=error.getNotas();

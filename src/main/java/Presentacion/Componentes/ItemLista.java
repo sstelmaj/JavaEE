@@ -94,8 +94,8 @@ public class ItemLista extends Control {
                  
                  dashboardController.setControladorAnterior(this.controlador);
                  dashboardController.setControladorSiguiente(detalleErrorController);
-                 
-                 dashboardController.getAnchorPane().getChildren().setAll(nuevaVista);
+                 dashboardController.setVista(nuevaVista);
+                 //dashboardController.getAnchorPane().getChildren().setAll(nuevaVista);
              } catch (IOException ex) {
                  Logger.getLogger(ItemLista.class.getName()).log(Level.SEVERE, null, ex);
              }

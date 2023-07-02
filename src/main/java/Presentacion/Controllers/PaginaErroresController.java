@@ -185,7 +185,7 @@ public class PaginaErroresController implements Initializable {
                 // Actualizar el texto del Label con la porción correspondiente
                 return displayedText;
             }else{
-                String displayedText = descripcion.substring(0, 20);
+                String displayedText = descripcion.substring(0, 50);
                 displayedText= displayedText.replaceAll("\\r?\\n", " ");
                 return displayedText;
             }

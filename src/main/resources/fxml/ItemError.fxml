@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="105.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+    <children>
+      <Label layoutX="23.0" layoutY="34.0" prefHeight="21.0" prefWidth="455.0" text="Descripcion" />
+      <Button fx:id="btnDetalle" layoutX="544.0" layoutY="32.0" mnemonicParsing="false" onMouseClicked="#DetalleSolucion" prefHeight="31.0" prefWidth="32.0" text="&gt;" />
+      <HBox fx:id="hBoxEtiquetas" layoutX="23.0" layoutY="72.0" prefHeight="21.0" prefWidth="293.0" />
+      <Label layoutX="23.0" layoutY="7.0" text="Titulo de la solucion" />
+   </children>
+</AnchorPane>
