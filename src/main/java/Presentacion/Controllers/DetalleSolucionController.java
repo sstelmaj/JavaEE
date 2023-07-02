@@ -8,7 +8,9 @@ import Logica.Clases.Archivo;
 import Logica.Clases.Solucion;
 import Logica.Controladores.SolucionController;
 import Persistencia.Conexion;
+import Persistencia.Sesion;
 import Presentacion.PanelCodigoSolucion;
+import Presentacion.RSTA;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.io.ByteArrayInputStream;
@@ -79,18 +81,18 @@ public class DetalleSolucionController implements Initializable {
     @FXML
     private GridPane tablaArchivos;
     private AnchorPane anchorPaneDestacado;
-    
+
     @FXML
     private Text txtUsosSolucion;
     @FXML
     private Text txtFechaSolucion;
-    
-    private String codigoSol,codigoErr,descripcion,creador;
+
+    private String codigoSol, codigoErr, descripcion, creador;
     private Date fechaSol;
     private int usosSol;
     private long idSol;
-    private Solucion solucion=null;
-    List<Archivo> archivos=null;
+    private Solucion solucion = null;
+    List<Archivo> archivos = null;
     private Button btnBack;
     private Scene escenaPrevia;
     @FXML
@@ -102,9 +104,9 @@ public class DetalleSolucionController implements Initializable {
     @FXML
     private TableColumn<Archivo, String> columnExt;
     private ObservableList<Archivo> listaArchivos;
-    private List<Image> listaImagenes=new ArrayList();
+    private List<Image> listaImagenes = new ArrayList();
     private int imagenesPorPagina = 9; // Número de imágenes por pagina del GridPane
-    private int paginaActual = 0; 
+    private int paginaActual = 0;
     @FXML
     private Button botonVer;
     @FXML
@@ -113,39 +115,49 @@ public class DetalleSolucionController implements Initializable {
     private Button nextButton;
     @FXML
     private Button btnValorar;
-    
+
     /**
      * Initializes the controller class.
+     *
      * @param id
      */
-    public void setId(long id){
-        this.idSol=id;
+    public void setId(long id) {
+        this.idSol = id;
     }
-     
-    public void setEscenaPrevia(Scene previa){
-        this.escenaPrevia=previa;
+
+    public void setEscenaPrevia(Scene previa) {
+        this.escenaPrevia = previa;
     }
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-      
-    }    
-    
-    public void initialize(){
+
+    }
+
+    public void initialize() {
         //Obtengo los datos de la solucion
         solucion = SolucionController.getInstance().obtenerSolucion(idSol);
-        codigoSol=solucion.getCodigo();
-        creador=solucion.getUsuario().getNombre();
-        descripcion=solucion.getDescripcion();
-        archivos=solucion.getArchivos();
-        fechaSol=solucion.getFechaSubida();
-        usosSol=solucion.getPuntos();
+        codigoSol = solucion.getCodigo();
+        creador = solucion.getUsuario().getNombre();
+        descripcion = solucion.getDescripcion();
+        archivos = solucion.getArchivos();
+        fechaSol = solucion.getFechaSubida();
+        usosSol = solucion.getPuntos();
 
-        codigoErr=solucion.getError().getCodigo();
+        codigoErr = solucion.getError().getCodigo();
 
         //Frame para el codigo de error
-        JInternalFrame iFrame = new PanelCodigoSolucion(codigoErr,SyntaxConstants.SYNTAX_STYLE_JAVA);
-        iFrame.setPreferredSize(new Dimension(550,400));
+        //JInternalFrame iFrame = new PanelCodigoSolucion(codigoErr,SyntaxConstants.SYNTAX_STYLE_JAVA);
+        JInternalFrame iFrame = new RSTA();
+        if (iFrame instanceof RSTA) {
+            RSTA rsta = (RSTA) iFrame;
+            rsta.setTextAreaContenido(this.codigoErr);
+            rsta.setEditable(false);
+            if (Sesion.getInstance().isIsDarkMode()) {
+                rsta.setModoOscuro();
+            }
+        }
+        iFrame.setPreferredSize(new Dimension(550, 400));
         iFrame.setSize(20, 20);
         iFrame.setVisible(true);
         iFrame.setBorder(null);
@@ -153,11 +165,20 @@ public class DetalleSolucionController implements Initializable {
         SwingNode swingNode = new SwingNode();
 
         swingNode.setContent(iFrame);
-        anchor1.getChildren().add(swingNode); 
+        anchor1.getChildren().add(swingNode);
 
         //Frame para el codigo de solucion
-        JInternalFrame iFrame2 = new PanelCodigoSolucion(codigoSol,SyntaxConstants.SYNTAX_STYLE_JAVA);
-        iFrame2.setPreferredSize(new Dimension(550,400));
+        //JInternalFrame iFrame2 = new PanelCodigoSolucion(codigoSol,SyntaxConstants.SYNTAX_STYLE_JAVA);
+        JInternalFrame iFrame2 = new RSTA();
+        if (iFrame2 instanceof RSTA) {
+            RSTA rsta = (RSTA) iFrame2;
+            rsta.setTextAreaContenido(this.codigoSol);
+            rsta.setEditable(false);
+            if (Sesion.getInstance().isIsDarkMode()) {
+                rsta.setModoOscuro();
+            }
+        }
+        iFrame2.setPreferredSize(new Dimension(550, 400));
         iFrame2.setSize(20, 20);
         iFrame2.setVisible(true);
         iFrame2.setBorder(null);
@@ -167,30 +188,30 @@ public class DetalleSolucionController implements Initializable {
         swingNode2.setContent(iFrame2);
         optCodigo.getChildren().add(swingNode2);
 
-        listaArchivos=FXCollections.observableArrayList();
+        listaArchivos = FXCollections.observableArrayList();
         this.columnArchivo.setCellValueFactory(new PropertyValueFactory("nombre"));
         this.columnExt.setCellValueFactory(new PropertyValueFactory("extension"));
-        for(Archivo arch:archivos){
-            if(this.checkIfFileHasExtension(arch.getExtension())){
-                Image imagen=null;
-                if(arch.getContenidoByte()!=null){
-                    imagen=new Image(new ByteArrayInputStream(arch.getContenidoByte()));
-                }else{
-                    imagen=new Image(arch.getUrl());
+        for (Archivo arch : archivos) {
+            if (this.checkIfFileHasExtension(arch.getExtension())) {
+                Image imagen = null;
+                if (arch.getContenidoByte() != null) {
+                    imagen = new Image(new ByteArrayInputStream(arch.getContenidoByte()));
+                } else {
+                    imagen = new Image(arch.getUrl());
                 }
                 this.listaImagenes.add(imagen);
-            }else{
-                this.listaArchivos.add(arch);                   
+            } else {
+                this.listaArchivos.add(arch);
             }
         }
         //Agregar el repositorio y link a la lista de archivos
-            if(solucion.getLink()!=null && !solucion.getLink().isEmpty()){
-                Archivo linkTemp=new Archivo();
-                linkTemp.setUrl(solucion.getLink());
-                linkTemp.setNombre("Link asociado");
-                linkTemp.setExtension("web");
-                this.listaArchivos.add(linkTemp);
-            }
+        if (solucion.getLink() != null && !solucion.getLink().isEmpty()) {
+            Archivo linkTemp = new Archivo();
+            linkTemp.setUrl(solucion.getLink());
+            linkTemp.setNombre("Link asociado");
+            linkTemp.setExtension("web");
+            this.listaArchivos.add(linkTemp);
+        }
         this.tablaArchivos1.setItems(listaArchivos);
 
         showPage(tablaArchivos);
@@ -210,26 +231,23 @@ public class DetalleSolucionController implements Initializable {
             }
         });
 
-
-
         //Cargar datos en panel de detalles
-        Text tituloDetalles=new Text("Estos son los detalles de la solucion \n");
-        Text detalles=new Text("Creado por: "+this.creador+"\nDescripcion: "+descripcion);
+        Text tituloDetalles = new Text("Estos son los detalles de la solucion \n");
+        Text detalles = new Text("Creado por: " + this.creador + "\nDescripcion: " + descripcion);
         tituloDetalles.setFill(Color.BLACK);
         tituloDetalles.setFont(Font.font("Helvetica", FontPosture.ITALIC, 19));
         detalles.setFill(Color.GRAY);
         detalles.setFont(Font.font("Calibri", FontPosture.ITALIC, 15));
-        txtFlowDetalles.getChildren().addAll(tituloDetalles,detalles);
+        txtFlowDetalles.getChildren().addAll(tituloDetalles, detalles);
         tablaArchivos.setGridLinesVisible(true);
 
-        txtUsosSolucion.setText("Usos: "+usosSol);
-        txtFechaSolucion.setText(txtFechaSolucion.getText()+new SimpleDateFormat("dd-MM-yyyy").format(this.fechaSol));
-
+        txtUsosSolucion.setText("Usos: " + usosSol);
+        txtFechaSolucion.setText(txtFechaSolucion.getText() + new SimpleDateFormat("dd-MM-yyyy").format(this.fechaSol));
 
         // Agregar un ChangeListener a la propiedad widthProperty y heightProperty del GridPane
         tablaArchivos.widthProperty().addListener((obs, oldVal, newVal) -> {
             for (Node node : tablaArchivos.getChildren()) {
-                if(node instanceof ImageView){
+                if (node instanceof ImageView) {
                     ImageView imageView = (ImageView) node;
                     imageView.setFitWidth(newVal.doubleValue() / 3);
                 }
@@ -238,47 +256,47 @@ public class DetalleSolucionController implements Initializable {
 
         tablaArchivos.heightProperty().addListener((var obs, var oldVal, var newVal) -> {
             for (Node node : tablaArchivos.getChildren()) {
-                if(node instanceof ImageView){
+                if (node instanceof ImageView) {
                     ImageView imageView = (ImageView) node;
                     imageView.setFitHeight(newVal.doubleValue() / 3);
                 }
             }
         });
     }
-    
+
     private boolean checkIfFileHasExtension(String s) {
-        String[] extensiones={"jpg","png","jpeg"};
+        String[] extensiones = {"jpg", "png", "jpeg"};
         return Arrays.stream(extensiones).anyMatch(entry -> s.endsWith(entry));
     }
-    
+
     @FXML
-    private void mostrarArchivos(){
-        Archivo archivoTemp=this.tablaArchivos1.getSelectionModel().getSelectedItem();
-        if(!archivoTemp.getExtension().equals("web")){
+    private void mostrarArchivos() {
+        Archivo archivoTemp = this.tablaArchivos1.getSelectionModel().getSelectedItem();
+        if (!archivoTemp.getExtension().equals("web")) {
             try {
                 File archivo = File.createTempFile(archivoTemp.getNombre(), "." + archivoTemp.getExtension());
-                try (FileOutputStream fileOuputStream = new FileOutputStream(archivo)) {
+                try ( FileOutputStream fileOuputStream = new FileOutputStream(archivo)) {
                     fileOuputStream.write(archivoTemp.getContenidoByte());
                 }
                 archivo.deleteOnExit();
                 Desktop.getDesktop().open(archivo);
-            }catch (Exception ex) {
+            } catch (Exception ex) {
                 System.out.println(ex);
             }
-        }else{
+        } else {
             try {
                 Desktop.getDesktop().browse(new URI(archivoTemp.getUrl()));
-            }catch (Exception ex) {
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
     }
-    
+
     private void showPage(GridPane gridPane) {
         gridPane.getChildren().clear();
 
         int startIndex = this.paginaActual * this.imagenesPorPagina;
-        int endIndex = Math.min(startIndex + this.imagenesPorPagina , this.listaImagenes.size());
+        int endIndex = Math.min(startIndex + this.imagenesPorPagina, this.listaImagenes.size());
 
         int col = 0;
         int row = 0;
@@ -292,7 +310,7 @@ public class DetalleSolucionController implements Initializable {
             imageView.setCursor(Cursor.HAND);
             imageView.setPreserveRatio(true);
             gridPane.add(imageView, col, row);
-            
+
             col++;
             if (col == 3) {
                 col = 0;
@@ -320,9 +338,9 @@ public class DetalleSolucionController implements Initializable {
                         popup.hide();
                         scene.getRoot().setDisable(false);
                     });
-                });              
+                });
             }
-        }  
+        }
     }
 
     private int getNumPages() {
@@ -334,7 +352,7 @@ public class DetalleSolucionController implements Initializable {
         this.usosSol++;
         this.solucion.setPuntos(this.usosSol);
         Conexion.getInstance().merge(this.solucion);
-        this.txtUsosSolucion.setText("Usos: "+usosSol);
+        this.txtUsosSolucion.setText("Usos: " + usosSol);
         this.btnValorar.setDisable(true);
     }
 }

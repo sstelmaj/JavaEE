@@ -524,7 +524,6 @@ public class SubirErrorController implements Initializable {
 
          error.setDescripcion(textDescripcion.getText());
             try { 
-
                if (this.solucion_asociada != null) {
                     solucion_asociada.setError(error);
                     solucion_asociada.setUsuario(usuario);

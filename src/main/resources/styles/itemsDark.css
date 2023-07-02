@@ -3,3 +3,7 @@ Label{
     -fx-text-fill: #ffffff; 
     
 }
+
+VBox{
+    -fx-background-color: #293134;
+}
