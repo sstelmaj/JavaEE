@@ -7,3 +7,8 @@ Label{
 VBox{
     -fx-background-color: #293134;
 }
+
+TitledPane AnchorPane {
+    -fx-background-color: #293134;
+    -fx-border-color:#293134;
+}

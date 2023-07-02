@@ -104,9 +104,9 @@ public class DetalleErrorController implements Initializable {
     @FXML
     private HBox buscador;
     @FXML
-    private Text txtTitulo;
+    private Label txtTitulo;
     @FXML
-    private Text txtFechaModif;
+    private Label txtFechaModif;
 
     private AnchorPane apPrincipal;
     @FXML
@@ -167,6 +167,8 @@ public class DetalleErrorController implements Initializable {
     private Button btnAgregarSolucion;
     @FXML
     private Button btnModificarError;
+    @FXML
+    private Button btnNotas;
 
     public Error getErrorDetalle() {
         return errorDetalle;
@@ -305,6 +307,7 @@ public class DetalleErrorController implements Initializable {
             });
 
             //Cargar datos en panel de descripcion y consola
+            this.txtTitulo.setText(error.getTitulo());
             Text tituloDescripcion = new Text("Descripcion del error \n");
             tituloDescripcion.getStyleClass().add("titulos");
             Text txtDescripcion = new Text("Creado por: " + creador + "\nDescripcion: " + descripcion);
@@ -361,6 +364,9 @@ public class DetalleErrorController implements Initializable {
 
             //PANEL NOTAS
             cargarNotas();
+            if (!Objects.equals(Sesion.getInstance().getUsuario().getId(), error.getUsuario().getId())) {
+                this.btnNotas.setDisable(true);
+            }
         }
     }
 
@@ -522,6 +528,7 @@ public class DetalleErrorController implements Initializable {
             nota.setFechaSubida(fecha);
             notas.add(nota);
             Conexion.getInstance().persist(nota);
+            this.txtAreaNotas.clear();
             this.errorDetalle.setNotas(notas);
             Conexion.getInstance().merge(errorDetalle);
         }
