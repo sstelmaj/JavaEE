@@ -216,7 +216,6 @@ public class ImportarDatosController implements Initializable {
     void importSoluciones() {
         try {
             String cadenaAviso = "";
-            boolean continuar;
             // Crear un cuadro de diálogo para seleccionar el archivo Excel a importar
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Seleccionar archivo Excel");
@@ -292,27 +291,12 @@ public class ImportarDatosController implements Initializable {
                     
                     if (SolucionController.getInstance().obtenerSolucion(id.longValue()) != null){
                         cadenaAviso = cadenaAviso + "La solucion de ID "+id+" ya existe en la Base de Datos\n";
-//                        Alert alert = new Alert(Alert.AlertType.WARNING);
-//                        alert.setTitle("Aviso!");
-//                        alert.setHeaderText(null);
-//                        alert.setContentText("La solucion de ID "+id+" ya existe en la Base de Datos");
-//                        alert.showAndWait();
                         continue;
                     } else if (ErrorController.getInstance().obtenerError(errorId.longValue()) == null){
                         cadenaAviso = cadenaAviso + "La solucion de ID "+id+" no puede asociarse al error "+errorId+" ya que este no existe en la base de datos, por favor ingrese el Error primero\n";
-//                        Alert alert = new Alert(Alert.AlertType.WARNING);
-//                        alert.setTitle("Aviso!");
-//                        alert.setHeaderText(null);
-//                        alert.setContentText("La solucion de ID "+id+" no puede asociarse al error "+errorId+ " ya que este no existe en la base de datos, por favor ingrese el Error primero.");
-//                        alert.showAndWait();
                         continue;
                     } else if (UsuarioController.getInstance().obtenerUsuario(usuarioMail) == null){
                         cadenaAviso = cadenaAviso + "La solucion de ID "+id+" no puede asociarse al usuario "+usuarioMail+" ya que este no existe en la base de datos, por favor ingrese el Usuario primero\n";
-//                        Alert alert = new Alert(Alert.AlertType.WARNING);
-//                        alert.setTitle("Aviso!");
-//                        alert.setHeaderText(null);
-//                        alert.setContentText("La solucion de ID "+id+" no puede asociarse al usuario "+usuarioMail+ " ya que este no existe en la base de datos, por favor ingrese el Usuario primero.");
-//                        alert.showAndWait();
                         continue;
                     }
                     
