@@ -10,7 +10,7 @@
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.image.*?>
 
-<AnchorPane id="AnchorPane" fx:id="anchPaneGeneral" prefHeight="701.0" prefWidth="1382.0" styleClass="mainFxmlClasss" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentacion.Controllers.DetalleErrorController">
+<AnchorPane id="AnchorPane" fx:id="anchPaneGeneral" prefHeight="701.0" prefWidth="1382.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentacion.Controllers.DetalleErrorController">
     <stylesheets>
         <URL value="@/styles/detalles.css" />
     </stylesheets>

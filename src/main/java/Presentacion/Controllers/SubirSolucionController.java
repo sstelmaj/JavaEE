@@ -437,7 +437,7 @@ public class SubirSolucionController implements Initializable {
 
         
         if(!tipoPantalla.equals("Solucion Asociada")){
-            
+            crear_solucion.setUsuario(Sesion.getInstance().getUsuario());
             crear_solucion.setError(this.error);
          }
     
