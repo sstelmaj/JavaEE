@@ -76,6 +76,7 @@ public class ImportarDatosController implements Initializable {
     
     void importErrores() {
         try {
+            String cadenaAviso = "";
             // Crear un cuadro de diálogo para seleccionar el archivo Excel a importar
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Seleccionar archivo Excel");
@@ -137,13 +138,19 @@ public class ImportarDatosController implements Initializable {
                     String repositorio = getStringCellValue(row, columnMapping.get("Repositorio"));
                     String titulo = getStringCellValue(row, columnMapping.get("Titulo"));
                     String usuarioMail = getStringCellValue(row, columnMapping.get("Usuario_Mail"));
+                   
+                    if (usuarioMail == null){
+                        usuarioMail = "";
+                    }
+                    if (id == null){
+                        id = 0.0;
+                    }
                     
                     if (ErrorController.getInstance().obtenerError(id.longValue()) != null){
-                        Alert alert = new Alert(Alert.AlertType.WARNING);
-                        alert.setTitle("Aviso!");
-                        alert.setHeaderText(null);
-                        alert.setContentText("El error de ID: "+id+" ya existe en la Base de Datos");
-                        alert.showAndWait();
+                        cadenaAviso = cadenaAviso + "El error de ID: "+id+" ya existe en la Base de Datos\n";
+                        continue;
+                    } else if (UsuarioController.getInstance().obtenerUsuario(usuarioMail) == null) {
+                        cadenaAviso = cadenaAviso + "El error de ID: "+id+" Debe de tener un usuario que lo crea\n";
                         continue;
                     }
                     
@@ -162,7 +169,9 @@ public class ImportarDatosController implements Initializable {
                     error.setId(id.longValue());
                     error.setCodigo(codigo);
                     error.setTitulo(titulo);
+                    
                     error.setUsuario(UsuarioController.getInstance().obtenerUsuario(usuarioMail));
+                    
                     error.setActive(Boolean.TRUE);
                     try {
                         Date fecha = formatoOriginal.parse(fechaSubida);
@@ -184,6 +193,14 @@ public class ImportarDatosController implements Initializable {
                 alert.setHeaderText(null);
                 alert.setContentText("Los datos se han importado correctamente desde el archivo Excel.");
                 alert.showAndWait();
+                
+                if (!"".equals(cadenaAviso)) {
+                    alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Aviso!");
+                    alert.setHeaderText(null);
+                    alert.setContentText(cadenaAviso);
+                    alert.showAndWait();
+                }
             }
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -198,13 +215,14 @@ public class ImportarDatosController implements Initializable {
     
     void importSoluciones() {
         try {
+            String cadenaAviso = "";
             // Crear un cuadro de diálogo para seleccionar el archivo Excel a importar
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Seleccionar archivo Excel");
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivos Excel", "*.xlsx"));
 
             // Obtener el archivo seleccionado por el usuario
-            Stage stage = (Stage) btnError.getScene().getWindow();
+            Stage stage = (Stage) btnSolucion.getScene().getWindow();
             File file = fileChooser.showOpenDialog(stage);
 
             if (file != null) {
@@ -261,29 +279,27 @@ public class ImportarDatosController implements Initializable {
                     Double errorId = getNumericCellValue(row, columnMapping.get("Error ID"));
                     //String errorTitulo = getStringCellValue(row, columnMapping.get("Error titulo"));
                     
+                    if (id == null){
+                        id = 0.0;
+                    }
+                    if (usuarioMail == null){
+                        usuarioMail = "";
+                    }
+                    if (errorId == null){
+                        errorId = 0.0;
+                    }
+                    
                     if (SolucionController.getInstance().obtenerSolucion(id.longValue()) != null){
-                        Alert alert = new Alert(Alert.AlertType.WARNING);
-                        alert.setTitle("Aviso!");
-                        alert.setHeaderText(null);
-                        alert.setContentText("La solucion de ID "+id+" ya existe en la Base de Datos");
-                        alert.showAndWait();
+                        cadenaAviso = cadenaAviso + "La solucion de ID "+id+" ya existe en la Base de Datos\n";
                         continue;
                     } else if (ErrorController.getInstance().obtenerError(errorId.longValue()) == null){
-                        Alert alert = new Alert(Alert.AlertType.WARNING);
-                        alert.setTitle("Aviso!");
-                        alert.setHeaderText(null);
-                        alert.setContentText("La solucion de ID "+id+" no puede asociarse al error "+errorId+ " ya que este no existe en la base de datos, por favor ingrese el Error primero.");
-                        alert.showAndWait();
+                        cadenaAviso = cadenaAviso + "La solucion de ID "+id+" no puede asociarse al error "+errorId+" ya que este no existe en la base de datos, por favor ingrese el Error primero\n";
                         continue;
                     } else if (UsuarioController.getInstance().obtenerUsuario(usuarioMail) == null){
-                        Alert alert = new Alert(Alert.AlertType.WARNING);
-                        alert.setTitle("Aviso!");
-                        alert.setHeaderText(null);
-                        alert.setContentText("La solucion de ID "+id+" no puede asociarse al usuario "+usuarioMail+ " ya que este no existe en la base de datos, por favor ingrese el Usuario primero.");
-                        alert.showAndWait();
+                        cadenaAviso = cadenaAviso + "La solucion de ID "+id+" no puede asociarse al usuario "+usuarioMail+" ya que este no existe en la base de datos, por favor ingrese el Usuario primero\n";
                         continue;
                     }
-
+                    
                     Solucion solucion = new Solucion();
                     solucion.setId(id.longValue());
                     solucion.setCodigo(codigo);
@@ -297,13 +313,15 @@ public class ImportarDatosController implements Initializable {
                     if (puntos != null){
                         solucion.setPuntos(puntos.intValue());
                     }
-                    try {
-                        Date fecha = formatoOriginal.parse(fechaSubida);
-                        String fechaFormateada = formatoNuevo.format(fecha);
-                        Date fechaFormateadaDate = formatoNuevo.parse(fechaFormateada);
-                        solucion.setFechaSubida(fechaFormateadaDate);
-                    } catch (ParseException ex) {
-                        Logger.getLogger(ImportarDatosController.class.getName()).log(Level.SEVERE, null, ex);
+                    if (fechaSubida != null) {
+                        try {
+                            Date fecha = formatoOriginal.parse(fechaSubida);
+                            String fechaFormateada = formatoNuevo.format(fecha);
+                            Date fechaFormateadaDate = formatoNuevo.parse(fechaFormateada);
+                            solucion.setFechaSubida(fechaFormateadaDate);
+                        } catch (ParseException ex) {
+                            Logger.getLogger(ImportarDatosController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                     solucion.setUsuario(UsuarioController.getInstance().obtenerUsuario(usuarioMail));
                     solucion.setError(ErrorController.getInstance().obtenerError(errorId.longValue()));
@@ -321,6 +339,13 @@ public class ImportarDatosController implements Initializable {
                 alert.setHeaderText(null);
                 alert.setContentText("Los datos se han importado correctamente desde el archivo Excel.");
                 alert.showAndWait();
+                if (!"".equals(cadenaAviso)) {
+                    alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Aviso");
+                    alert.setHeaderText(null);
+                    alert.setContentText(cadenaAviso);
+                    alert.showAndWait();
+                }
             }
         } catch (IOException ex) {
             ex.printStackTrace();
