@@ -13,13 +13,13 @@
         <URL value="@/styles/detalles.css" />
     </stylesheets>
     <children>
-      <Text fx:id="txtTitulo" layoutX="14.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Titulo de la solucion" />
-      <Text fx:id="txtDescripcion" layoutX="14.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Descripcion" wrappingWidth="306.16064453125">
+      <Label fx:id="txtTitulo" layoutX="14.0" layoutY="14.0" text="Titulo de la solucion" />
+      <Label fx:id="txtDescripcion" layoutX="14.0" layoutY="36.0" prefWidth="306.16064453125" text="Descripcion">
          <font>
             <Font size="13.0" />
          </font>
-      </Text>
+      </Label>
       <Button fx:id="btnDetalle" layoutX="339.0" layoutY="30.0" mnemonicParsing="false" onMouseClicked="#DetalleSolucion" prefHeight="31.0" prefWidth="32.0" text="&gt;" />
-      <HBox fx:id="hBoxEtiquetas" layoutX="14.0" layoutY="54.0" prefHeight="21.0" prefWidth="293.0" />
+      <HBox fx:id="hBoxEtiquetas" layoutX="14.0" layoutY="55.0" prefHeight="21.0" prefWidth="293.0" />
    </children>
 </AnchorPane>

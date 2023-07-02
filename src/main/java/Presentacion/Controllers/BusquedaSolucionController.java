@@ -31,9 +31,9 @@ import javafx.stage.Stage;
 public class BusquedaSolucionController implements Initializable {
 
     @FXML
-    private Text txtTitulo;
+    private Label txtTitulo;
     @FXML
-    private Text txtDescripcion;
+    private Label txtDescripcion;
     @FXML
     private Button btnDetalle;
     private String titulo,descripcion;
