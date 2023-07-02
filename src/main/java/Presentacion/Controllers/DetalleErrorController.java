@@ -167,6 +167,8 @@ public class DetalleErrorController implements Initializable {
     private Button btnAgregarSolucion;
     @FXML
     private Button btnModificarError;
+    @FXML
+    private Button btnNotas;
 
     public Error getErrorDetalle() {
         return errorDetalle;
@@ -362,6 +364,9 @@ public class DetalleErrorController implements Initializable {
 
             //PANEL NOTAS
             cargarNotas();
+            if (!Objects.equals(Sesion.getInstance().getUsuario().getId(), error.getUsuario().getId())) {
+                this.btnNotas.setDisable(true);
+            }
         }
     }
 
@@ -523,6 +528,7 @@ public class DetalleErrorController implements Initializable {
             nota.setFechaSubida(fecha);
             notas.add(nota);
             Conexion.getInstance().persist(nota);
+            this.txtAreaNotas.clear();
             this.errorDetalle.setNotas(notas);
             Conexion.getInstance().merge(errorDetalle);
         }
