@@ -104,9 +104,9 @@ public class DetalleErrorController implements Initializable {
     @FXML
     private HBox buscador;
     @FXML
-    private Text txtTitulo;
+    private Label txtTitulo;
     @FXML
-    private Text txtFechaModif;
+    private Label txtFechaModif;
 
     private AnchorPane apPrincipal;
     @FXML
@@ -305,6 +305,7 @@ public class DetalleErrorController implements Initializable {
             });
 
             //Cargar datos en panel de descripcion y consola
+            this.txtTitulo.setText(error.getTitulo());
             Text tituloDescripcion = new Text("Descripcion del error \n");
             tituloDescripcion.getStyleClass().add("titulos");
             Text txtDescripcion = new Text("Creado por: " + creador + "\nDescripcion: " + descripcion);

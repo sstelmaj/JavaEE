@@ -21,7 +21,7 @@
               <panes>
                 <TitledPane animated="false" text="Descripcion">
                   <content>
-                    <AnchorPane fx:id="anchPaneDescrip" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                    <AnchorPane fx:id="anchPaneDescrip" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #293134;">
                            <children>
                               <TextFlow fx:id="txtFlowDescripcion" prefHeight="314.0" prefWidth="639.0" />
                               <AnchorPane fx:id="apEtiquetas" layoutY="315.0" prefHeight="86.0" prefWidth="639.0">
@@ -125,22 +125,22 @@
             <ComboBox fx:id="comboBoxSubEtiq" layoutX="183.0" layoutY="32.0" prefWidth="150.0" />
             <Button fx:id="btnAgregarEtiqueta" layoutX="367.0" layoutY="32.0" mnemonicParsing="false" onMouseClicked="#agregarEtiquetaAFiltro" text="Agregar" />
             <HBox fx:id="buscador" layoutX="2.0" layoutY="68.0" prefHeight="31.0" prefWidth="355.0" />
-            <Text layoutX="14.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Etiquetas" />
-            <Text layoutX="183.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Subetiquetas" />
+            <Label layoutX="14.0" layoutY="8.0" text="Etiquetas" />
+            <Label layoutX="187.0" layoutY="8.0" text="Subetiquetas" />
             <Button fx:id="btnAgregarSolucion" layoutX="278.0" layoutY="586.0" mnemonicParsing="false" onMouseClicked="#agregarSolucion" text="Agregar Solucion" />
          </children>
       </AnchorPane>
-      <Text layoutX="957.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Soluciones">
+      <Label layoutX="988.0" layoutY="24.0" text="Soluciones">
          <font>
             <Font size="30.0" />
          </font>
-      </Text>
-      <Text fx:id="txtTitulo" layoutX="287.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Titulo del error">
+      </Label>
+      <Label fx:id="txtTitulo" layoutX="64.0" layoutY="24.0" prefHeight="45.0" prefWidth="611.0" text="Titulo del error">
          <font>
             <Font size="30.0" />
          </font>
-      </Text>
-      <Text fx:id="txtFechaModif" layoutX="66.0" layoutY="669.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ultima modificación: " />
+      </Label>
+      <Label fx:id="txtFechaModif" layoutX="66.0" layoutY="652.0" text="Ultima modificación: " />
       <Button fx:id="btnModificarError" layoutX="585.0" layoutY="647.0" mnemonicParsing="false" onMouseClicked="#modificarError" text="Modificar error" />
    </children>
 </AnchorPane>
