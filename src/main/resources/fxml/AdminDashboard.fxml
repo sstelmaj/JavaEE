@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.scene.chart.*?>
 <?import javafx.scene.shape.*?>
 <?import java.lang.*?>
@@ -7,19 +8,13 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentacion.Controllers.AdminDashboardController">
+<AnchorPane id="AnchorPane" fx:id="anchorRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="512.0" prefWidth="1178.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentacion.Controllers.AdminDashboardController">
    <children>
-      <Button fx:id="btnImportar" layoutX="751.0" layoutY="35.0" mnemonicParsing="false" text="Importar Datos" />
-      <Button fx:id="btnExportar" layoutX="866.0" layoutY="35.0" mnemonicParsing="false" text="Exportar Datos" />
-      <Button fx:id="btnUsuarios" layoutX="36.0" layoutY="35.0" mnemonicParsing="false" onAction="#gotoAdminUsuarios" text="Gestionar Usuarios" />
-      <Button fx:id="btnDescargar" layoutX="453.0" layoutY="35.0" mnemonicParsing="false" onAction="#handleDownloadGraphs" text="Descargar Graficas" />
-      <BorderPane fx:id="graphsPane" layoutX="14.0" layoutY="72.0" prefHeight="414.0" prefWidth="972.0">
-         <left>
-            <PieChart fx:id="pieRatio" prefHeight="414.0" prefWidth="370.0" BorderPane.alignment="CENTER" />
-         </left>
-         <right>
-            <LineChart fx:id="lineRecord" prefHeight="414.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+      <AnchorPane fx:id="graphsPane" layoutX="48.0" layoutY="84.0" prefHeight="393.0" prefWidth="1082.0" AnchorPane.bottomAnchor="26.0" AnchorPane.leftAnchor="48.0" AnchorPane.rightAnchor="48.0" AnchorPane.topAnchor="84.0">
+         <children>
+            <LineChart fx:id="lineRecord" layoutX="474.0" layoutY="11.0" prefHeight="389.0" prefWidth="445.0">
               <xAxis>
                 <CategoryAxis fx:id="lineXAxis" side="BOTTOM" />
               </xAxis>
@@ -27,6 +22,62 @@
                 <NumberAxis fx:id="lineYAxis" side="LEFT" />
               </yAxis>
             </LineChart>
-         </right></BorderPane>
+            <PieChart fx:id="pieRatio" layoutX="40.0" layoutY="21.0" prefHeight="359.0" prefWidth="370.0" />
+         </children>
+      </AnchorPane>
+      <Button fx:id="btnImportar" layoutX="597.0" layoutY="35.0" mnemonicParsing="false" text="Importar Datos" />
+      <Button fx:id="btnExportar" layoutX="712.0" layoutY="35.0" mnemonicParsing="false" text="Exportar Datos" />
+      <Button fx:id="btnDescargar" layoutX="453.0" layoutY="35.0" mnemonicParsing="false" onAction="#handleDownloadGraphs" text="Descargar Graficas" />
+      <Button fx:id="botonAjustes" layoutX="839.0" layoutY="32.0" mnemonicParsing="false" onAction="#clickAjustes" prefHeight="32.0" prefWidth="40.0" />
+      <AnchorPane fx:id="anchorConfig" layoutX="1002.0" layoutY="7.0" prefHeight="222.0" prefWidth="274.0" visible="false" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="7.0">
+         <children>
+            <RadioButton fx:id="ingles" layoutX="190.0" layoutY="141.0" mnemonicParsing="false" text="Ingles">
+               <toggleGroup>
+                  <ToggleGroup fx:id="idioma" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="espaniol" layoutX="190.0" layoutY="115.0" mnemonicParsing="false" text="Español" toggleGroup="$idioma" />
+            <Label fx:id="txtIdioma" layoutX="195.0" layoutY="91.0" text="Idioma">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <RadioButton fx:id="clara" layoutX="21.0" layoutY="115.0" mnemonicParsing="false" text="Clara">
+               <toggleGroup>
+                  <ToggleGroup fx:id="apariencia" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="oscura" layoutX="21.0" layoutY="141.0" mnemonicParsing="false" text="Oscura" toggleGroup="$apariencia" />
+            <Label fx:id="txtApariencia" layoutX="22.0" layoutY="91.0" text="Apariencia">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </Label>
+            <Button fx:id="botonGuardar" layoutX="141.0" layoutY="181.0" mnemonicParsing="false" onAction="#clickGuardar" prefHeight="27.0" prefWidth="77.0" text="Guardar" />
+            <RadioButton fx:id="normal" layoutX="102.0" layoutY="141.0" mnemonicParsing="false" onAction="#clickNormal" text="Normal">
+               <toggleGroup>
+                  <ToggleGroup fx:id="resolucion" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="fullhd" layoutX="102.0" layoutY="115.0" mnemonicParsing="false" onAction="#clickFullHD" text="Full HD" toggleGroup="$resolucion" />
+            <Label fx:id="txtResolucion" layoutX="103.0" layoutY="91.0" text="Resulución">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <Button fx:id="btnCancelar" layoutX="57.0" layoutY="182.0" mnemonicParsing="false" onAction="#cancelarAjustes" prefHeight="25.0" prefWidth="63.0" text="Cancelar" />
+            <Label fx:id="txtAjustes" layoutX="98.0" layoutY="14.0" text="Ajustes">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="27.0" fitWidth="30.0" layoutX="186.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../recursos/engranaje.png" />
+               </image>
+            </ImageView>
+            <Button fx:id="btnDesactivar" layoutX="80.0" layoutY="57.0" mnemonicParsing="false" onAction="#clickDesactivar" style="-fx-border-radius: 10; -fx-border-color: red; -fx-background-color: d3d3d3; -fx-background-radius: 10;" text="Desactivar Cuenta" textFill="#ab120a" />
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>

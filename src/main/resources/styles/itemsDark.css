@@ -1,0 +1,9 @@
+/* items que no son afectados por la cascada */
+Label{
+    -fx-text-fill: #ffffff; 
+    
+}
+
+VBox{
+    -fx-background-color: #293134;
+}

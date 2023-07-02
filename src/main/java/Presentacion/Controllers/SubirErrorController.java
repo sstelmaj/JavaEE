@@ -206,6 +206,10 @@ public class SubirErrorController implements Initializable {
     private Button botonImprimirEtiqueta;
     @FXML
     private ScrollPane scrollDesc;
+    @FXML
+    private Label txtTituloChico;
+    @FXML
+    private Label txtFecha;
 
     public void setPanelContent(AnchorPane pane) {
         this.panelContent = pane;
@@ -214,6 +218,8 @@ public class SubirErrorController implements Initializable {
         panelContent.setLeftAnchor(anchorError, 0.0);
         panelContent.setTopAnchor(anchorError, 0.0);
         panelContent.setBottomAnchor(anchorError, 0.0);
+        
+        
         //   anchor1.setPrefWidth(900);
         BackgroundFill backgroundFill = new BackgroundFill(Color.LIGHTGREEN, null, null);
         Background background = new Background(backgroundFill);
@@ -221,8 +227,8 @@ public class SubirErrorController implements Initializable {
         //    double maxRightAnchor = 500;
 
         anchorError.setRightAnchor(botonIngresar, 500.0);
-
-
+       
+        
     }
 
     public final void setActualizador(String descripcion) {
@@ -265,6 +271,7 @@ public class SubirErrorController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //para el primer renderizado visual
+        
         botonEliminarSolucion.setVisible(false);
         botonVerSolucion.setVisible(false);
         tipoPantalla = "Subir Error";
@@ -417,16 +424,14 @@ public class SubirErrorController implements Initializable {
         rstaConsola();
 
         //modo oscuro
-        if (Sesion.getInstance().isIsDarkMode()) {
-            textDescripcion.setStyle("-fx-control-inner-background: #293134;");
-
-        }
+        
+        
 
         if (Sesion.getInstance().isIsFullHD()) {
 
             scrollDesc.getStyleClass().add("textDescfullHD");
             textDescripcion.getStyleClass().add("textDescfullHD");
-
+            
             listaCompletado.getStyleClass().add("textDescfullHD");
 
         }
@@ -519,20 +524,18 @@ public class SubirErrorController implements Initializable {
 
          error.setDescripcion(textDescripcion.getText());
             try { 
-                Conexion.getInstance().merge(error);
+               if (this.solucion_asociada != null) {
+                    solucion_asociada.setError(error);
+                    solucion_asociada.setUsuario(usuario);
+                    Conexion.getInstance().merge(solucion_asociada);
+               }else{
+                   Conexion.getInstance().merge(error);
+               }
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                             alert.setTitle("Información");
                             alert.setHeaderText(null);
                             alert.setContentText("Se ha creado el error con exito!");
                             alert.showAndWait();
-              
-              
-               if (this.solucion_asociada != null) {
-                solucion_asociada.setError(error);
-                solucion_asociada.setUsuario(usuario);
-                Conexion.getInstance().merge(solucion_asociada);
-            
-              }
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("/fxml/PaginaErrores.fxml"));
                 Parent nuevaVista = loader.load();
@@ -551,7 +554,7 @@ public class SubirErrorController implements Initializable {
       //  if(tipoPantalla.equals("Subir Error")){
             
 
-            
+       
            
        
 

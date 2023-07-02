@@ -11,7 +11,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.ColumnResult;
 import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
@@ -21,7 +20,9 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.SqlResultSetMapping;
+import javax.persistence.Temporal;
 
 /**
  *
@@ -64,9 +65,15 @@ public class Usuario implements Serializable {
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private AjustesUsuario ajustes;
     
-    @Column(nullable = true)
-    private Date fechaRegistro = new Date();
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date fechaRegistro;
     
+    @PrePersist
+    protected void onCreate() {
+        if(fechaRegistro == null) {
+            fechaRegistro = new Date();
+        }
+    }
     
     public Date getFechaRegistro() {
         return fechaRegistro;

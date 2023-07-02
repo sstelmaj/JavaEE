@@ -8,13 +8,19 @@ import Logica.Clases.Etiqueta;
 import Logica.Controladores.ErrorController;
 import Logica.Controladores.EtiquetaController;
 import Presentacion.Componentes.ItemLista;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -40,6 +46,8 @@ public class PaginaErroresController implements Initializable {
     private TextField txtBuscador;
     private List<Etiqueta>allEtiquetas;
     private ArrayList<String> valores = new ArrayList<>();
+    @FXML
+    private Button btnSubirError;
 
     /**
      * Initializes the controller class.
@@ -177,10 +185,30 @@ public class PaginaErroresController implements Initializable {
                 // Actualizar el texto del Label con la porción correspondiente
                 return displayedText;
             }else{
-                String displayedText = descripcion.substring(0, 20);
+                String displayedText = descripcion.substring(0, 50);
                 displayedText= displayedText.replaceAll("\\r?\\n", " ");
                 return displayedText;
             }
+    }
+
+    @FXML
+    private void subirError(MouseEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/fxml/subirError.fxml"));
+            Parent nuevaVista = loader.load();
+            SubirErrorController subirErrorController = (SubirErrorController)loader.getController();
+            
+            
+            DashboardController dashboardController = DashboardController.getInstance();
+            subirErrorController.setPanelContent(dashboardController.getAnchorPane());
+            dashboardController.setControladorAnterior(this);
+            // dashboardController.setControladorSiguiente();
+
+            dashboardController.getAnchorPane().getChildren().setAll(nuevaVista);
+        } catch (IOException ex) {
+            Logger.getLogger(PaginaErroresController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 }

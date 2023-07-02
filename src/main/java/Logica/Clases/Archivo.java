@@ -22,8 +22,8 @@ public class Archivo implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
     @Id
+    private Long id;
     private String nombre;
     
     private String extension;

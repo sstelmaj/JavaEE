@@ -48,6 +48,12 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
         textArea.setText(contenido);
     }
     
+    public void setEditable(Boolean bool){
+        textArea.setEditable(bool);
+        jPanel2.setVisible(bool);
+        //jButton2.setVisible(bool);
+        
+    }
     public void setModoOscuro(){
               try {
             Theme theme = Theme.load(getClass().getResourceAsStream(
@@ -74,7 +80,7 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
         
    //    Font font = new Font("Segoe UI", Font.PLAIN, 12);
    //     textArea.setFont(font);
-        textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
+        textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
         
         CompletionProvider provider = createCompletionProvider();
 
@@ -154,7 +160,7 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
         jComboBoxLeng = new javax.swing.JComboBox<>();
         jPanel_CP = new javax.swing.JPanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(600, 616));
 
         jPanel1.setBackground(new java.awt.Color(0, 153, 153));
@@ -185,7 +191,7 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
 
         jLabel1.setText("Lenguajes");
 
-        jComboBoxLeng.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ACTIONSCRIPT", "ASSEMBLER_X86", "BBCODE", "C", "CLOJURE", "C++", "CSHARP", "CSS", "DELPHI", "DTD", "FORTRAN", "GROOVY", "HTACCESS", "HTML", "JAVA", "JAVASCRIPT", "JSON", "JSP", "LATEX", "LISP", "LUA", "MAKEFILE", "MXML", "NSIS", "PERL", "PHP", "PROPERTIES_FILE", "PYTHON", "RUBY", "SAS", "SCALA", "SQL", "TCL", "UNIX_SHELL", "VISUAL_BASIC", "WINDOWS_BATCH", "XML" }));
+        jComboBoxLeng.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NONE", "ACTIONSCRIPT", "ASSEMBLER_X86", "BBCODE", "C", "CLOJURE", "C++", "CSHARP", "CSS", "DELPHI", "DTD", "FORTRAN", "GROOVY", "HTACCESS", "HTML", "JAVA", "JAVASCRIPT", "JSON", "JSP", "LATEX", "LISP", "LUA", "MAKEFILE", "MXML", "NSIS", "PERL", "PHP", "PROPERTIES_FILE", "PYTHON", "RUBY", "SAS", "SCALA", "SQL", "TCL", "UNIX_SHELL", "VISUAL_BASIC", "WINDOWS_BATCH", "XML" }));
         jComboBoxLeng.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBoxLengActionPerformed(evt);
@@ -273,7 +279,7 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
                 // Insertamos el texto en el JTextArea
                 textArea.insert(data, textArea.getCaretPosition());
                 
-             
+                             
             } catch (UnsupportedFlavorException | IOException ex) {
                 System.out.println(ex);
             }
@@ -297,6 +303,10 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
         String selectedLanguage = (String)jComboBoxLeng.getSelectedItem();
         
         switch (selectedLanguage) {
+            case "NONE":
+            
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
+            break;
         case "ACTIONSCRIPT":
             
             textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_ACTIONSCRIPT);

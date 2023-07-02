@@ -5,6 +5,7 @@
 package Presentacion.Componentes;
 
 import javafx.scene.control.Control;
+import javafx.scene.control.Label;
 import javafx.scene.control.Skin;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -17,24 +18,24 @@ import javafx.scene.text.Text;
  */
 public class ItemNota extends Control {
     private Pane anchorPane;
-    private Text txtNota;
-    private Text txtFecha;
+    private Label txtNota;
+    private Label txtFecha;
     
     public ItemNota(){
         anchorPane = new AnchorPane();
         anchorPane.setPrefSize(400.0, 108.0);
         
          // Crear los componentes
-        txtFecha = new Text("Contenido de la nota");
+        txtFecha = new Label("Contenido de la nota");
         txtFecha.setLayoutX(266.0);
         txtFecha.setLayoutY(89.0);
-        txtFecha.setWrappingWidth(144.16064453125);
+        //txtFecha.setWrappingWidth(144.16064453125);
         txtFecha.setFont(new Font(13.0));
         
-        txtNota = new Text("Descripcion");
+        txtNota = new Label("Descripcion");
         txtNota.setLayoutX(18.0);
         txtNota.setLayoutY(30.0);
-        txtNota.setWrappingWidth(367.33740234375);
+        //txtNota.setWrappingWidth(367.33740234375);
         txtNota.setFont(new Font(13.0));
         
         anchorPane.setVisible(true);
@@ -53,15 +54,15 @@ public class ItemNota extends Control {
     }
     
 
-    public Text getTxtNota() {
+    public Label getTxtNota() {
         return txtNota;
     }
 
-    public void setTxtNota(Text txtNota) {
+    public void setTxtNota(Label txtNota) {
         this.txtNota = txtNota;
     }
 
-    public Text getTxtFecha() {
+    public Label getTxtFecha() {
         return txtFecha;
     }
 

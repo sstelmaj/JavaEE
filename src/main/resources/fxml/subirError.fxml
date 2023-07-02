@@ -15,6 +15,7 @@
 <AnchorPane id="AnchorPane" fx:id="anchorError" prefHeight="701.0" prefWidth="1382.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentacion.Controllers.SubirErrorController">
     <stylesheets>
         <URL value="@/styles/subir_modificar_ES.css" />
+        
     </stylesheets>
     
     <children>
@@ -105,8 +106,8 @@
             <Font size="36.0" />
          </font>
       </Label>
-      <Label layoutX="98.0" layoutY="83.0" prefHeight="17.0" prefWidth="186.0" text="Título" />
-      <Label layoutX="361.0" layoutY="83.0" prefHeight="17.0" prefWidth="63.0" text="Fecha" />
+      <Label fx:id="txtTituloChico" layoutX="98.0" layoutY="83.0" prefHeight="17.0" prefWidth="186.0" text="Título" />
+      <Label fx:id="txtFecha" layoutX="361.0" layoutY="83.0" prefHeight="17.0" prefWidth="63.0" text="Fecha" />
       <AnchorPane layoutX="813.0" layoutY="541.0" />
       <Pane fx:id="paneButtons" layoutX="318.0" layoutY="553.0" prefHeight="43.0" prefWidth="731.0" AnchorPane.bottomAnchor="30.0">
          <children>
