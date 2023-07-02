@@ -524,20 +524,19 @@ public class SubirErrorController implements Initializable {
 
          error.setDescripcion(textDescripcion.getText());
             try { 
-                Conexion.getInstance().merge(error);
+
+               if (this.solucion_asociada != null) {
+                    solucion_asociada.setError(error);
+                    solucion_asociada.setUsuario(usuario);
+                    Conexion.getInstance().merge(solucion_asociada);
+               }else{
+                   Conexion.getInstance().merge(error);
+               }
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                             alert.setTitle("Información");
                             alert.setHeaderText(null);
                             alert.setContentText("Se ha creado el error con exito!");
                             alert.showAndWait();
-              
-              
-               if (this.solucion_asociada != null) {
-                solucion_asociada.setError(error);
-                solucion_asociada.setUsuario(usuario);
-                Conexion.getInstance().merge(solucion_asociada);
-            
-              }
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("/fxml/PaginaErrores.fxml"));
                 Parent nuevaVista = loader.load();
