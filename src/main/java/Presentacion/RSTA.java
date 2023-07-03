@@ -80,7 +80,7 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
         
    //    Font font = new Font("Segoe UI", Font.PLAIN, 12);
    //     textArea.setFont(font);
-        textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
+        textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
         
         CompletionProvider provider = createCompletionProvider();
 
