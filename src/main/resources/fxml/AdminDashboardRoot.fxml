@@ -14,10 +14,10 @@
     </stylesheets>
    <children>
       <AnchorPane fx:id="contentAPane" layoutX="154.0" layoutY="60.0" prefHeight="444.0" prefWidth="873.0" />
-      <Button fx:id="botonAtras" layoutX="161.0" layoutY="20.0" mnemonicParsing="false" onAction="#clickAtras" text="Atras" />
-      <Button fx:id="botonAdelante" layoutX="214.0" layoutY="20.0" mnemonicParsing="false" onAction="#clickAdelante" text="Adelante" />
-      <Button fx:id="botonCerrarSesion" layoutX="951.0" layoutY="14.0" mnemonicParsing="false" onAction="#cerrarSesion" prefHeight="37.0" prefWidth="92.0" text="Cerrar Session" AnchorPane.rightAnchor="21.0" />
-      <Button fx:id="botonInicio" layoutX="318.0" layoutY="14.0" mnemonicParsing="false" onAction="#clickInicio" prefHeight="37.0" prefWidth="72.0" text="Inicio" />
-      <Button fx:id="btnGestionar" layoutX="411.0" layoutY="14.0" mnemonicParsing="false" onAction="#clickGestionar" prefHeight="37.0" prefWidth="129.0" text="Gestionar Usuarios" />
+      <Button fx:id="botonAtras" layoutX="154.0" layoutY="20.0" mnemonicParsing="false" onAction="#clickAtras" text="Atras" />
+      <Button fx:id="botonAdelante" layoutX="205.0" layoutY="20.0" mnemonicParsing="false" onAction="#clickAdelante" text="Adelante" />
+      <Button fx:id="botonCerrarSesion" layoutX="867.0" layoutY="14.0" mnemonicParsing="false" onAction="#cerrarSesion" prefHeight="37.0" prefWidth="92.0" text="Cerrar Session" AnchorPane.rightAnchor="105.0" />
+      <Button fx:id="botonInicio" layoutX="301.0" layoutY="14.0" mnemonicParsing="false" onAction="#clickInicio" prefHeight="37.0" prefWidth="72.0" text="Inicio" />
+      <Button fx:id="btnGestionar" layoutX="403.0" layoutY="14.0" mnemonicParsing="false" onAction="#clickGestionar" prefHeight="37.0" prefWidth="129.0" text="Gestionar Usuarios" />
    </children>
 </AnchorPane>
