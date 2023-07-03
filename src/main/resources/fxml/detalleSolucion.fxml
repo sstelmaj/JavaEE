@@ -81,9 +81,14 @@
       <Label fx:id="txtFechaSolucion" layoutX="691.0" layoutY="641.0" text="Fecha de subida: " />
       <Label fx:id="txtUsosSolucion" layoutX="1064.0" layoutY="641.0" text="Text" />
       <Button fx:id="btnValorar" layoutX="1211.0" layoutY="636.0" mnemonicParsing="false" onMouseClicked="#sumarPunto" text="Valorar" />
-      <Label layoutX="69.0" layoutY="27.0" text="Detalle de solucion">
+      <Label layoutX="69.0" layoutY="15.0" text="Detalle de solucion">
          <font>
             <Font size="23.0" />
+         </font>
+      </Label>
+      <Label layoutX="290.0" layoutY="55.0" text="Codigo del error">
+         <font>
+            <Font size="20.0" />
          </font>
       </Label>
    </children>

@@ -47,7 +47,7 @@ public class ItemLista extends Control {
         tipoItem = tipo;
         this.controlador = controlador;
         anchorPane = new AnchorPane();
-        anchorPane.setPrefSize(600.0, 105.0);
+        anchorPane.setPrefSize(580.0, 105.0);
         
          // Crear los componentes
         txtTitulo = new Label("Titulo del error");
