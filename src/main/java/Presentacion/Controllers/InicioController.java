@@ -277,6 +277,20 @@ public class InicioController implements Initializable {
 
 
        anchorConfig.setVisible(true);
+       
+       if(Sesion.getInstance().isIsFullHD()){
+            fullhd.setSelected(true);
+        }else{
+            normal.setSelected(true);
+        }
+        
+        if(Sesion.getInstance().isIsDarkMode()){
+            oscura.setSelected(true);
+        }else{
+            clara.setSelected(true);
+        }
+        
+        
        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1), anchorConfig);
        fadeTransition.setFromValue(0); // Opacidad inicial de 0 (invisible)
        fadeTransition.setToValue(1); // Opacidad final de 1 (totalmente visible)

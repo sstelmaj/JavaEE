@@ -4,3 +4,8 @@ Label{
     -fx-text-fill: #000000; 
     
 }
+
+#anchorConfig Label{
+    -fx-text-fill: #000000; 
+    
+}
