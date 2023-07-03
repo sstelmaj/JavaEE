@@ -68,7 +68,7 @@
                            </content>
                         </ScrollPane>
                         <Label layoutX="21.0" layoutY="195.0" prefHeight="25.0" prefWidth="63.0" text="Url" />
-                        <Button fx:id="linkButtonVisualizar1" layoutX="478.0" layoutY="195.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="88.0" text="Visualizar" />
+                        <Button fx:id="linkButtonVisualizar1" layoutX="478.0" layoutY="195.0" mnemonicParsing="false" onAction="#visualizarRepo" prefHeight="25.0" prefWidth="88.0" text="Visualizar" />
                         <TextField fx:id="textFieldRepositorio" layoutX="94.0" layoutY="195.0" prefHeight="25.0" prefWidth="374.0" />
                      </children>
                   </AnchorPane>

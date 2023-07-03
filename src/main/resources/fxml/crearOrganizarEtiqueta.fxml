@@ -15,28 +15,33 @@
         <URL value="@/styles/vista2.css" />
     </stylesheets>
    <children>
-      <ScrollPane layoutX="152.0" layoutY="75.0" prefHeight="280.0" prefWidth="264.0">
-         <content>
-            <TreeView fx:id="arbolEtiquetas" editable="true" prefHeight="278.0" prefWidth="262.0" />
-         </content>
-      </ScrollPane>
-      <Label fx:id="textTitulo" layoutX="152.0" layoutY="26.0" text="Etiquetas">
-         <font>
-            <Font size="24.0" />
-         </font></Label>
-      <ScrollPane layoutX="436.0" layoutY="144.0" prefHeight="211.0" prefWidth="213.0">
-         <content>
-            <ListView fx:id="listaSubEtiquetas" prefHeight="208.0" prefWidth="211.0" />
-         </content>
-      </ScrollPane>
-      <Label layoutX="436.0" layoutY="79.0" text="Etiqueta" />
-      <TextField fx:id="textEtiquetaPadre" layoutX="520.0" layoutY="75.0" prefHeight="25.0" prefWidth="129.0" />
-      <Button fx:id="ingresarEtiqueta" layoutX="660.0" layoutY="330.0" mnemonicParsing="false" onAction="#clickIngresarEtiqueta" text="Ingresar Etiqueta" />
-      <Label layoutX="436.0" layoutY="116.0" text="Sub Etiqueta" />
-      <TextField fx:id="textSubEtiqueta" layoutX="520.0" layoutY="112.0" prefHeight="25.0" prefWidth="129.0" />
-      <Button fx:id="agregarSubEtiqueta" layoutX="660.0" layoutY="112.0" mnemonicParsing="false" onAction="#clickAgregarSubEtiqueta" prefHeight="25.0" prefWidth="67.0" text="Agregar" />
-      <Button fx:id="verificarEtiqueta" layoutX="660.0" layoutY="75.0" mnemonicParsing="false" onAction="#clickVerificar" prefHeight="25.0" prefWidth="67.0" text="Verificar" />
-      <Button fx:id="botonQuitar" layoutX="660.0" layoutY="144.0" mnemonicParsing="false" onAction="#clickQuitar" prefHeight="25.0" prefWidth="67.0" text="Quitar" />
-      <Button layoutX="152.0" layoutY="363.0" mnemonicParsing="false" text="Eliminar Etiqueta" onAction="#eliminarEtiqueta"/>
+      <AnchorPane fx:id="container" layoutX="115.0" layoutY="16.0" prefHeight="390.0" prefWidth="691.0">
+         <children>
+            <ScrollPane layoutX="32.0" layoutY="55.0" prefHeight="280.0" prefWidth="264.0">
+               <content>
+                  <TreeView fx:id="arbolEtiquetas" editable="true" prefHeight="278.0" prefWidth="262.0" />
+               </content>
+            </ScrollPane>
+            <Label fx:id="textTitulo" layoutX="308.0" layoutY="5.0" text="Etiquetas">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <ScrollPane layoutX="321.0" layoutY="124.0" prefHeight="211.0" prefWidth="213.0">
+               <content>
+                  <ListView fx:id="listaSubEtiquetas" prefHeight="208.0" prefWidth="211.0" />
+               </content>
+            </ScrollPane>
+            <Label layoutX="324.0" layoutY="64.0" text="Etiqueta" />
+            <TextField fx:id="textEtiquetaPadre" layoutX="405.0" layoutY="60.0" prefHeight="25.0" prefWidth="129.0" />
+            <Button fx:id="ingresarEtiqueta" layoutX="545.0" layoutY="310.0" mnemonicParsing="false" onAction="#clickIngresarEtiqueta" text="Ingresar Etiqueta" />
+            <Label layoutX="323.0" layoutY="101.0" text="Sub Etiqueta" />
+            <TextField fx:id="textSubEtiqueta" layoutX="405.0" layoutY="97.0" prefHeight="25.0" prefWidth="129.0" />
+            <Button fx:id="agregarSubEtiqueta" layoutX="545.0" layoutY="97.0" mnemonicParsing="false" onAction="#clickAgregarSubEtiqueta" prefHeight="25.0" prefWidth="67.0" text="Agregar" />
+            <Button fx:id="verificarEtiqueta" layoutX="545.0" layoutY="60.0" mnemonicParsing="false" onAction="#clickVerificar" prefHeight="25.0" prefWidth="67.0" text="Verificar" />
+            <Button fx:id="botonQuitar" layoutX="545.0" layoutY="131.0" mnemonicParsing="false" onAction="#clickQuitar" prefHeight="25.0" prefWidth="67.0" text="Quitar" />
+            <Button fx:id="btnEliminar" layoutX="32.0" layoutY="344.0" mnemonicParsing="false" onAction="#eliminarEtiqueta" text="Eliminar Etiqueta" />
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>
