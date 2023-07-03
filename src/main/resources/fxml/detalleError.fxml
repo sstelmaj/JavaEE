@@ -73,11 +73,11 @@
                            <children>
                               <ScrollPane layoutY="6.0" prefHeight="364.0" prefWidth="639.0">
                                 <content>
-                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="363.0" prefWidth="636.0">
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="409.0" prefWidth="636.0">
                                        <children>
-                                          <ListView fx:id="listaNotas" layoutX="37.0" layoutY="14.0" prefHeight="236.0" prefWidth="563.0" />
-                                          <TextArea fx:id="txtAreaNotas" layoutX="36.0" layoutY="260.0" prefHeight="66.0" prefWidth="565.0" />
-                                          <Button fx:id="btnNotas" layoutX="503.0" layoutY="334.0" mnemonicParsing="false" onMouseClicked="#agregarNota" text="Añadir nota" />
+                                          <ListView fx:id="listaNotas" layoutX="37.0" layoutY="14.0" prefHeight="219.0" prefWidth="563.0" />
+                                          <TextArea fx:id="txtAreaNotas" layoutX="36.0" layoutY="244.0" prefHeight="66.0" prefWidth="565.0" />
+                                          <Button fx:id="btnNotas" layoutX="503.0" layoutY="318.0" mnemonicParsing="false" onMouseClicked="#agregarNota" text="Añadir nota" />
                                        </children>
                                     </AnchorPane>
                                 </content>
@@ -90,7 +90,6 @@
                      <content>
                         <AnchorPane fx:id="anchorFile" prefHeight="200.0" prefWidth="200.0">
                            <children>
-                              <Button layoutX="171.0" layoutY="273.0" mnemonicParsing="false" text="Descargar" />
                               <ScrollPane layoutX="23.0" layoutY="22.0" prefHeight="240.0" prefWidth="566.0">
                                  <content>
                                     <TableView fx:id="tablaArchivos" prefHeight="237.0" prefWidth="566.0">
@@ -101,7 +100,7 @@
                                     </TableView>
                                  </content>
                               </ScrollPane>
-                              <Button fx:id="botonVer" layoutX="66.0" layoutY="273.0" mnemonicParsing="false" onAction="#mostrarArchivos" text="Ver archivo" />
+                              <Button fx:id="botonVer" layoutX="23.0" layoutY="273.0" mnemonicParsing="false" onAction="#mostrarArchivos" text="Ver" />
                            </children>
                         </AnchorPane>
                      </content>
@@ -121,9 +120,9 @@
                   </AnchorPane>
               </content>
             </ScrollPane>
-            <ComboBox fx:id="comboBoxEtiquetas" layoutX="14.0" layoutY="32.0" prefWidth="150.0" />
-            <ComboBox fx:id="comboBoxSubEtiq" layoutX="183.0" layoutY="32.0" prefWidth="150.0" />
-            <Button fx:id="btnAgregarEtiqueta" layoutX="367.0" layoutY="32.0" mnemonicParsing="false" onMouseClicked="#agregarEtiquetaAFiltro" text="Agregar" />
+            <ComboBox fx:id="comboBoxEtiquetas" layoutX="14.0" layoutY="32.0" prefWidth="150.0" promptText="Etiqueta" />
+            <ComboBox fx:id="comboBoxSubEtiq" layoutX="183.0" layoutY="32.0" prefWidth="150.0" promptText="Subetiqueta" />
+            <Button fx:id="btnAgregarEtiqueta" layoutX="357.0" layoutY="32.0" mnemonicParsing="false" onMouseClicked="#agregarEtiquetaAFiltro" text="Agregar" />
             <HBox fx:id="buscador" layoutX="2.0" layoutY="68.0" prefHeight="31.0" prefWidth="355.0" />
             <Label layoutX="14.0" layoutY="8.0" text="Etiquetas" />
             <Label layoutX="187.0" layoutY="8.0" text="Subetiquetas" />
