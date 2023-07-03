@@ -5,7 +5,7 @@
 package Logica.Controladores;
 
 import Logica.Clases.Solucion;
-import Logica.DTOs.CantidadPorFecha;
+import Logica.DTOs.CantidadPorMes;
 import Persistencia.Conexion;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -53,14 +53,12 @@ public class SolucionController {
      }
      
      
-     public List<CantidadPorFecha> obtenerCantidadSolucionesSemanalesPorFecha(String fecha) {
+     public List<CantidadPorMes> obtenerCantidadSolucionesMensuales() {
         EntityManager em = Conexion.getInstance().getEntity();
-        List<CantidadPorFecha> resultado = null;
+        List<CantidadPorMes> resultado = null;
         em.getTransaction().begin();
-        try{
-            Query q = em.createNativeQuery("SELECT COUNT(*) AS CANTIDAD, FECHASUBIDA From solucion WHERE FECHASUBIDA <= ? AND FECHASUBIDA > DATE_SUB(?, INTERVAL 6 DAY) GROUP BY FECHASUBIDA", "CantidadPorFecha");
-            q.setParameter(1, fecha);
-            q.setParameter(2, fecha);
+        try{            
+            Query q = em.createNativeQuery("SELECT COUNT(*) AS CANTIDAD, DATE_FORMAT(FECHASUBIDA, '%Y/%m') AS MES FROM solucion WHERE FECHASUBIDA <= CURDATE() AND FECHASUBIDA > DATE_SUB(CURDATE(), INTERVAL 8 MONTH) GROUP BY DATE_FORMAT(FECHASUBIDA, '%Y/%m')", "CantidadPorMes");
             resultado = q.getResultList();
             em.getTransaction().commit();
         }catch(Exception e){

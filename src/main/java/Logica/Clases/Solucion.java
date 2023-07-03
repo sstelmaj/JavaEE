@@ -6,7 +6,7 @@ package Logica.Clases;
  */
 
 
-import Logica.DTOs.CantidadPorFecha;
+import Logica.DTOs.CantidadPorMes;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -18,7 +18,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -33,12 +32,12 @@ import org.eclipse.persistence.annotations.CascadeOnDelete;
  */
 
 @SqlResultSetMapping(
-    name = "CantidadPorFecha",
+    name = "CantidadPorMes",
     classes = @ConstructorResult(
-        targetClass = CantidadPorFecha.class,
+        targetClass = CantidadPorMes.class,
         columns = {
-            @ColumnResult(name = "cantidad"),
-            @ColumnResult(name = "fechaSubida"),
+            @ColumnResult(name = "CANTIDAD"),
+            @ColumnResult(name = "MES"),
         }
     )
 )

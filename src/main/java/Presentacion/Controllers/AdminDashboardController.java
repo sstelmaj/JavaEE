@@ -9,7 +9,7 @@ import Logica.Clases.Usuario;
 import Logica.Controladores.ErrorController;
 import Logica.Controladores.SolucionController;
 import Logica.Controladores.UsuarioController;
-import Logica.DTOs.CantidadPorFecha;
+import Logica.DTOs.CantidadPorMes;
 import Persistencia.Conexion;
 import Persistencia.Sesion;
 import java.io.File;
@@ -28,7 +28,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -48,12 +47,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -279,11 +273,11 @@ public class AdminDashboardController implements Initializable {
         System.out.println("pie w" + pieW);
         System.out.println("pie h" + pieH);
     }
-
-    private void loadLineChartData() {
-        List<CantidadPorFecha> erroresSemanales = ErrorController.getInstance().obtenerCantidadErroresSemanalesPorFecha("2023-06-28");
-        List<CantidadPorFecha> solucionesSemanales = SolucionController.getInstance().obtenerCantidadSolucionesSemanalesPorFecha("2023-06-28");
-        List<CantidadPorFecha> usuariosSemanales = UsuarioController.getInstance().obtenerCantidadUsuariosSemanalesPorFecha("2023-06-28");
+    private void loadLineChartData(){
+        List<CantidadPorMes> erroresSemanales = ErrorController.getInstance().obtenerCantidadErroresMensuales();
+        List<CantidadPorMes> solucionesSemanales = SolucionController.getInstance().obtenerCantidadSolucionesMensuales();
+        List<CantidadPorMes> usuariosSemanales = UsuarioController.getInstance().obtenerCantidadUsuariosMensuales();
+        
 
         ObservableList<XYChart.Series> lineRecordData = FXCollections.observableArrayList(
                 new XYChart.Series("Errores Publicados", parseListToObservableData(erroresSemanales)),
@@ -301,23 +295,21 @@ public class AdminDashboardController implements Initializable {
         System.out.println("line w" + lineW);
         System.out.println("line h" + lineH);
     }
-
-    private ObservableList<XYChart.Data> parseListToObservableData(List<CantidadPorFecha> lista) {
+    
+    private ObservableList<XYChart.Data> parseListToObservableData(List<CantidadPorMes> lista){
         ObservableList<XYChart.Data> ol = FXCollections.observableArrayList();
-        lista.forEach(item -> ol.add(new XYChart.Data(item.getStringFechaSubida(), item.getIntCantidad())));
+        lista.forEach(item -> ol.add(new XYChart.Data(item.getMes(), item.getCantidad())));
         return ol;
     }
-
-    private void sortCategoryAxis(List<CantidadPorFecha>... listas) {
+    private void sortCategoryAxis(List<CantidadPorMes> ...listas){
         ObservableList<String> categories = FXCollections.observableArrayList();
-        for (List<CantidadPorFecha> lista : listas) {
-            for (CantidadPorFecha item : lista) {
-                String fecha = item.getStringFechaSubida();
-                if (!categories.contains(fecha)) {
-                    categories.add(fecha);
-                }
+        for (List<CantidadPorMes> lista : listas) {
+            for (CantidadPorMes item : lista) {
+                if (!categories.contains(item.getMes())) 
+                    categories.add(item.getMes());
             }
         }
+        
 
         Collections.sort(categories);
         categories.forEach(System.out::println);
