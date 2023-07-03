@@ -94,7 +94,8 @@ public class AdminUsuariosController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        usuariosDB = UsuarioController.getInstance().obtenerUsuarios();
+        String mailAdminLogueado = Sesion.getInstance().getUser();
+        usuariosDB = UsuarioController.getInstance().obtenerUsuariosParaGestionar(mailAdminLogueado);
         perfilesDB = PerfilController.getInstance().obtenerNombresDePerfiles();
            perfiles_ = FXCollections.observableArrayList();
         //asocia las columnas con el tituo

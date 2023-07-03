@@ -43,6 +43,19 @@ public class UsuarioController {
         return resultado;
     }
     
+    public List<Usuario> obtenerUsuariosParaGestionar(String mail){
+        EntityManager em = Conexion.getInstance().getEntity();
+        List<Usuario> resultado = null;
+        em.getTransaction().begin();
+        try {
+                resultado = em.createNativeQuery("SELECT * FROM usuario WHERE mail not in ('admin@mail.com', '"+ mail +"')", Usuario.class).getResultList();
+            em.getTransaction().commit();
+        } catch (Exception e){
+            em.getTransaction().rollback();
+        }
+        return resultado;
+    }
+    
 
     public void actualizarEstadoUsuarioPorMail(String mail, Boolean nuevoEstado){
         EntityManager em = Conexion.getInstance().getEntity();
