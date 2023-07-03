@@ -25,6 +25,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -460,6 +461,10 @@ public class SubirSolucionController implements Initializable {
             Date date = Date.from(inputFecha.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
             System.out.println(date);
             crear_solucion.setFechaSubida(date);
+        } else {
+            Calendar calendar = Calendar.getInstance();
+            Date fechaActual = calendar.getTime();
+            crear_solucion.setFechaSubida(fechaActual);
         }
 
         crear_solucion.setLink(linkTextFieldUrl.getText());

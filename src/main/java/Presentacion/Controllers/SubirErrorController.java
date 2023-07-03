@@ -80,6 +80,7 @@ import org.fife.ui.rtextarea.RTextScrollPane;
 import Presentacion.RSTA;
 import Presentacion.Main;
 import java.awt.Insets;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -512,6 +513,10 @@ public class SubirErrorController implements Initializable {
             Date date = Date.from(inputFecha.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
             System.out.println(date);
             error.setFechaSubida(date);
+        } else {
+            Calendar calendar = Calendar.getInstance();
+            Date fechaActual = calendar.getTime();
+            error.setFechaSubida(fechaActual);
         }
         error.setLink(linkTextFieldUrl.getText());
         error.setRepositorio(textFieldRepositorio.getText());
