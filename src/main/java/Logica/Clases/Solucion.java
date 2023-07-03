@@ -44,10 +44,6 @@ import org.eclipse.persistence.annotations.CascadeOnDelete;
 )
 @Entity
 public class Solucion implements Serializable {
-
-
-    @ManyToMany(cascade={CascadeType.ALL})
-    private List<Etiqueta> etiquetas;
     
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     
@@ -60,6 +56,9 @@ public class Solucion implements Serializable {
     @OneToMany(cascade={CascadeType.ALL})
     private List<Archivo> archivos;
 
+    @CascadeOnDelete
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Etiqueta> etiquetas;
    
 
     private static final long serialVersionUID = 1L;
