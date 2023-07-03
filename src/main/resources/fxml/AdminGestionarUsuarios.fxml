@@ -24,11 +24,11 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <Button fx:id="btnCrearUsuario" layoutX="334.0" layoutY="65.0" mnemonicParsing="false" onAction="#crearUsuario" text="Crear Usuario" />
-      <Button fx:id="btnModificar" disable="true" layoutX="505.0" layoutY="65.0" mnemonicParsing="false" onAction="#modificar" text="Modificar Usuario" />
-      <Button fx:id="btnCrearPerfil" layoutX="689.0" layoutY="65.0" mnemonicParsing="false" onAction="#crearPerfil" text="Crear Perfil" />
-      <Button fx:id="btnModificarPerfil" disable="true" layoutX="825.0" layoutY="65.0" mnemonicParsing="false" onAction="#modificarPerfil" text="Modificar Perfil" />
-      <Label layoutX="417.0" layoutY="108.0" text="Usuarios">
+      <Button fx:id="btnCrearUsuario" layoutX="51.0" layoutY="55.0" mnemonicParsing="false" onAction="#crearUsuario" text="Crear Usuario" />
+      <Button fx:id="btnModificar" disable="true" layoutX="151.0" layoutY="55.0" mnemonicParsing="false" onAction="#modificar" text="Modificar Usuario" />
+      <Button fx:id="btnCrearPerfil" layoutX="877.0" layoutY="68.0" mnemonicParsing="false" onAction="#crearPerfil" text="Crear Perfil" />
+      <Button fx:id="btnModificarPerfil" disable="true" layoutX="964.0" layoutY="68.0" mnemonicParsing="false" onAction="#modificarPerfil" text="Modificar Perfil" />
+      <Label layoutX="421.0" layoutY="95.0" text="Usuarios">
          <font>
             <Font size="18.0" />
          </font>
@@ -42,7 +42,7 @@
             <TableColumn fx:id="colCrear" editable="false" text="crearUsuario" />
          </columns>
       </TableView>
-      <Label fx:id="labelPerfil" layoutX="1061.0" layoutY="108.0" text="Perfiles">
+      <Label fx:id="labelPerfil" layoutX="1063.0" layoutY="109.0" text="Perfiles">
          <font>
             <Font size="18.0" />
          </font>

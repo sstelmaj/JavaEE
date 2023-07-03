@@ -51,8 +51,6 @@ public class DashboardController implements Initializable {
 
     @FXML
     private AnchorPane contentAPane;
-    @FXML
-    private ComboBox<String> selectorVista;
 
     private Map<String, String> vistas = new HashMap<>(); // mapa de vistas
 
@@ -112,9 +110,9 @@ public class DashboardController implements Initializable {
         System.out.println(mainStage.widthProperty().toString());
     }
 
-    public void setVista(String nombreVista) {
-        this.selectorVista.setValue(nombreVista);
-    }
+//    public void setVista(String nombreVista) {
+//        this.selectorVista.setValue(nombreVista);
+//    }
 
     public void setContenido(Parent vista) {
 
@@ -221,129 +219,6 @@ public class DashboardController implements Initializable {
         vistas.put("Crear Usuario", "/fxml/crearUsuario.fxml");
         vistas.put("Modificar Usuario", "/fxml/crearUsuario.fxml");
         vistas.put("Prueba Filtrado", "/fxml/pruebaFiltrado.fxml");
-
-        // Agregar elementos al ComboBox
-        selectorVista.getItems().addAll( "Subir Error", "Modificar Error", "Subir Solucion", "Modificar Solucion",
-                "Vista 2", "Detalle Solucion", "Crear Etiqueta", "Modificar Etiqueta", "Admin", "Error", "Crear Perfil", "Modificar Perfil", "Crear Usuario", "Modificar Usuario", "Prueba Filtrado");
-
-        // Listener para cambio de selecciÃ³n en el ComboBox
-        selectorVista.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            fxml = vistas.get(newValue); // Obtener ruta del fxml correspondiente al valor seleccionado
-            try {
-                if (Sesion.getInstance().isIsDarkMode()) {
-                    if (anchorDash.getStyleClass().contains("fondoDashLight")) {
-                        anchorDash.getStyleClass().remove("fondoDashLight");
-                        contentAPane.getStyleClass().remove("fondoContentLight");
-                        contentAPane.getStyleClass().remove("fondoInputsLight");
-                        contentAPane.getStylesheets().remove("/styles/itemsLight.css");
-                    }
-                    anchorDash.getStyleClass().add("fondoDashDark");
-                    contentAPane.getStyleClass().add("fondoContentDark");
-                    contentAPane.getStyleClass().add("fondoInputsDark");
-                    contentAPane.getStylesheets().add("/styles/itemsDark.css");
-
-                } else {
-                    if (anchorDash.getStyleClass().contains("fondoDashDark")) {
-
-                        anchorDash.getStyleClass().remove("fondoDashDark");
-                        contentAPane.getStyleClass().remove("fondoContentDark");
-                        contentAPane.getStyleClass().remove("fondoInputsDark");
-                         contentAPane.getStylesheets().remove("/styles/itemsDark.css");
-
-                    }
-                    anchorDash.getStyleClass().add("fondoDashLight");
-                    contentAPane.getStyleClass().add("fondoContentLight");
-                    contentAPane.getStyleClass().add("fondoInputsLight");
-                    contentAPane.getStylesheets().add("/styles/itemsLight.css");
-                  
-                }
-
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource(fxml));
-                Parent nuevaVista = loader.load();
-
-                if (newValue.equals("Modificar Error")) {
-                    SubirErrorController subirErrorController = (SubirErrorController) loader.getController();
-                    List<Logica.Clases.Error> errores = ErrorController.getInstance().listaErrores(new ArrayList(), "201");
-                    if (errores != null) {
-                        System.out.println("llega");
-                        subirErrorController.setErrorModificar(errores.get(0));
-                        subirErrorController.setPanelContent(contentAPane);
-                    } else {
-                        System.out.println("no llega");
-                    }
-                    subirErrorController.setTipoPantalla("Modificar Error");
-                } else if (newValue.equals("Modificar Solucion")) {
-                    SubirSolucionController subirSolucionController = (SubirSolucionController) loader.getController();
-                    Solucion soluciones = SolucionController.getInstance().obtenerSolucion(101);
-                    subirSolucionController.setPanelContent(contentAPane);
-                    if (soluciones != null) {
-                        System.out.println("llega");
-                        subirSolucionController.setSolucionModificar(soluciones);
-
-                    } else {
-                        System.out.println("no llega");
-                    }
-                    subirSolucionController.setTipoPantalla("Modificar Solucion");
-
-                } else if (newValue.equals("Modificar Perfil")) {
-                    CrearPerfilController crearPerfilController = (CrearPerfilController) loader.getController();
-                    Perfil perfil = PerfilController.getInstance().obtenerPerfil("Admin");
-                    if (perfil != null) {
-                        System.out.println("llega");
-                        crearPerfilController.setPerfilModificar(perfil);
-                    } else {
-                        System.out.println("no llega");
-                    }
-                    crearPerfilController.setTipoPantalla("Modificar Perfil");
-                    crearPerfilController.setDashboard(this);
-                } else if (newValue.equals("Modificar Usuario")) {
-                    CrearUsuarioController crearUsuarioController = (CrearUsuarioController) loader.getController();
-                    Usuario usuario = UsuarioController.getInstance().obtenerUsuario("martinperez@gmail.com");
-                    if (usuario != null) {
-                        System.out.println("llega");
-                        crearUsuarioController.setUsuarioModificar(usuario);
-                    } else {
-                        System.out.println("no llega");
-                    }
-                    crearUsuarioController.setTipoPantalla("Modificar Usuario");
-
-                    crearUsuarioController.setDashboard(this);
-                }
-
-                if (fxml.equals("/fxml/detalleError.fxml")) {
-                    DetalleErrorController detalleErrorController = (DetalleErrorController) loader.getController();
-                    detalleErrorController.setDashboard(this);
-                    //detalleErrorController.initialize(contentAPane, );
-                } else if (newValue.equals("Modificar Etiqueta")) {
-                    crearEtiquetaController crearEtiquetaController = (crearEtiquetaController) loader.getController();
-                    Etiqueta etiqueta = EtiquetaController.getInstance().obtenerEtiqueta("SO");
-                    if (etiqueta != null) {
-                        System.out.println("llega");
-                        crearEtiquetaController.setEtiquetaModificar(etiqueta);
-                    } else {
-                        System.out.println("no llega");
-                    }
-                    crearEtiquetaController.setTipoPantalla("Modificar Etiqueta");
-
-                    //crearEtiquetaController.setDashboard(this);
-                } else if (newValue.equals("Subir Error")) {
-                    SubirErrorController subirErrorController = (SubirErrorController) loader.getController();
-                    subirErrorController.setPanelContent(contentAPane);
-
-                } else if (newValue.equals("Subir Solucion")) {
-                    SubirSolucionController subirErrorController = (SubirSolucionController) loader.getController();
-                    subirErrorController.setPanelContent(contentAPane);
-
-                }
-
-                contentAPane.getChildren().setAll(nuevaVista);
-
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
-        });
-
     }
 
     public void setVista(Parent nuevaVista) {
