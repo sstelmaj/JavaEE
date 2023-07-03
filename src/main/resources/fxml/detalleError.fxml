@@ -10,35 +10,37 @@
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.image.*?>
 
-<AnchorPane id="AnchorPane" fx:id="anchPaneGeneral" prefHeight="701.0" prefWidth="1382.0" styleClass="mainFxmlClasss" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentacion.Controllers.DetalleErrorController">
+<AnchorPane id="AnchorPane" fx:id="anchPaneGeneral" prefHeight="701.0" prefWidth="1382.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentacion.Controllers.DetalleErrorController">
     <stylesheets>
         <URL value="@/styles/detalles.css" />
     </stylesheets>
     <children>
       <AnchorPane layoutX="66.0" layoutY="84.0" prefHeight="557.0" prefWidth="639.0">
          <children>
-            <Accordion prefHeight="557.0" prefWidth="639.0">
+            <Accordion layoutY="44.0" prefHeight="483.0" prefWidth="639.0">
               <panes>
-                <TitledPane animated="false" text="Descripcion">
+                <TitledPane animated="false" prefHeight="380.0" prefWidth="639.0" text="Descripcion">
                   <content>
-                    <AnchorPane fx:id="anchPaneDescrip" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                    <AnchorPane fx:id="anchPaneDescrip" minHeight="0.0" minWidth="0.0" prefHeight="413.0" prefWidth="637.0" style="-fx-background-color: #293134;">
                            <children>
-                              <TextFlow fx:id="txtFlowDescripcion" prefHeight="314.0" prefWidth="639.0" />
+                              <TextFlow fx:id="txtFlowDescripcion" prefHeight="256.0" prefWidth="639.0" />
                               <AnchorPane fx:id="apEtiquetas" layoutY="315.0" prefHeight="86.0" prefWidth="639.0">
                                  <children>
                                     <Text layoutX="14.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Etiquetas:" wrappingWidth="117.6708984375" />
                                     <HBox fx:id="hBoxEtiquetas" layoutY="32.0" prefHeight="55.0" prefWidth="639.0" />
                                  </children>
                               </AnchorPane>
-                           </children></AnchorPane>
+                           </children>
+                        </AnchorPane>
                   </content>
                 </TitledPane>
                 <TitledPane animated="false" text="Salida por consola">
                   <content>
                     <AnchorPane fx:id="anchPaneConsola" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <TextFlow fx:id="txtFlowConsola" layoutY="7.0" prefHeight="390.0" prefWidth="639.0" />
-                           </children></AnchorPane>
+                              <TextFlow fx:id="txtFlowConsola" layoutY="7.0" prefHeight="354.0" prefWidth="639.0" />
+                           </children>
+                        </AnchorPane>
                   </content>
                 </TitledPane>
                 <TitledPane animated="false" text="Imagenes">
@@ -59,41 +61,33 @@
                               </GridPane>
                               <Button fx:id="prevButton" layoutX="14.0" layoutY="7.0" mnemonicParsing="false" text="Anterior" />
                               <Button fx:id="nextButton" layoutX="534.0" layoutY="7.0" mnemonicParsing="false" text="Siguiente" />
-                           </children></AnchorPane>
+                           </children>
+                        </AnchorPane>
                   </content>
                 </TitledPane>
-                  <TitledPane animated="false" text="Codigo">
+                  <TitledPane animated="false" maxHeight="389.0" prefHeight="389.0" text="Codigo">
                      <content>
-                        <AnchorPane fx:id="anchPaneCodigo" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        <AnchorPane fx:id="anchPaneCodigo" maxHeight="389.0" minHeight="0.0" minWidth="0.0" prefHeight="389.0" prefWidth="637.0" />
                      </content>
                   </TitledPane>
-                  <TitledPane animated="false" text="Notas">
+                  <TitledPane animated="false" maxHeight="400.0" prefHeight="422.0" prefWidth="639.0" text="Notas">
                      <content>
-                        <AnchorPane fx:id="anchPaneDescrip1" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="392.0" prefWidth="637.0">
                            <children>
-                              <ScrollPane layoutY="6.0" prefHeight="364.0" prefWidth="639.0">
-                                <content>
-                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="363.0" prefWidth="636.0">
-                                       <children>
-                                          <ListView fx:id="listaNotas" layoutX="37.0" layoutY="14.0" prefHeight="236.0" prefWidth="563.0" />
-                                          <TextArea fx:id="txtAreaNotas" layoutX="36.0" layoutY="260.0" prefHeight="82.0" prefWidth="565.0" />
-                                          <Button layoutX="502.0" layoutY="348.0" mnemonicParsing="false" onMouseClicked="#agregarNota" text="Añadir nota" />
-                                       </children>
-                                    </AnchorPane>
-                                </content>
-                              </ScrollPane>
+                              <Button fx:id="btnNotas" layoutX="37.0" layoutY="287.0" mnemonicParsing="false" onMouseClicked="#agregarNota" text="Añadir nota" />
+                              <ListView fx:id="listaNotas" layoutX="37.0" layoutY="26.0" prefHeight="178.0" prefWidth="563.0" />
+                              <TextArea fx:id="txtAreaNotas" layoutX="36.0" layoutY="215.0" prefHeight="66.0" prefWidth="565.0" />
                            </children>
                         </AnchorPane>
                      </content>
                   </TitledPane>
-                  <TitledPane animated="false" prefHeight="200.0" prefWidth="200.0" text="Recursos adicionales">
+                  <TitledPane animated="false" prefHeight="412.0" prefWidth="639.0" text="Recursos adicionales">
                      <content>
-                        <AnchorPane fx:id="anchorFile" prefHeight="200.0" prefWidth="200.0">
+                        <AnchorPane fx:id="anchorFile" prefHeight="372.0" prefWidth="637.0">
                            <children>
-                              <Button layoutX="171.0" layoutY="273.0" mnemonicParsing="false" text="Descargar" />
-                              <ScrollPane layoutX="23.0" layoutY="22.0" prefHeight="240.0" prefWidth="566.0">
+                              <ScrollPane layoutX="23.0" layoutY="22.0" prefHeight="212.0" prefWidth="566.0">
                                  <content>
-                                    <TableView fx:id="tablaArchivos" prefHeight="237.0" prefWidth="566.0">
+                                    <TableView fx:id="tablaArchivos" prefHeight="202.0" prefWidth="566.0">
                                        <columns>
                                           <TableColumn fx:id="columnArchivo" prefWidth="201.0" text="Archivo" />
                                           <TableColumn fx:id="columnExt" minWidth="0.0" prefWidth="197.0" text="Extension" />
@@ -101,7 +95,7 @@
                                     </TableView>
                                  </content>
                               </ScrollPane>
-                              <Button fx:id="botonVer" layoutX="66.0" layoutY="273.0" mnemonicParsing="false" onAction="#mostrarArchivos" text="Ver archivo" />
+                              <Button fx:id="botonVer" layoutX="23.0" layoutY="243.0" mnemonicParsing="false" onAction="#mostrarArchivos" text="Ver" />
                            </children>
                         </AnchorPane>
                      </content>
@@ -110,37 +104,43 @@
             </Accordion>
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="828.0" layoutY="66.0" prefHeight="597.0" prefWidth="461.0">
+      <AnchorPane layoutX="828.0" layoutY="94.0" prefHeight="511.0" prefWidth="423.0">
          <children>
-            <ScrollPane layoutX="14.0" layoutY="99.0" prefHeight="476.0" prefWidth="399.0">
+            <ScrollPane layoutX="14.0" layoutY="99.0" prefHeight="354.0" prefWidth="399.0">
               <content>
-                <AnchorPane fx:id="anchPaneLista" minHeight="0.0" minWidth="0.0" prefHeight="476.0" prefWidth="397.0">
+                <AnchorPane fx:id="anchPaneLista" minHeight="0.0" minWidth="0.0" prefHeight="360.0" prefWidth="397.0">
                      <children>
-                        <VBox fx:id="lista" prefHeight="478.0" prefWidth="399.0" />
+                        <VBox fx:id="lista" prefHeight="354.0" prefWidth="399.0" />
                      </children>
                   </AnchorPane>
               </content>
             </ScrollPane>
-            <ComboBox fx:id="comboBoxEtiquetas" layoutX="14.0" layoutY="32.0" prefWidth="150.0" />
-            <ComboBox fx:id="comboBoxSubEtiq" layoutX="183.0" layoutY="32.0" prefWidth="150.0" />
-            <Button fx:id="btnAgregarEtiqueta" layoutX="367.0" layoutY="32.0" mnemonicParsing="false" onMouseClicked="#agregarEtiquetaAFiltro" text="Agregar" />
+            <ComboBox fx:id="comboBoxEtiquetas" layoutX="14.0" layoutY="32.0" prefWidth="150.0" promptText="Etiqueta" />
+            <ComboBox fx:id="comboBoxSubEtiq" layoutX="183.0" layoutY="32.0" prefWidth="150.0" promptText="Subetiqueta" />
+            <Button fx:id="btnAgregarEtiqueta" layoutX="357.0" layoutY="32.0" mnemonicParsing="false" onMouseClicked="#agregarEtiquetaAFiltro" text="Agregar" />
             <HBox fx:id="buscador" layoutX="2.0" layoutY="68.0" prefHeight="31.0" prefWidth="355.0" />
-            <Text layoutX="14.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Etiquetas" />
-            <Text layoutX="183.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Subetiquetas" />
-            <Button fx:id="btnAgregarSolucion" layoutX="278.0" layoutY="586.0" mnemonicParsing="false" onMouseClicked="#agregarSolucion" text="Agregar Solucion" />
+            <Label layoutX="14.0" layoutY="8.0" text="Etiquetas" />
+            <Label layoutX="187.0" layoutY="8.0" text="Subetiquetas" />
+            <Button fx:id="btnAgregarSolucion" layoutX="288.0" layoutY="497.0" mnemonicParsing="false" onMouseClicked="#agregarSolucion" text="Agregar Solucion" />
+            <Accordion layoutX="2.0" layoutY="472.0" />
+            <Button fx:id="btnModificarError" layoutX="8.0" layoutY="497.0" mnemonicParsing="false" onMouseClicked="#modificarError" text="Modificar error" />
          </children>
       </AnchorPane>
-      <Text layoutX="957.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Soluciones">
+      <Label layoutX="983.0" layoutY="67.0" text="Soluciones">
          <font>
-            <Font size="30.0" />
+            <Font size="24.0" />
          </font>
-      </Text>
-      <Text fx:id="txtTitulo" layoutX="287.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Titulo del error">
+      </Label>
+      <Label fx:id="txtTitulo" layoutX="61.0" layoutY="56.0" prefHeight="45.0" prefWidth="123.0" text="Titulo del error">
          <font>
-            <Font size="30.0" />
+            <Font size="18.0" />
          </font>
-      </Text>
-      <Text fx:id="txtFechaModif" layoutX="66.0" layoutY="669.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ultima modificación: " />
-      <Button fx:id="btnModificarError" layoutX="585.0" layoutY="647.0" mnemonicParsing="false" onMouseClicked="#modificarError" text="Modificar error" />
+      </Label>
+      <Label fx:id="txtFechaModif" layoutX="66.0" layoutY="652.0" text="Fecha de subida: " />
+      <Label layoutX="563.0" layoutY="25.0" text="Detalle del Error">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

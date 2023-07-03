@@ -11,6 +11,7 @@ import Persistencia.Sesion;
 import Presentacion.Main;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
@@ -27,6 +28,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
@@ -88,8 +91,37 @@ public class InicioController implements Initializable {
     private AjustesUsuario ajustesModificar = Sesion.getInstance().getUsuario().getAjustes();
     
     private Usuario usuarioSesion = Sesion.getInstance().getUsuario();
-   
+    
+    private boolean mostrarAjustes = true;
+    
+     private static InicioController instancia;
+    
+    public static InicioController getInstance() {
+        
+        return instancia;
+    }
+    @FXML
+    private Button btnCancelar;
+    @FXML
+    private Button btnDesactivar;
+    @FXML
+    private Label txtIdioma;
+    @FXML
+    private Label txtApariencia;
+    @FXML
+    private Label txtResolucion;
+    @FXML
+    private Label txtAjustes;
 
+    public AnchorPane getRoot() {
+        return root;
+    }
+
+    public void setRoot(AnchorPane root) {
+        this.root = root;
+    }
+   
+    
     public void setPanelContent(AnchorPane panelContent) {
         this.panelContent = panelContent;
         
@@ -100,13 +132,17 @@ public class InicioController implements Initializable {
         
         
 // resize based on the scene
+        anchorConfig.setStyle("-fx-background-color: #c6c6c6; -fx-background-radius: 10px;");
+        
          if(Sesion.getInstance().isIsDarkMode()){
             System.out.println("tiene modo oscuro");
-            root.setStyle("-fx-background-color: #14151e; -fx-background-radius: 10px;");
-            anchorConfig.setStyle("-fx-background-color: #c6c6c6; -fx-background-radius: 10px;");
+            //quedaria seteado aca para que quede con el mismo fondo de la imagen
+            root.setStyle("-fx-background-color: #14151e; ");
+            root.getStyleClass().add("contentGeneral");         
+            
         }else{
-           root.setStyle("-fx-background-color: #ffffff; -fx-background-radius: 10px;");
-           
+            root.setStyle("-fx-background-color: #ffffff; ");
+            root.getStyleClass().add("contentGeneral");
             Image imageBackground = new Image("/recursos/MaleLogsWBMesa_de_trabajo_Blanca.png",1000.0, 1000.0, true, true);
             // Ruta de la imagen
             ImageView imagen = new ImageView(imageBackground);
@@ -159,7 +195,7 @@ public class InicioController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        
+        this.instancia = this;
         
         //..\recursos\MaleLogsDBMesa_de_trabajo_1.png
         
@@ -167,7 +203,7 @@ public class InicioController implements Initializable {
         
         botonError.setGraphic(new ImageView(image));
         
-        Image imageLlave = new Image("/recursos/llave1.png",121.0, 110.0, true, true);
+        Image imageLlave = new Image("/recursos/etiqueta.png",105.0, 105.0, true, true);
         
         botonSolucion.setGraphic(new ImageView(imageLlave));
         
@@ -180,7 +216,17 @@ public class InicioController implements Initializable {
         botonCerrarSesion.setGraphic(new ImageView(imageCerrar));
         
         
-        
+       btnDesactivar.setStyle("-fx-background-color: #d3d3d3; -fx-background-radius: 10; -fx-border-color: red; -fx-border-radius: 10; -fx-text-fill: #ab120a;");
+
+        // Establecer estilo al pasar el ratón por encima
+        btnDesactivar.setOnMouseEntered(event -> {
+            btnDesactivar.setStyle("-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-color: red; -fx-border-radius: 10; -fx-text-fill: #ab120a;");
+        });
+
+        // Establecer estilo al quitar el ratón de encima
+        btnDesactivar.setOnMouseExited(event -> {
+            btnDesactivar.setStyle("-fx-background-color: #d3d3d3; -fx-background-radius: 10; -fx-border-color: red; -fx-border-radius: 10; -fx-text-fill: #ab120a;");
+        });
         
         Usuario user =  Sesion.getInstance().getUsuario();
         
@@ -197,8 +243,13 @@ public class InicioController implements Initializable {
     @FXML
     private void clickSolucion(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader();
-         loader.setLocation(getClass().getResource("/fxml/paginaSoluciones.fxml"));
+         loader.setLocation(getClass().getResource("/fxml/crearOrganizarEtiqueta.fxml"));
+         dashboardController.setControladorAnterior(this);
+        
+         
         Parent nuevaVista = loader.load();
+        crearEtiquetaController crearEtiqueta=(crearEtiquetaController)loader.getController();
+         dashboardController.setControladorSiguiente(crearEtiqueta);
         dashboardController.getAnchorPane().getChildren().setAll(nuevaVista);
     }
 
@@ -229,27 +280,38 @@ public class InicioController implements Initializable {
     private void clickAjustes(ActionEvent event) throws IOException {
        
 
-        // Configurar la animación de translación
-//        TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(1), anchorConfig);
-//        translateTransition.setFromY(-anchorConfig.getHeight()); // Posición inicial fuera de la pantalla, arriba
-//        translateTransition.setToY(0); // Posición final en la posición original, abajo
-//        translateTransition.setCycleCount(1); // Ejecutar la animación solo una vez
-//
-//        
-//        translateTransition.play(); ///////////////////////
-            anchorConfig.setVisible(true);
-            FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1), anchorConfig);
-            fadeTransition.setFromValue(0); // Opacidad inicial de 0 (invisible)
-            fadeTransition.setToValue(1); // Opacidad final de 1 (totalmente visible)
 
-            TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(1), anchorConfig);
-            translateTransition.setFromY(-anchorConfig.getHeight()); // Posición inicial fuera de la pantalla, arriba
-            translateTransition.setToY(0); // Posición final en la posición original, abajo
+       anchorConfig.setVisible(true);
+       
+       if(Sesion.getInstance().isIsFullHD()){
+            fullhd.setSelected(true);
+        }else{
+            normal.setSelected(true);
+        }
+        
+        if(Sesion.getInstance().isIsDarkMode()){
+            oscura.setSelected(true);
+        }else{
+            clara.setSelected(true);
+        }
+        
+        
+       FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1), anchorConfig);
+       fadeTransition.setFromValue(0); // Opacidad inicial de 0 (invisible)
+       fadeTransition.setToValue(1); // Opacidad final de 1 (totalmente visible)
 
-            ParallelTransition parallelTransition = new ParallelTransition(fadeTransition, translateTransition);
-            parallelTransition.setCycleCount(1); // Ejecutar la animación solo una vez
+       TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(1), anchorConfig);
+       translateTransition.setFromY(-anchorConfig.getHeight()); // Posición inicial fuera de la pantalla, arriba
+       translateTransition.setToY(0); // Posición final en la posición original, abajo
 
-            parallelTransition.play();
+       ParallelTransition parallelTransition = new ParallelTransition(fadeTransition, translateTransition);
+       parallelTransition.setCycleCount(1); // Ejecutar la animación solo una vez
+
+       parallelTransition.play();
+            
+                    
+            
+           
 
 
     }
@@ -273,8 +335,8 @@ public class InicioController implements Initializable {
             this.ajustesModificar.setDarkMode(true);
              System.out.println("tiene modo oscuro");
             root.setStyle("-fx-background-color: #14151e; -fx-background-radius: 10px;");
-            anchorConfig.setStyle("-fx-background-color: #c6c6c6; -fx-background-radius: 10px;");
-            
+        //    anchorConfig.setStyle("-fx-background-color: #c6c6c6; -fx-background-radius: 10px;");
+            DashboardController.getInstance().setDarkMode(true);
             
             Image imageBackground = new Image("/recursos/MaleLogsDBMesa_de_trabajo_1.png",1000.0, 1000.0, true, true);
             // Ruta de la imagen
@@ -297,11 +359,13 @@ public class InicioController implements Initializable {
             imagen.fitHeightProperty().bind(anchorImage.heightProperty());
             
         }else if (clara.isSelected()){
+             
             Sesion.getInstance().setIsDarkMode(false);
             this.ajustesModificar.setDarkMode(false);
-            
-             root.setStyle("-fx-background-color: #ffffff; -fx-background-radius: 10px;");
+            DashboardController.getInstance().setDarkMode(false);
            
+            root.setStyle("-fx-background-color: #ffffff; -fx-background-radius: 10px;");
+        //    anchorConfig.setStyle("-fx-background-color: #c6c6c6; -fx-background-radius: 10px;");
             Image imageBackground = new Image("/recursos/MaleLogsWBMesa_de_trabajo_Blanca.png",1000.0, 1000.0, true, true);
             // Ruta de la imagen
             ImageView imagen = new ImageView(imageBackground);
@@ -323,6 +387,18 @@ public class InicioController implements Initializable {
             imagen.fitHeightProperty().bind(anchorImage.heightProperty());
             
         }
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1), anchorConfig);
+        fadeTransition.setFromValue(1); // Opacidad inicial de 1 (totalmente visible)
+        fadeTransition.setToValue(0); // Opacidad final de 0 (invisible)
+
+        TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(1), anchorConfig);
+        translateTransition.setFromY(0); // Posición inicial en la posición original, abajo
+        translateTransition.setToY(-anchorConfig.getHeight()); // Posición final fuera de la pantalla, arriba
+
+        ParallelTransition parallelTransition = new ParallelTransition(fadeTransition, translateTransition);
+        parallelTransition.setCycleCount(1); // Ejecutar la animación solo una vez
+
+        parallelTransition.play();
         
         
         try { 
@@ -346,5 +422,73 @@ public class InicioController implements Initializable {
     @FXML
     private void clickFullHD(ActionEvent event) {
     }
+
+    @FXML
+    private void cancelarAjustes(ActionEvent event) {
+        
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1), anchorConfig);
+        fadeTransition.setFromValue(1); // Opacidad inicial de 1 (totalmente visible)
+        fadeTransition.setToValue(0); // Opacidad final de 0 (invisible)
+
+        TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(1), anchorConfig);
+        translateTransition.setFromY(0); // Posición inicial en la posición original, abajo
+        translateTransition.setToY(-anchorConfig.getHeight()); // Posición final fuera de la pantalla, arriba
+
+        ParallelTransition parallelTransition = new ParallelTransition(fadeTransition, translateTransition);
+        parallelTransition.setCycleCount(1); // Ejecutar la animación solo una vez
+
+        parallelTransition.play();
+    }
+
+    @FXML
+    private void clickDesactivar(ActionEvent event) {
+        
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmación");
+        alert.setHeaderText(null);
+        alert.setContentText("¿Estás seguro de que deseas desactivar la cuenta?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            // Acciones a realizar si el usuario selecciona "Sí"
+            System.out.println("El usuario seleccionó 'Sí'.");
+            
+            try { 
+                usuarioSesion.setActive(false);
+                Conexion.getInstance().merge(usuarioSesion);
+                  
+                Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert2.setTitle("Información");
+                        alert2.setHeaderText(null);
+                        alert2.setContentText("Se ha desactivado la cuenta con exito!");
+                        alert2.showAndWait();
+                        
+                          Platform.runLater(() -> {
+                            try {
+                                // Reiniciar el estado de la aplicación
+                                // ...
+
+                                // Cerrar la ventana actual
+                                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                                stage.close();
+
+
+                                // Volver a iniciar la aplicación
+                                Main mainApp = new Main();
+                                mainApp.start(new Stage());
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        });
+                        
+                } catch (Exception e) {
+                    // Manejo de la excepción
+                    e.printStackTrace();
+                }
+        } else {
+            // Acciones a realizar si el usuario selecciona "No" o cierra el cuadro de diálogo
+            System.out.println("El usuario seleccionó 'No' o cerró el cuadro de diálogo.");
+        }
+            }
     
 }

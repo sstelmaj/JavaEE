@@ -47,7 +47,7 @@ public class ItemLista extends Control {
         tipoItem = tipo;
         this.controlador = controlador;
         anchorPane = new AnchorPane();
-        anchorPane.setPrefSize(600.0, 105.0);
+        anchorPane.setPrefSize(580.0, 105.0);
         
          // Crear los componentes
         txtTitulo = new Label("Titulo del error");
@@ -94,8 +94,8 @@ public class ItemLista extends Control {
                  
                  dashboardController.setControladorAnterior(this.controlador);
                  dashboardController.setControladorSiguiente(detalleErrorController);
-                 
-                 dashboardController.getAnchorPane().getChildren().setAll(nuevaVista);
+                 dashboardController.setVista(nuevaVista);
+                 //dashboardController.getAnchorPane().getChildren().setAll(nuevaVista);
              } catch (IOException ex) {
                  Logger.getLogger(ItemLista.class.getName()).log(Level.SEVERE, null, ex);
              }

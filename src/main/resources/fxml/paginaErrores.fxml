@@ -9,11 +9,8 @@
 
 <AnchorPane id="AnchorPane" prefHeight="621.0" prefWidth="1282.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentacion.Controllers.PaginaErroresController">
    <children>
-      <Text layoutX="800.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Filtrar" wrappingWidth="150.0" />
-      <Text layoutX="800.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Etiqueta" wrappingWidth="150.0" />
-      <Text layoutX="958.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SubEtiqueta" wrappingWidth="150.0" />
-      <ComboBox fx:id="comboSo" layoutX="800.0" layoutY="75.0" prefWidth="150.0" promptText="SO" />
-      <ComboBox fx:id="comboFramework" layoutX="958.0" layoutY="75.0" prefWidth="150.0" promptText="Framework" />
+      <ComboBox fx:id="comboSo" layoutX="800.0" layoutY="75.0" prefWidth="150.0" promptText="Etiqueta" />
+      <ComboBox fx:id="comboFramework" layoutX="958.0" layoutY="75.0" prefWidth="150.0" promptText="Subetiqueta" />
       <ScrollPane layoutX="800.0" layoutY="134.0" prefHeight="223.0" prefWidth="373.0">
          <content>
             <ListView fx:id="listaEtiquetas" prefHeight="220.0" prefWidth="371.0" />
@@ -21,11 +18,15 @@
       </ScrollPane>
       <AnchorPane prefHeight="621.0" prefWidth="738.0">
          <children>
-            <ListView fx:id="listaErrores" layoutX="73.0" layoutY="101.0" prefHeight="506.0" prefWidth="616.0" />
+            <ListView fx:id="listaErrores" layoutX="73.0" layoutY="101.0" prefHeight="472.0" prefWidth="616.0" />
             <TextField fx:id="txtBuscador" layoutX="73.0" layoutY="47.0" onKeyTyped="#filtrarErrores" prefHeight="44.0" prefWidth="616.0" />
-            <Text layoutX="73.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Busqueda" wrappingWidth="189.0" />
+            <Button fx:id="btnSubirError" layoutX="598.0" layoutY="576.0" mnemonicParsing="false" onMouseClicked="#subirError" text="Subir error" />
+            <Label layoutX="74.0" layoutY="13.0" prefHeight="21.0" prefWidth="150.0" text="Busqueda" />
          </children>
       </AnchorPane>
       <Button layoutX="1116.0" layoutY="75.0" mnemonicParsing="false" onMouseClicked="#agregarEtiquetaAFiltro" text="Ingresar" />
+      <Label layoutX="958.0" layoutY="48.0" text="SubEtiqueta" />
+      <Label layoutX="800.0" layoutY="48.0" prefHeight="21.0" prefWidth="84.0" text="Etiqueta" />
+      <Label layoutX="800.0" layoutY="11.0" text="Filtrar" />
    </children>
 </AnchorPane>

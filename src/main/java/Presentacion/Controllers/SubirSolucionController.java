@@ -25,6 +25,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -75,6 +76,7 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
 import jdk.nashorn.api.scripting.JSObject;
 import org.fife.ui.autocomplete.AutoCompletion;
@@ -220,11 +222,11 @@ public class SubirSolucionController implements Initializable {
         panelContent.setTopAnchor(anchorSolucion, 0.0);
         panelContent.setBottomAnchor(anchorSolucion, 0.0);
         //   anchor1.setPrefWidth(900);
-        BackgroundFill backgroundFill = new BackgroundFill(Color.LIGHTGREEN, null, null);
-        Background background = new Background(backgroundFill);
-        anchor1.setBackground(background);
+//        BackgroundFill backgroundFill = new BackgroundFill(Color.LIGHTGREEN, null, null);
+//        Background background = new Background(backgroundFill);
+//        anchor1.setBackground(background);
         //    double maxRightAnchor = 500;
-
+           
         anchorSolucion.setRightAnchor(botonIngresar, 500.0);
 
     }
@@ -418,10 +420,16 @@ public class SubirSolucionController implements Initializable {
 
             // Accedemos al text area
             String contenido = textArea.getText();
-
+            
             System.out.print("codigo es" + contenido);
             //seteamos el contenido
             crear_solucion.setCodigo(contenido);
+            
+            JComboBox<String> cbxLeng = rsta.getLeng();
+            String lenguaje = (String )cbxLeng.getSelectedItem();
+            System.out.println(lenguaje);
+            crear_solucion.setLenguaje(lenguaje);
+            //crear_solucion.setLenguaje(ignoredText);
         } else {
 
         }
@@ -437,12 +445,14 @@ public class SubirSolucionController implements Initializable {
 
         
         if(!tipoPantalla.equals("Solucion Asociada")){
-            
+            crear_solucion.setUsuario(Sesion.getInstance().getUsuario());
             crear_solucion.setError(this.error);
          }
     
 
         crear_solucion.setDescripcion(textDescripcion.getText());
+        
+
 
         //    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", new Locale("es")); (util para despues o capaz el input fecha lo modifica)
         // Formatear LocalDate a String en español
@@ -451,6 +461,10 @@ public class SubirSolucionController implements Initializable {
             Date date = Date.from(inputFecha.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
             System.out.println(date);
             crear_solucion.setFechaSubida(date);
+        } else {
+            Calendar calendar = Calendar.getInstance();
+            Date fechaActual = calendar.getTime();
+            crear_solucion.setFechaSubida(fechaActual);
         }
 
         crear_solucion.setLink(linkTextFieldUrl.getText());

@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,7 +29,6 @@ import org.eclipse.persistence.annotations.CascadeOnDelete;
  *
  * @author Usuario
  */
-@CascadeOnDelete
 @Entity
 public class Etiqueta implements Serializable {
 
@@ -50,7 +50,8 @@ public class Etiqueta implements Serializable {
         this.active = active;
     }
     
-    @OneToMany(orphanRemoval=true, cascade = CascadeType.ALL)
+    @CascadeOnDelete
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Etiqueta> sub_etiqueta;
 
     public List<Etiqueta> getSub_etiqueta() {

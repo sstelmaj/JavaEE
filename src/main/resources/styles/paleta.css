@@ -1,0 +1,85 @@
+
+/* Paleta original Dark
+    fondo dash
+        -fx-background-color: #242424;
+
+    fondo input
+        -fx-control-inner-background: #293134;
+    fondo content
+        -fx-background-color: #262a2c;
+    text color
+
+   Paleta original Light
+    fondo dash
+       
+    fondo input
+
+    fondo content
+
+    text color
+*/
+
+.dashGeneral{
+    
+    
+}
+
+.inputsGeneral{
+    
+    
+}
+
+.contentGeneral{
+    -fx-background-radius: 10px;
+    
+}
+
+.textGeneral{
+    
+    
+}
+
+
+
+.fondoDashDark{
+    -fx-background-color: #242424;
+
+}
+
+/* Mas que nada el mismo color ocuro que tenia el text area */
+.fondoInputsDark{
+    
+    -fx-control-inner-background: #293134;
+}
+
+.fondoContentDark{
+    -fx-background-color: #262a2c;
+    
+}
+
+.textColorDark{
+    -fx-text-fill: #ffffff;
+    
+}
+
+
+
+.fondoDashLight{
+    -fx-background-color: #c6c6c6;
+    
+}
+
+/* Mas que nada el mismo color ocuro que tenia el text area */
+.fondoInputsLight{
+    -fx-control-inner-background: #ffffff;
+    
+}
+
+.fondoContentLight{
+    -fx-background-color: #ffffff;
+    
+}
+
+.textColorLight{
+    -fx-text-fill: #000000;
+}

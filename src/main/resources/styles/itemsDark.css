@@ -1,0 +1,28 @@
+/* items que no son afectados por la cascada */
+Label{
+    -fx-text-fill: #ffffff; 
+    
+}
+
+VBox{
+    -fx-background-color: #293134;
+}
+
+PieChart Label{
+    -fx-text-fill: #000000; 
+    
+}
+
+LineChart Label{
+    -fx-text-fill: #000000; 
+    
+}
+
+#anchorConfig Label{
+    -fx-text-fill: #000000; 
+    
+}
+TitledPane AnchorPane {
+    -fx-background-color: #293134;
+    -fx-border-color:#293134;
+}

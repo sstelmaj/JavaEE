@@ -24,6 +24,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Temporal;
+import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 /**
  *
@@ -42,10 +43,6 @@ import javax.persistence.Temporal;
 )
 @Entity
 public class Solucion implements Serializable {
-
-
-    @ManyToMany(cascade={CascadeType.ALL})
-    private List<Etiqueta> etiquetas;
     
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     
@@ -58,6 +55,12 @@ public class Solucion implements Serializable {
     @OneToMany(cascade={CascadeType.ALL})
     private List<Archivo> archivos;
 
+
+    private String lenguaje;
+
+    @CascadeOnDelete
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Etiqueta> etiquetas;
    
 
     private static final long serialVersionUID = 1L;
@@ -85,8 +88,14 @@ public class Solucion implements Serializable {
     public void setError(Error error) {
         this.error = error;
     }
-    
-    
+
+    public String getLenguaje() {
+        return lenguaje;
+    }
+
+    public void setLenguaje(String lenguaje) {
+        this.lenguaje = lenguaje;
+    }
     
     public Long getId() {
         return id;

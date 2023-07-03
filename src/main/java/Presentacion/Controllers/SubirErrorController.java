@@ -80,6 +80,7 @@ import org.fife.ui.rtextarea.RTextScrollPane;
 import Presentacion.RSTA;
 import Presentacion.Main;
 import java.awt.Insets;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -96,6 +97,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
+import javax.swing.JComboBox;
 
 /**
  * FXML Controller class
@@ -203,9 +205,13 @@ public class SubirErrorController implements Initializable {
     @FXML
     private Button botonEliminarSolucion;
     @FXML
-    private Button botonImprimirEtiqueta;
-    @FXML
     private ScrollPane scrollDesc;
+    @FXML
+    private Label txtTituloChico;
+    @FXML
+    private Label txtFecha;
+    @FXML
+    private Button btnCambiar;
 
     public void setPanelContent(AnchorPane pane) {
         this.panelContent = pane;
@@ -214,6 +220,8 @@ public class SubirErrorController implements Initializable {
         panelContent.setLeftAnchor(anchorError, 0.0);
         panelContent.setTopAnchor(anchorError, 0.0);
         panelContent.setBottomAnchor(anchorError, 0.0);
+        
+        
         //   anchor1.setPrefWidth(900);
         BackgroundFill backgroundFill = new BackgroundFill(Color.LIGHTGREEN, null, null);
         Background background = new Background(backgroundFill);
@@ -221,8 +229,8 @@ public class SubirErrorController implements Initializable {
         //    double maxRightAnchor = 500;
 
         anchorError.setRightAnchor(botonIngresar, 500.0);
-
-
+       
+        
     }
 
     public final void setActualizador(String descripcion) {
@@ -265,6 +273,7 @@ public class SubirErrorController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //para el primer renderizado visual
+        
         botonEliminarSolucion.setVisible(false);
         botonVerSolucion.setVisible(false);
         tipoPantalla = "Subir Error";
@@ -417,16 +426,14 @@ public class SubirErrorController implements Initializable {
         rstaConsola();
 
         //modo oscuro
-        if (Sesion.getInstance().isIsDarkMode()) {
-            textDescripcion.setStyle("-fx-control-inner-background: #293134;");
-
-        }
+        
+        
 
         if (Sesion.getInstance().isIsFullHD()) {
 
             scrollDesc.getStyleClass().add("textDescfullHD");
             textDescripcion.getStyleClass().add("textDescfullHD");
-
+            
             listaCompletado.getStyleClass().add("textDescfullHD");
 
         }
@@ -459,11 +466,17 @@ public class SubirErrorController implements Initializable {
         //obtenemos el contenido de el internal frame
         if (internalFrame instanceof RSTA) {
             RSTA rsta = (RSTA) internalFrame;
+            
             RSyntaxTextArea textArea = rsta.getTextArea();
 
             // Accedemos al text area
             String contenido = textArea.getText();
-
+            
+             JComboBox<String> cbxLeng = rsta.getLeng();
+            String lenguaje = (String )cbxLeng.getSelectedItem();
+            System.out.println(lenguaje);
+            error.setLenguaje(lenguaje);
+                
             System.out.print("codigo es" + contenido);
             //seteamos el contenido
             error.setCodigo(contenido);
@@ -483,7 +496,9 @@ public class SubirErrorController implements Initializable {
 
             // Accedemos al text area
             String contenido = textArea.getText();
-
+           
+            
+           
             System.out.print("consola es" + contenido);
             //seteamos el contenido
             error.setConsola(contenido);
@@ -498,6 +513,10 @@ public class SubirErrorController implements Initializable {
             Date date = Date.from(inputFecha.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
             System.out.println(date);
             error.setFechaSubida(date);
+        } else {
+            Calendar calendar = Calendar.getInstance();
+            Date fechaActual = calendar.getTime();
+            error.setFechaSubida(fechaActual);
         }
         error.setLink(linkTextFieldUrl.getText());
         error.setRepositorio(textFieldRepositorio.getText());
@@ -519,20 +538,18 @@ public class SubirErrorController implements Initializable {
 
          error.setDescripcion(textDescripcion.getText());
             try { 
-                Conexion.getInstance().merge(error);
+               if (this.solucion_asociada != null) {
+                    solucion_asociada.setError(error);
+                    solucion_asociada.setUsuario(usuario);
+                    Conexion.getInstance().merge(solucion_asociada);
+               }else{
+                   Conexion.getInstance().merge(error);
+               }
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                             alert.setTitle("Información");
                             alert.setHeaderText(null);
                             alert.setContentText("Se ha creado el error con exito!");
                             alert.showAndWait();
-              
-              
-               if (this.solucion_asociada != null) {
-                solucion_asociada.setError(error);
-                solucion_asociada.setUsuario(usuario);
-                Conexion.getInstance().merge(solucion_asociada);
-            
-              }
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("/fxml/PaginaErrores.fxml"));
                 Parent nuevaVista = loader.load();
@@ -551,7 +568,7 @@ public class SubirErrorController implements Initializable {
       //  if(tipoPantalla.equals("Subir Error")){
             
 
-            
+       
            
        
 
@@ -605,14 +622,26 @@ public class SubirErrorController implements Initializable {
                 if (iFrame instanceof RSTA) {
                     RSTA rsta = (RSTA) iFrame;
                     rsta.setModoOscuro();
+                    
+                }else{
+                    
                 }
 
             }
-
+ 
             ((javax.swing.plaf.basic.BasicInternalFrameUI) iFrame.getUI()).setNorthPane(null);
             swingNode = new SwingNode();
 
             swingNode.setContent(iFrame);
+            
+            JInternalFrame internalFrameConsola = (JInternalFrame) swingNode.getContent();
+            if (internalFrameConsola instanceof RSTA) {
+                  RSTA rsta = (RSTA) iFrame;
+//                  
+//                  String c = "C";
+//                  rsta.setLeng(c);
+              }
+           
             anchor1.getChildren().add(swingNode);
             anchor1.setRightAnchor(swingNode, 0.0);
             anchor1.setLeftAnchor(swingNode, 0.0);
@@ -741,7 +770,6 @@ public class SubirErrorController implements Initializable {
 
     }
 
-    @FXML
     private void clickImprimirEtiqueta(ActionEvent event) {
         ArrayList<String> valores = new ArrayList<>();
         valores.add("Angular");
@@ -802,5 +830,11 @@ public class SubirErrorController implements Initializable {
         }
         System.out.println("sin etiquetas erroneas" + descContenido);
         textDescripcion.setText(descContenido);
+    }
+
+    @FXML
+    private void cambiarCBX(ActionEvent event) {
+        
+        
     }
 }

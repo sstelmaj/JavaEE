@@ -48,6 +48,12 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
         textArea.setText(contenido);
     }
     
+    public void setEditable(Boolean bool){
+        textArea.setEditable(bool);
+        jPanel2.setVisible(bool);
+        //jButton2.setVisible(bool);
+        
+    }
     public void setModoOscuro(){
               try {
             Theme theme = Theme.load(getClass().getResourceAsStream(
@@ -58,6 +64,18 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
             ioe.printStackTrace();
         }
     }
+    
+    
+    public void setLeng(String Item){
+        jComboBoxLeng.setSelectedItem(Item);
+    }
+    
+    public JComboBox<String>  getLeng(){
+          
+       return this.jComboBoxLeng;
+    }
+    
+    private String lenguaje;
     public RSTA() {
         
         
@@ -75,7 +93,7 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
    //    Font font = new Font("Segoe UI", Font.PLAIN, 12);
    //     textArea.setFont(font);
         textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
-        
+      //   jComboBoxLeng.setSelectedItem("C++");
         CompletionProvider provider = createCompletionProvider();
 
  
@@ -92,7 +110,7 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
          JToolBar toolBar = new JToolBar();
          searchField = new JTextField(30);
          toolBar.add(searchField);
-         final JButton nextButton = new JButton("Find Next");
+         final JButton nextButton = new JButton("Buscar Siguiente");
          nextButton.setActionCommand("FindNext");
          nextButton.addActionListener(this);
           toolBar.add(nextButton);
@@ -102,7 +120,7 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
             nextButton.doClick(0);
          }
         });
-        JButton prevButton = new JButton("Find Previous");
+        JButton prevButton = new JButton("Buscar Anterior");
         prevButton.setActionCommand("FindPrev");
         prevButton.addActionListener(this);
         toolBar.add(prevButton);
@@ -137,7 +155,7 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
       context.setWholeWord(regexCB.isSelected());
       boolean found = SearchEngine.find(textArea, context).wasFound();
       if (!found) {
-         JOptionPane.showMessageDialog(this, "Text not found");
+         JOptionPane.showMessageDialog(this, "Texto no encontrado");
       }
 
    }
@@ -154,7 +172,7 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
         jComboBoxLeng = new javax.swing.JComboBox<>();
         jPanel_CP = new javax.swing.JPanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(600, 616));
 
         jPanel1.setBackground(new java.awt.Color(0, 153, 153));
@@ -185,7 +203,7 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
 
         jLabel1.setText("Lenguajes");
 
-        jComboBoxLeng.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ACTIONSCRIPT", "ASSEMBLER_X86", "BBCODE", "C", "CLOJURE", "C++", "CSHARP", "CSS", "DELPHI", "DTD", "FORTRAN", "GROOVY", "HTACCESS", "HTML", "JAVA", "JAVASCRIPT", "JSON", "JSP", "LATEX", "LISP", "LUA", "MAKEFILE", "MXML", "NSIS", "PERL", "PHP", "PROPERTIES_FILE", "PYTHON", "RUBY", "SAS", "SCALA", "SQL", "TCL", "UNIX_SHELL", "VISUAL_BASIC", "WINDOWS_BATCH", "XML" }));
+        jComboBoxLeng.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NONE", "ACTIONSCRIPT", "ASSEMBLER_X86", "BBCODE", "C", "CLOJURE", "C++", "CSHARP", "CSS", "DELPHI", "DTD", "FORTRAN", "GROOVY", "HTACCESS", "HTML", "JAVA", "JAVASCRIPT", "JSON", "JSP", "LATEX", "LISP", "LUA", "MAKEFILE", "MXML", "NSIS", "PERL", "PHP", "PROPERTIES_FILE", "PYTHON", "RUBY", "SAS", "SCALA", "SQL", "TCL", "UNIX_SHELL", "VISUAL_BASIC", "WINDOWS_BATCH", "XML" }));
         jComboBoxLeng.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBoxLengActionPerformed(evt);
@@ -273,7 +291,7 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
                 // Insertamos el texto en el JTextArea
                 textArea.insert(data, textArea.getCaretPosition());
                 
-             
+                             
             } catch (UnsupportedFlavorException | IOException ex) {
                 System.out.println(ex);
             }
@@ -297,6 +315,10 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
         String selectedLanguage = (String)jComboBoxLeng.getSelectedItem();
         
         switch (selectedLanguage) {
+            case "NONE":
+            
+            textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
+            break;
         case "ACTIONSCRIPT":
             
             textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_ACTIONSCRIPT);
@@ -312,6 +334,7 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
         case "C":
          
             textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_C);
+            
             break;
         case "CLOJURE":
             

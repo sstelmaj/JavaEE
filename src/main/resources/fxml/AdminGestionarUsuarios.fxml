@@ -7,21 +7,44 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentacion.Controllers.AdminUsuariosController">
+<AnchorPane id="AnchorPane" fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="623.0" prefWidth="1321.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentacion.Controllers.AdminUsuariosController">
    <children>
        
-       <TableView fx:id="tableUsuarios" layoutX="20.0" layoutY="47.0" prefHeight="440.0" prefWidth="960.0">
+       <TableView fx:id="tableUsuarios" layoutX="51.0" layoutY="145.0" prefHeight="430.0" prefWidth="809.0">
          <columns>
-           <TableColumn fx:id="colNombres" prefWidth="203.0" resizable="false" text="Nombre" />
-             <TableColumn fx:id="colApellidos" prefWidth="209.0" resizable="false" text="Apellido" />
-             <TableColumn fx:id="colCorreos" prefWidth="309.0" resizable="false" text="Correo" />
-             <TableColumn fx:id="colActivos" prefWidth="98.0" resizable="false" text="Activo" />
-             <TableColumn fx:id="colPerfiles" prefWidth="140.0" resizable="false" text="Perfil" />
+           <TableColumn fx:id="colNombres" prefWidth="159.0" resizable="false" text="Nombre" />
+             <TableColumn fx:id="colApellidos" prefWidth="213.0" resizable="false" text="Apellido" />
+             <TableColumn fx:id="colCorreos" prefWidth="203.0" resizable="false" text="Correo" />
+             <TableColumn fx:id="colActivos" prefWidth="64.0" resizable="false" text="Activo" />
+             <TableColumn fx:id="colPerfiles" prefWidth="177.0" resizable="false" text="Perfil" />
          </columns>
        </TableView>
-      <Label layoutX="401.0" layoutY="6.0" text="Gestionar Usuarios">
+      <Label layoutX="561.0" layoutY="14.0" text="Gestionar Usuarios">
          <font>
             <Font size="24.0" />
+         </font>
+      </Label>
+      <Button fx:id="btnCrearUsuario" layoutX="51.0" layoutY="55.0" mnemonicParsing="false" onAction="#crearUsuario" text="Crear Usuario" />
+      <Button fx:id="btnModificar" disable="true" layoutX="151.0" layoutY="55.0" mnemonicParsing="false" onAction="#modificar" text="Modificar Usuario" />
+      <Button fx:id="btnCrearPerfil" layoutX="877.0" layoutY="68.0" mnemonicParsing="false" onAction="#crearPerfil" text="Crear Perfil" />
+      <Button fx:id="btnModificarPerfil" disable="true" layoutX="964.0" layoutY="68.0" mnemonicParsing="false" onAction="#modificarPerfil" text="Modificar Perfil" />
+      <Label layoutX="421.0" layoutY="95.0" text="Usuarios">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <TableView fx:id="tablaPerfiles" layoutX="877.0" layoutY="145.0" prefHeight="430.0" prefWidth="425.0">
+         <columns>
+            <TableColumn fx:id="colNombre" editable="false" prefWidth="146.0" text="nombre" />
+            <TableColumn fx:id="colSubir" editable="false" prefWidth="51.0" text="subir" />
+            <TableColumn fx:id="colDesactivar" editable="false" prefWidth="76.0" text="desactivar" />
+            <TableColumn fx:id="colModificar" editable="false" prefWidth="71.0" text="modificar" />
+            <TableColumn fx:id="colCrear" editable="false" text="crearUsuario" />
+         </columns>
+      </TableView>
+      <Label fx:id="labelPerfil" layoutX="1063.0" layoutY="109.0" text="Perfiles">
+         <font>
+            <Font size="18.0" />
          </font>
       </Label>
    </children>

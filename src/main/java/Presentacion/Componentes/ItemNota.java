@@ -5,8 +5,11 @@
 package Presentacion.Componentes;
 
 import javafx.scene.control.Control;
+import javafx.scene.control.Label;
 import javafx.scene.control.Skin;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -17,24 +20,28 @@ import javafx.scene.text.Text;
  */
 public class ItemNota extends Control {
     private Pane anchorPane;
-    private Text txtNota;
-    private Text txtFecha;
+    private TextArea txtNota;
+    private Label txtFecha;
     
     public ItemNota(){
         anchorPane = new AnchorPane();
-        anchorPane.setPrefSize(400.0, 108.0);
+        anchorPane.setPrefSize(520.0, 108.0);
         
-         // Crear los componentes
-        txtFecha = new Text("Contenido de la nota");
-        txtFecha.setLayoutX(266.0);
+        // Crear los componentes
+        txtFecha = new Label("Contenido de la nota");
+        txtFecha.setLayoutX(400.0);
         txtFecha.setLayoutY(89.0);
-        txtFecha.setWrappingWidth(144.16064453125);
+        //txtFecha.setWrappingWidth(144.16064453125);
         txtFecha.setFont(new Font(13.0));
         
-        txtNota = new Text("Descripcion");
-        txtNota.setLayoutX(18.0);
-        txtNota.setLayoutY(30.0);
-        txtNota.setWrappingWidth(367.33740234375);
+        txtNota = new TextArea("Descripcion");
+        txtNota.setWrapText(true);
+        txtNota.setStyle("-fx-text-box-border: transparent;");
+        txtNota.setPrefSize(500, 78);
+        txtNota.setEditable(false);
+        txtNota.setLayoutX(8.0);
+        txtNota.setLayoutY(3.0);
+        //txtNota.setWrappingWidth(367.33740234375);
         txtNota.setFont(new Font(13.0));
         
         anchorPane.setVisible(true);
@@ -53,15 +60,15 @@ public class ItemNota extends Control {
     }
     
 
-    public Text getTxtNota() {
+    public TextArea getTxtNota() {
         return txtNota;
     }
 
-    public void setTxtNota(Text txtNota) {
+    public void setTxtNota(TextArea txtNota) {
         this.txtNota = txtNota;
     }
 
-    public Text getTxtFecha() {
+    public Label getTxtFecha() {
         return txtFecha;
     }
 
