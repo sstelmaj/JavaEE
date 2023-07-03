@@ -632,9 +632,9 @@ public class SubirErrorController implements Initializable {
             JInternalFrame internalFrameConsola = (JInternalFrame) swingNode.getContent();
             if (internalFrameConsola instanceof RSTA) {
                   RSTA rsta = (RSTA) iFrame;
-                  
-                  String c = "C";
-                  rsta.setLeng(c);
+//                  
+//                  String c = "C";
+//                  rsta.setLeng(c);
               }
            
             anchor1.getChildren().add(swingNode);
