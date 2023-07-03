@@ -238,7 +238,7 @@ public class DashboardController implements Initializable {
         selectorVista.getItems().addAll( "Subir Error", "Modificar Error", "Subir Solucion", "Modificar Solucion",
                 "Vista 2", "Detalle Solucion", "Crear Etiqueta", "Modificar Etiqueta", "Admin", "Error", "Crear Perfil", "Modificar Perfil", "Crear Usuario", "Modificar Usuario", "Prueba Filtrado");
 
-        // Listener para cambio de selección en el ComboBox
+        // Listener para cambio de selecciÃ³n en el ComboBox
         selectorVista.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             fxml = vistas.get(newValue); // Obtener ruta del fxml correspondiente al valor seleccionado
             try {
@@ -457,14 +457,14 @@ public class DashboardController implements Initializable {
     private void cerrarSesion(ActionEvent event) {
         Platform.runLater(() -> {
             try {
-                // Reiniciar el estado de la aplicación
+                // Reiniciar el estado de la aplicaciÃ³n
                 // ...
 
                 // Cerrar la ventana actual
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 stage.close();
 
-                // Volver a iniciar la aplicación
+                // Volver a iniciar la aplicaciÃ³n
                 Main mainApp = new Main();
                 mainApp.start(new Stage());
             } catch (Exception e) {

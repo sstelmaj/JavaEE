@@ -7,3 +7,22 @@ Label{
 VBox{
     -fx-background-color: #293134;
 }
+
+VBox{
+    -fx-background-color: #293134;
+}
+
+PieChart Label{
+    -fx-text-fill: #000000; 
+    
+}
+
+LineChart Label{
+    -fx-text-fill: #000000; 
+    
+}
+
+#anchorConfig Label{
+    -fx-text-fill: #000000; 
+    
+}

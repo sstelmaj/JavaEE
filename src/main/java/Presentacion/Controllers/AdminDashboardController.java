@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
@@ -33,6 +34,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -154,6 +156,7 @@ public class AdminDashboardController implements Initializable {
         btnImportar.setOnAction(event -> mostrarVentanaImportar());
 
         lineXAxis = new CategoryAxis();
+        
         lineXAxis.setLabel("Fecha");
         lineYAxis = new NumberAxis();
         lineYAxis.setLabel("Cantidad");
@@ -162,11 +165,24 @@ public class AdminDashboardController implements Initializable {
         lineRecord.setTitle("Publicaciones en 2023");
         graphsPane.getChildren().set(0, lineRecord);
         lineRecord.setLayoutX(580.0);
-        if (Sesion.getInstance().isIsFullHD()) {
+       if (Sesion.getInstance().isIsFullHD()) {
             lineRecord.setLayoutX(760.0);
             lineRecord.setPrefWidth(700.0);
             lineRecord.setPrefHeight(710.0);
 
+            Platform.runLater(() -> {
+                double ancho = anchorRoot.getWidth();
+                double altura = anchorRoot.getHeight();
+                System.out.println(ancho);
+                System.out.println(altura);
+            });
+        } else {
+            Platform.runLater(() -> {
+                double ancho = anchorRoot.getWidth();
+                double altura = anchorRoot.getHeight();
+                System.out.println("an"+ancho);
+                System.out.println(altura);
+            });
         }
         //    graphsPane.setRight(lineRecord);
 
@@ -312,24 +328,67 @@ public class AdminDashboardController implements Initializable {
 
     @FXML
     private void handleDownloadGraphs(ActionEvent event) throws IOException {
+        
+        boolean isFullHD = Sesion.getInstance().isIsFullHD();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Guardar graficas");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG Image", "*.png"));
 
-        Stage stage = (Stage) btnDescargar.getScene().getWindow();
+   //     Stage stage = (Stage) btnDescargar.getScene().getWindow();
+   //     Stage stage = (Stage) anchorRoot.getScene().getWindow();
+   
+        Stage stage = Sesion.getInstance().getStagePrincipal();
         File file = fileChooser.showSaveDialog(stage);
+       SnapshotParameters params = new SnapshotParameters();
+     
+
+
+     
         WritableImage image = graphsPane.snapshot(null, null);
         ImageIO.write(SwingFXUtils.fromFXImage(image, null), "PNG", file);
+        
+        if(isFullHD){
+            Sesion.getInstance().setIsFullHD(false);
+            Sesion.getInstance().setIsFullHD(true);
+        }else{
+            Sesion.getInstance().setIsFullHD(true);
+            Sesion.getInstance().setIsFullHD(false);
+        }
+           
+
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Éxito");
         alert.setHeaderText(null);
         alert.setContentText("Las graficas se han descargado exitosamente.");
+        
         alert.showAndWait();
+        
+
+      
+        
+        anchorRoot.setPrefWidth(1666.0);
+        anchorRoot.setPrefWidth(877.0);
+       anchorRoot.requestLayout();
     }
 
     @FXML
     private void clickAjustes(ActionEvent event) {
         anchorConfig.setVisible(true);
+        
+        if(Sesion.getInstance().isIsFullHD()){
+            fullhd.setSelected(true);
+        }else{
+            normal.setSelected(true);
+        }
+        
+        if(Sesion.getInstance().isIsDarkMode()){
+            oscura.setSelected(true);
+        }else{
+            clara.setSelected(true);
+        }
+        
+        
+        
         FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1), anchorConfig);
         fadeTransition.setFromValue(0); // Opacidad inicial de 0 (invisible)
         fadeTransition.setToValue(1); // Opacidad final de 1 (totalmente visible)
@@ -420,6 +479,19 @@ public class AdminDashboardController implements Initializable {
 
     @FXML
     private void cancelarAjustes(ActionEvent event) {
+        
+         FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1), anchorConfig);
+        fadeTransition.setFromValue(1); // Opacidad inicial de 1 (totalmente visible)
+        fadeTransition.setToValue(0); // Opacidad final de 0 (invisible)
+
+        TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(1), anchorConfig);
+        translateTransition.setFromY(0); // Posición inicial en la posición original, abajo
+        translateTransition.setToY(-anchorConfig.getHeight()); // Posición final fuera de la pantalla, arriba
+
+        ParallelTransition parallelTransition = new ParallelTransition(fadeTransition, translateTransition);
+        parallelTransition.setCycleCount(1); // Ejecutar la animación solo una vez
+
+        parallelTransition.play();
     }
 
     @FXML
