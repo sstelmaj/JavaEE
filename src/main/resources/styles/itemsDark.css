@@ -8,10 +8,6 @@ VBox{
     -fx-background-color: #293134;
 }
 
-VBox{
-    -fx-background-color: #293134;
-}
-
 PieChart Label{
     -fx-text-fill: #000000; 
     
@@ -25,4 +21,8 @@ LineChart Label{
 #anchorConfig Label{
     -fx-text-fill: #000000; 
     
+}
+TitledPane AnchorPane {
+    -fx-background-color: #293134;
+    -fx-border-color:#293134;
 }

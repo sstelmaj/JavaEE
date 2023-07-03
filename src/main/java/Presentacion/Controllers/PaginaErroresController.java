@@ -22,6 +22,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -39,12 +40,12 @@ public class PaginaErroresController implements Initializable {
     @FXML
     private ComboBox<String> comboFramework;
     @FXML
-    private ListView<Text> listaEtiquetas;
+    private ListView<Label> listaEtiquetas;
     @FXML
     private ListView<ItemLista> listaErrores;
     @FXML
     private TextField txtBuscador;
-    private List<Etiqueta>allEtiquetas;
+    private List<Etiqueta> allEtiquetas;
     private ArrayList<String> valores = new ArrayList<>();
     @FXML
     private Button btnSubirError;
@@ -54,68 +55,74 @@ public class PaginaErroresController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        allEtiquetas=EtiquetaController.getInstance().listaEtiquetas();
-        
+        allEtiquetas = EtiquetaController.getInstance().listaEtiquetas();
+
         filtrarErrores();
-        
-        for(Etiqueta e: allEtiquetas){
-            if(e.getPadre()==null){
+
+        for (Etiqueta e : allEtiquetas) {
+            if (e.getPadre() == null) {
                 this.comboSo.getItems().add(e.getNombre());
             }
         }
         comboSo.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             cargarSubetiquetas();
         });
-       // ArrayList<String> valores = new ArrayList<>();
+        // ArrayList<String> valores = new ArrayList<>();
         //List<Logica.Clases.Error> errores = ErrorController.getInstance().filtradoErroresPorEtiquetas(valores);
         //comboSo.setOnAction(event -> filtrarErrores());
         //comboFramework.setOnAction(event -> filtrarErrores());
-    }   
-    
+    }
+
     @FXML
-        private void filtrarErrores() {
-        String busqueda=this.txtBuscador.getText();
-        List<Logica.Clases.Error>erroresBusqueda=null;
-        if(!busqueda.isEmpty()){        //Si existe algo ingresado en el buscador obtiene los errores que coincidan
-            erroresBusqueda=ErrorController.getInstance().busquedaDeErrores(busqueda);
-        }else{
+    private void filtrarErrores() {
+        String busqueda = this.txtBuscador.getText();
+        List<Logica.Clases.Error> erroresBusqueda = null;
+        if (!busqueda.isEmpty()) {        //Si existe algo ingresado en el buscador obtiene los errores que coincidan
+            erroresBusqueda = ErrorController.getInstance().busquedaDeErrores(busqueda);
+        } else {
             erroresBusqueda = ErrorController.getInstance().obtenerErrores();
         }
-        
+
         String seleccionSo = (String) comboSo.getValue();
         String seleccionFramework = (String) comboFramework.getValue();
 
-        if(this.listaEtiquetas.getItems()!=null){
-            if(this.valores.isEmpty()){
-                if(erroresBusqueda !=null){
-                     listaErrores.getItems().clear(); 
-                     for (Logica.Clases.Error error : erroresBusqueda) {
-                         // Obtener la parte del texto original que coincide con el texto ingresado
-                         //String displayedText = error.getDescripcion().substring(0, Math.min(error.getDescripcion().length(), this.txtBuscador.getText().length()));
-                         String displayedText= this.cortarDescripcion(this.txtBuscador.getText(),error.getDescripcion());
-                         ItemLista item = new ItemLista("Error",this);
-                         item.getStylesheets().add(getClass().getResource("/styles/detalles.css").toExternalForm());
-                         item.setError(error);
-                         item.setTitulo(error.getTitulo());
-                         item.setEtiquetas(error.getEtiquetas());
-                         item.setTxtDescripcion(displayedText);
-                         listaErrores.getItems().add(item);
-                     }
-                 }
-           //listaErrores.getItems().setAll(errores);
-           //this.valores.clear();
-            }else{
+        if (this.listaEtiquetas.getItems() != null) {
+            if (this.valores.isEmpty()) {
+                if (erroresBusqueda != null) {
+                    listaErrores.getItems().clear();
+                    for (Logica.Clases.Error error : erroresBusqueda) {
+                        // Obtener la parte del texto original que coincide con el texto ingresado
+                        //String displayedText = error.getDescripcion().substring(0, Math.min(error.getDescripcion().length(), this.txtBuscador.getText().length()));
+                        String displayedText = "*Sin descripcion*";
+                        if (error.getDescripcion() != null) {
+                            displayedText = this.cortarDescripcion(this.txtBuscador.getText(), error.getDescripcion());
+                        }
+                        ItemLista item = new ItemLista("Error", this);
+                        item.getStylesheets().add(getClass().getResource("/styles/detalles.css").toExternalForm());
+                        item.setError(error);
+                        item.setTitulo(error.getTitulo());
+                        item.setEtiquetas(error.getEtiquetas());
+                        item.setTxtDescripcion(displayedText);
+                        listaErrores.getItems().add(item);
+                    }
+                }
+                //listaErrores.getItems().setAll(errores);
+                //this.valores.clear();
+            } else {
                 List<Logica.Clases.Error> errores = ErrorController.getInstance().filtradoErroresPorEtiquetas(valores);
                 System.out.println(errores.size());
                 //this.valores.clear();
                 // Actualizar la lista de errores en el ListView
-                if(errores != null){
-                    listaErrores.getItems().clear(); 
+                if (errores != null) {
+                    listaErrores.getItems().clear();
                     for (Logica.Clases.Error error : errores) {
                         //String displayedText = error.getDescripcion().substring(0, Math.min(error.getDescripcion().length(), this.txtBuscador.getText().length()));
-                        String displayedText= this.cortarDescripcion(this.txtBuscador.getText(),error.getDescripcion());
-                        if(erroresBusqueda!= null && erroresBusqueda.contains(error)){
-                            ItemLista item = new ItemLista("Error",this);
+                        String displayedText = "*Sin descripcion*";
+                        if (error.getDescripcion() != null) {
+                            displayedText = this.cortarDescripcion(this.txtBuscador.getText(), error.getDescripcion());
+                        }
+                        if (erroresBusqueda != null && erroresBusqueda.contains(error)) {
+                            ItemLista item = new ItemLista("Error", this);
                             item.getStylesheets().add(getClass().getResource("/styles/detalles.css").toExternalForm());
                             item.setError(error);
                             item.setTitulo(error.getTitulo());
@@ -124,21 +131,21 @@ public class PaginaErroresController implements Initializable {
                             listaErrores.getItems().add(item);
                         }
                     }
-                //listaErrores.getItems().setAll(errores);
+                    //listaErrores.getItems().setAll(errores);
                 }
-            }   
+            }
         }
     }
-        
-        private void cargarSubetiquetas(){
+
+    private void cargarSubetiquetas() {
         this.comboFramework.getItems().clear();
-        for(Etiqueta e:this.allEtiquetas){
-            if(e.getPadre()!=null){
-                if(e.getPadre().equals(comboSo.getSelectionModel().getSelectedItem()) && !this.valores.contains(e.getNombre())){
+        for (Etiqueta e : this.allEtiquetas) {
+            if (e.getPadre() != null) {
+                if (e.getPadre().equals(comboSo.getSelectionModel().getSelectedItem()) && !this.valores.contains(e.getNombre())) {
                     this.comboFramework.getItems().add(e.getNombre());
                 }
-            }else{
-                if(e.getNombre().equals(comboSo.getSelectionModel().getSelectedItem()) && !this.valores.contains(e.getNombre())){
+            } else {
+                if (e.getNombre().equals(comboSo.getSelectionModel().getSelectedItem()) && !this.valores.contains(e.getNombre())) {
                     this.comboFramework.getItems().add(e.getNombre());
                 }
             }
@@ -147,48 +154,48 @@ public class PaginaErroresController implements Initializable {
 
     @FXML
     private void agregarEtiquetaAFiltro(MouseEvent event) {
-        String seleccionado=this.comboFramework.getSelectionModel().getSelectedItem();
-        if(seleccionado!=null){
+        String seleccionado = this.comboFramework.getSelectionModel().getSelectedItem();
+        if (seleccionado != null) {
             this.valores.add(seleccionado);
-            Text etiqueta=new Text(seleccionado);
+            Label etiqueta = new Label(seleccionado);
             etiqueta.setOnMouseClicked(this::eliminarEtiquetaSeleccionada);
             this.listaEtiquetas.getItems().add(etiqueta);
-            this.comboFramework.getItems().remove(seleccionado); 
+            this.comboFramework.getItems().remove(seleccionado);
             filtrarErrores();
         }
     }
-    
-    private void eliminarEtiquetaSeleccionada (MouseEvent event) {
-        Text etiqueta = (Text) event.getSource();
+
+    private void eliminarEtiquetaSeleccionada(MouseEvent event) {
+        Label etiqueta = (Label) event.getSource();
         this.comboFramework.getItems().add(etiqueta.getText());
         this.listaEtiquetas.getItems().remove(etiqueta);
         this.valores.remove(etiqueta.getText());
         filtrarErrores();
     }
-    
-    private String cortarDescripcion(String buscador,String descripcion){
-    // Obtener la posición de la cadena ingresada en el texto original
-            int startIndex = descripcion.indexOf(buscador);
 
-            if (startIndex != -1) {
-                // Calcular los índices de inicio y fin para mostrar una porción del texto original
-                int maxDisplayedLength = 50; // Cantidad máxima de caracteres a mostrar
-                int textLength = descripcion.length();
+    private String cortarDescripcion(String buscador, String descripcion) {
+        // Obtener la posición de la cadena ingresada en el texto original
+        int startIndex = descripcion.indexOf(buscador);
 
-                int endIndex = Math.min(startIndex + maxDisplayedLength + 10, textLength);
-                startIndex = Math.max(endIndex - maxDisplayedLength - 10, 0);
+        if (startIndex != -1) {
+            // Calcular los índices de inicio y fin para mostrar una porción del texto original
+            int maxDisplayedLength = 50; // Cantidad máxima de caracteres a mostrar
+            int textLength = descripcion.length();
 
-                // Obtener la porción del texto original que contiene la cadena ingresada en el centro
-                String displayedText = descripcion.substring(startIndex, endIndex);
-                displayedText= displayedText.replaceAll("\\r?\\n", " ");
+            int endIndex = Math.min(startIndex + maxDisplayedLength + 10, textLength);
+            startIndex = Math.max(endIndex - maxDisplayedLength - 10, 0);
 
-                // Actualizar el texto del Label con la porción correspondiente
-                return displayedText;
-            }else{
-                String displayedText = descripcion.substring(0, 50);
-                displayedText= displayedText.replaceAll("\\r?\\n", " ");
-                return displayedText;
-            }
+            // Obtener la porción del texto original que contiene la cadena ingresada en el centro
+            String displayedText = descripcion.substring(startIndex, endIndex);
+            displayedText = displayedText.replaceAll("\\r?\\n", " ");
+
+            // Actualizar el texto del Label con la porción correspondiente
+            return displayedText;
+        } else {
+            String displayedText = descripcion.substring(0, 50);
+            displayedText = displayedText.replaceAll("\\r?\\n", " ");
+            return displayedText;
+        }
     }
 
     @FXML
@@ -197,9 +204,8 @@ public class PaginaErroresController implements Initializable {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/fxml/subirError.fxml"));
             Parent nuevaVista = loader.load();
-            SubirErrorController subirErrorController = (SubirErrorController)loader.getController();
-            
-            
+            SubirErrorController subirErrorController = (SubirErrorController) loader.getController();
+
             DashboardController dashboardController = DashboardController.getInstance();
             subirErrorController.setPanelContent(dashboardController.getAnchorPane());
             dashboardController.setControladorAnterior(this);
@@ -210,5 +216,5 @@ public class PaginaErroresController implements Initializable {
             Logger.getLogger(PaginaErroresController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
 }

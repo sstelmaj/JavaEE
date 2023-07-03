@@ -65,16 +65,8 @@ public class DashboardController implements Initializable {
     private double newHeight;
 
     private Stage mainStage;
-    @FXML
-    private Button botonActualizar;
-    @FXML
     private Label textResAncho;
-    @FXML
     private Label textResAlto;
-    @FXML
-    private Button botonPredeterminada;
-    @FXML
-    private Button botonMedidaContent;
     @FXML
     private AnchorPane anchorDash;
 
@@ -85,10 +77,6 @@ public class DashboardController implements Initializable {
     private Button botonAtras;
     @FXML
     private Button botonAdelante;
-    @FXML
-    private Button botonErrores;
-    @FXML
-    private Button botonSoluciones;
     @FXML
     private Button botonInicio;
 
@@ -362,7 +350,6 @@ public class DashboardController implements Initializable {
         contentAPane.getChildren().setAll(nuevaVista);
     }
 
-    @FXML
     private void actualizar(ActionEvent event) {
         String widthString = String.valueOf(mainStage.getWidth());
         textResAncho.setText(widthString);
@@ -394,13 +381,11 @@ public class DashboardController implements Initializable {
         }
     }
 
-    @FXML
     private void actionPredeterminada(ActionEvent event) {
         this.mainStage.setHeight(800.0);
         this.mainStage.setWidth(1552.0);
     }
 
-    @FXML
     private void verContent(ActionEvent event) {
         System.out.println("ancho orign" + contentAPane.getWidth());
         System.out.println("alto origin" + contentAPane.getHeight());
@@ -438,7 +423,6 @@ public class DashboardController implements Initializable {
         }
     }
 
-    @FXML
     private void clickErrores(ActionEvent event) {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/fxml/paginaErrores.fxml"));
@@ -450,9 +434,6 @@ public class DashboardController implements Initializable {
         }
     }
 
-    @FXML
-    private void clickSoluciones(ActionEvent event) {
-    }
 
     private void cerrarSesion(ActionEvent event) {
         Platform.runLater(() -> {

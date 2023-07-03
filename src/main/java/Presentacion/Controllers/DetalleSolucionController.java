@@ -36,6 +36,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -83,9 +84,9 @@ public class DetalleSolucionController implements Initializable {
     private AnchorPane anchorPaneDestacado;
 
     @FXML
-    private Text txtUsosSolucion;
+    private Label txtUsosSolucion;
     @FXML
-    private Text txtFechaSolucion;
+    private Label txtFechaSolucion;
 
     private String codigoSol, codigoErr, descripcion, creador;
     private Date fechaSol;
