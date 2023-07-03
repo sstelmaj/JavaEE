@@ -6,6 +6,7 @@ package Logica.Controladores;
 
 
 
+import Logica.Clases.AjustesUsuario;
 import Logica.Clases.Perfil;
 import Logica.Clases.Usuario;
 import Logica.DTOs.CantidadPorMes;
@@ -73,7 +74,7 @@ public class UsuarioController {
     public Usuario obtenerUsuario(Long id){
         Usuario user=null;
         Object resultado = null;
-        EntityManager em= Conexion.getInstance().getEntity(); ;
+        EntityManager em= Conexion.getInstance().getEntity();
         em.getTransaction().begin();
         try{
             Query q = em.createNativeQuery("SELECT * from usuario where id='"+id+"'", Usuario.class);
@@ -157,4 +158,74 @@ public class UsuarioController {
         }
         return resultado;
     }
+     
+     public boolean existeUserAdmin(){
+         EntityManager em = Conexion.getInstance().getEntity();
+         Object usuario = null;
+         boolean resultado = false;
+         em.getTransaction().begin();
+         try {
+             usuario = em.createNativeQuery("SELECT * FROM usuario WHERE PERFIL_NOMBRE = 'Administrador'").getSingleResult();
+             em.getTransaction().commit();
+         } catch (Exception e) {
+             em.getTransaction().rollback();
+         }
+         if (usuario != null) {
+             resultado = true;
+         }
+         return resultado;
+     }
+     
+     public boolean existePerflAdmin(){
+         EntityManager em = Conexion.getInstance().getEntity();
+         Object usuario = null;
+         boolean resultado = false;
+         em.getTransaction().begin();
+         try {
+             usuario = em.createNativeQuery("SELECT * FROM perfil WHERE NOMBRE = 'Administrador'").getSingleResult();
+             em.getTransaction().commit();
+         } catch (Exception e) {
+             em.getTransaction().rollback();
+         }
+         if (usuario != null) {
+             resultado = true;
+         } 
+         return resultado;
+     }
+     
+     public boolean existeAjustes(){
+         EntityManager em = Conexion.getInstance().getEntity();
+         Object usuario = null;
+         boolean resultado = false;
+         em.getTransaction().begin();
+         try {
+             usuario = em.createNativeQuery("SELECT * FROM ajustesusuario limit 1").getSingleResult();
+             em.getTransaction().commit();
+         } catch (Exception e) {
+             em.getTransaction().rollback();
+         }
+         if (usuario != null) {
+             resultado = true;
+         } 
+         return resultado;
+     }
+     
+     public AjustesUsuario obtenerAjustes(){
+         AjustesUsuario ajustes=null;
+        Object resultado = null;
+        EntityManager em= Conexion.getInstance().getEntity();
+        em.getTransaction().begin();
+        try{
+            Query q = em.createNativeQuery("SELECT * FROM ajustesusuario limit 1", AjustesUsuario.class);
+            resultado=q.getSingleResult();
+            em.getTransaction().commit();  
+        }catch(Exception e){
+            em.getTransaction().rollback();
+        }
+        if(resultado!=null){
+            ajustes = (AjustesUsuario) resultado;
+            System.out.println("funciona");
+        }
+      return ajustes;  
+     }
 }

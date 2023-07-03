@@ -252,15 +252,6 @@ public class CrearUsuarioController implements Initializable {
             return;
         }
         
-        if(UsuarioController.getInstance().existeUsuario(textCorreo.getText())){
-             Alert alert = new Alert(Alert.AlertType.WARNING);
-                        alert.setTitle("Información");
-                        alert.setHeaderText(null);
-                        alert.setContentText("El usuario con ese correo ya existe!");
-                        alert.showAndWait();
-              textCorreo.requestFocus();
-            return;
-        }
         
         if(textPass.getText().equals(textPass2.getText())){
             String patronPass = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{6,10}$";
@@ -319,7 +310,15 @@ public class CrearUsuarioController implements Initializable {
                     e.printStackTrace();
                 }
         }else{
-        
+            if (UsuarioController.getInstance().existeUsuario(textCorreo.getText())) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Información");
+                alert.setHeaderText(null);
+                alert.setContentText("El usuario con ese correo ya existe!");
+                alert.showAndWait();
+                textCorreo.requestFocus();
+                return;
+            }
             try { 
                 AjustesUsuario ajustes = new AjustesUsuario();
                 ajustes.setFullHD(true);
