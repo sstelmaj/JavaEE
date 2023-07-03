@@ -59,7 +59,7 @@ public class Error implements Serializable {
     private Usuario usuario;
     
    
-    
+    private String lenguaje;
    
     
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -104,6 +104,15 @@ public class Error implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public String getLenguaje() {
+        return lenguaje;
+    }
+
+    public void setLenguaje(String lenguaje) {
+        this.lenguaje = lenguaje;
+    }
+    
     
 
     public List<Nota> getNotas() {

@@ -64,6 +64,18 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
             ioe.printStackTrace();
         }
     }
+    
+    
+    public void setLeng(String Item){
+        jComboBoxLeng.setSelectedItem(Item);
+    }
+    
+    public JComboBox<String>  getLeng(){
+          
+       return this.jComboBoxLeng;
+    }
+    
+    private String lenguaje;
     public RSTA() {
         
         
@@ -81,7 +93,7 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
    //    Font font = new Font("Segoe UI", Font.PLAIN, 12);
    //     textArea.setFont(font);
         textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
-        
+      //   jComboBoxLeng.setSelectedItem("C++");
         CompletionProvider provider = createCompletionProvider();
 
  
@@ -98,7 +110,7 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
          JToolBar toolBar = new JToolBar();
          searchField = new JTextField(30);
          toolBar.add(searchField);
-         final JButton nextButton = new JButton("Find Next");
+         final JButton nextButton = new JButton("Buscar Siguiente");
          nextButton.setActionCommand("FindNext");
          nextButton.addActionListener(this);
           toolBar.add(nextButton);
@@ -108,7 +120,7 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
             nextButton.doClick(0);
          }
         });
-        JButton prevButton = new JButton("Find Previous");
+        JButton prevButton = new JButton("Buscar Anterior");
         prevButton.setActionCommand("FindPrev");
         prevButton.addActionListener(this);
         toolBar.add(prevButton);
@@ -143,7 +155,7 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
       context.setWholeWord(regexCB.isSelected());
       boolean found = SearchEngine.find(textArea, context).wasFound();
       if (!found) {
-         JOptionPane.showMessageDialog(this, "Text not found");
+         JOptionPane.showMessageDialog(this, "Texto no encontrado");
       }
 
    }
@@ -322,6 +334,7 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
         case "C":
          
             textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_C);
+            
             break;
         case "CLOJURE":
             

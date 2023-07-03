@@ -203,7 +203,7 @@ public class InicioController implements Initializable {
         
         botonError.setGraphic(new ImageView(image));
         
-        Image imageLlave = new Image("/recursos/llave1.png",121.0, 110.0, true, true);
+        Image imageLlave = new Image("/recursos/etiqueta.png",105.0, 105.0, true, true);
         
         botonSolucion.setGraphic(new ImageView(imageLlave));
         
@@ -243,8 +243,13 @@ public class InicioController implements Initializable {
     @FXML
     private void clickSolucion(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader();
-         loader.setLocation(getClass().getResource("/fxml/paginaSoluciones.fxml"));
+         loader.setLocation(getClass().getResource("/fxml/crearOrganizarEtiqueta.fxml"));
+         dashboardController.setControladorAnterior(this);
+        
+         
         Parent nuevaVista = loader.load();
+        crearEtiquetaController crearEtiqueta=(crearEtiquetaController)loader.getController();
+         dashboardController.setControladorSiguiente(crearEtiqueta);
         dashboardController.getAnchorPane().getChildren().setAll(nuevaVista);
     }
 

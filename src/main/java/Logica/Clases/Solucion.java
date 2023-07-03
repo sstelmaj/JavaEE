@@ -56,6 +56,9 @@ public class Solucion implements Serializable {
     @OneToMany(cascade={CascadeType.ALL})
     private List<Archivo> archivos;
 
+
+    private String lenguaje;
+
     @CascadeOnDelete
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Etiqueta> etiquetas;

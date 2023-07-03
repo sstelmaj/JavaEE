@@ -116,8 +116,8 @@
             <Button fx:id="botonCrearSolucion" layoutX="14.0" layoutY="10.0" mnemonicParsing="false" onAction="#clickCrearSolucion" text="Crear Solucion" />
             <Button fx:id="botonVerSolucion" layoutX="130.0" layoutY="10.0" mnemonicParsing="false" text="Ver solucion" />
             <Button fx:id="botonEliminarSolucion" layoutX="230.0" layoutY="9.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="110.0" text="Eliminar solucion" />
-            <Button fx:id="botonImprimirEtiqueta" layoutX="649.0" layoutY="9.0" mnemonicParsing="false" onAction="#clickImprimirEtiqueta" text="print E" />
          </children>
       </Pane>
+      <Button fx:id="btnCambiar" layoutX="594.0" layoutY="108.0" mnemonicParsing="false" onAction="#cambiarCBX" text="Cambiar Combobox" />
    </children>
 </AnchorPane>

@@ -224,7 +224,7 @@ public class DetalleErrorController implements Initializable {
                     rsta.setModoOscuro();
                 }
             }
-            iFrame.setPreferredSize(new Dimension(550, 400));
+            iFrame.setPreferredSize(new Dimension(550, 320));
             iFrame.setSize(20, 20);
             iFrame.setVisible(true);
             iFrame.setBorder(null);
@@ -233,7 +233,7 @@ public class DetalleErrorController implements Initializable {
 
             swingNode.setContent(iFrame);
             anchPaneCodigo.getChildren().add(swingNode);
-
+            swingNode.setLayoutX(35.0);
             listaArchivos = FXCollections.observableArrayList();
             this.columnArchivo.setCellValueFactory(new PropertyValueFactory("nombre"));
             this.columnExt.setCellValueFactory(new PropertyValueFactory("extension"));
@@ -573,8 +573,9 @@ public class DetalleErrorController implements Initializable {
 
             DashboardController dashboardController = DashboardController.getInstance();
             dashboardController.setControladorAnterior(this);
-            // dashboardController.setControladorSiguiente();
-
+            AnchorPane contentAPane = dashboardController.getAnchorPane();
+            subirSolucionController.setPanelContent(contentAPane);
+            dashboardController.setControladorSiguiente(subirSolucionController);
             dashboardController.getAnchorPane().getChildren().setAll(nuevaVista);
         } catch (IOException ex) {
             System.out.println(ex);

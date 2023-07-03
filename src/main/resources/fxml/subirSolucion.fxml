@@ -80,8 +80,6 @@
             <Font size="36.0" />
          </font>
       </Label>
-      <Button fx:id="botonCancelar" layoutX="497.0" layoutY="557.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="88.0" text="Cancelar" AnchorPane.bottomAnchor="119.0" />
-      <Button fx:id="botonIngresar" layoutX="655.0" layoutY="557.0" mnemonicParsing="false" onAction="#clickIngresar" prefHeight="25.0" prefWidth="88.0" text="Ingresar" AnchorPane.bottomAnchor="119.0" />
       <Label layoutX="361.0" layoutY="83.0" prefHeight="17.0" prefWidth="63.0" text="Fecha" />
       <Label layoutX="652.0" layoutY="107.0" text="Puntuacion:">
          <font>
@@ -89,5 +87,11 @@
          </font>
       </Label>
       <Button fx:id="mostrarError" layoutX="934.0" layoutY="108.0" mnemonicParsing="false" text="Mostrar Error Asociado" />
+      <Pane layoutX="173.0" layoutY="604.0" prefHeight="64.0" prefWidth="980.0" AnchorPane.bottomAnchor="31.0">
+         <children>
+            <Button fx:id="botonCancelar" layoutX="356.0" layoutY="33.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="88.0" text="Cancelar" />
+            <Button fx:id="botonIngresar" layoutX="525.0" layoutY="33.0" mnemonicParsing="false" onAction="#clickIngresar" prefHeight="25.0" prefWidth="88.0" text="Ingresar" />
+         </children>
+      </Pane>
    </children>
 </AnchorPane>

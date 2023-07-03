@@ -96,6 +96,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
+import javax.swing.JComboBox;
 
 /**
  * FXML Controller class
@@ -203,13 +204,13 @@ public class SubirErrorController implements Initializable {
     @FXML
     private Button botonEliminarSolucion;
     @FXML
-    private Button botonImprimirEtiqueta;
-    @FXML
     private ScrollPane scrollDesc;
     @FXML
     private Label txtTituloChico;
     @FXML
     private Label txtFecha;
+    @FXML
+    private Button btnCambiar;
 
     public void setPanelContent(AnchorPane pane) {
         this.panelContent = pane;
@@ -464,11 +465,17 @@ public class SubirErrorController implements Initializable {
         //obtenemos el contenido de el internal frame
         if (internalFrame instanceof RSTA) {
             RSTA rsta = (RSTA) internalFrame;
+            
             RSyntaxTextArea textArea = rsta.getTextArea();
 
             // Accedemos al text area
             String contenido = textArea.getText();
-
+            
+             JComboBox<String> cbxLeng = rsta.getLeng();
+            String lenguaje = (String )cbxLeng.getSelectedItem();
+            System.out.println(lenguaje);
+            error.setLenguaje(lenguaje);
+                
             System.out.print("codigo es" + contenido);
             //seteamos el contenido
             error.setCodigo(contenido);
@@ -488,7 +495,9 @@ public class SubirErrorController implements Initializable {
 
             // Accedemos al text area
             String contenido = textArea.getText();
-
+           
+            
+           
             System.out.print("consola es" + contenido);
             //seteamos el contenido
             error.setConsola(contenido);
@@ -608,14 +617,26 @@ public class SubirErrorController implements Initializable {
                 if (iFrame instanceof RSTA) {
                     RSTA rsta = (RSTA) iFrame;
                     rsta.setModoOscuro();
+                    
+                }else{
+                    
                 }
 
             }
-
+ 
             ((javax.swing.plaf.basic.BasicInternalFrameUI) iFrame.getUI()).setNorthPane(null);
             swingNode = new SwingNode();
 
             swingNode.setContent(iFrame);
+            
+            JInternalFrame internalFrameConsola = (JInternalFrame) swingNode.getContent();
+            if (internalFrameConsola instanceof RSTA) {
+                  RSTA rsta = (RSTA) iFrame;
+//                  
+//                  String c = "C";
+//                  rsta.setLeng(c);
+              }
+           
             anchor1.getChildren().add(swingNode);
             anchor1.setRightAnchor(swingNode, 0.0);
             anchor1.setLeftAnchor(swingNode, 0.0);
@@ -744,7 +765,6 @@ public class SubirErrorController implements Initializable {
 
     }
 
-    @FXML
     private void clickImprimirEtiqueta(ActionEvent event) {
         ArrayList<String> valores = new ArrayList<>();
         valores.add("Angular");
@@ -805,5 +825,11 @@ public class SubirErrorController implements Initializable {
         }
         System.out.println("sin etiquetas erroneas" + descContenido);
         textDescripcion.setText(descContenido);
+    }
+
+    @FXML
+    private void cambiarCBX(ActionEvent event) {
+        
+        
     }
 }
