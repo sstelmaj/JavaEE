@@ -7,6 +7,7 @@ package Presentacion.Controllers;
 import Logica.Clases.Etiqueta;
 import Logica.Controladores.ErrorController;
 import Logica.Controladores.EtiquetaController;
+import Persistencia.Sesion;
 import Presentacion.Componentes.ItemLista;
 import java.io.IOException;
 import java.net.URL;
@@ -26,6 +27,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
 /**
@@ -49,6 +51,16 @@ public class PaginaErroresController implements Initializable {
     private ArrayList<String> valores = new ArrayList<>();
     @FXML
     private Button btnSubirError;
+    @FXML
+    private AnchorPane anchorLIstado;
+    @FXML
+    private Button btnIngresar;
+    @FXML
+    private Label textSubEtiqueta;
+    @FXML
+    private Label textEtiqueta;
+    @FXML
+    private Label textFiltrar;
 
     /**
      * Initializes the controller class.
@@ -71,6 +83,12 @@ public class PaginaErroresController implements Initializable {
         //List<Logica.Clases.Error> errores = ErrorController.getInstance().filtradoErroresPorEtiquetas(valores);
         //comboSo.setOnAction(event -> filtrarErrores());
         //comboFramework.setOnAction(event -> filtrarErrores());
+        
+        
+        if(Sesion.getInstance().getUsuario().getPerfil().isSubir()==false){
+            btnSubirError.setDisable(true);
+        
+        }
     }
 
     @FXML

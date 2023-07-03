@@ -444,7 +444,7 @@ public class SubirErrorController implements Initializable {
     @FXML
     private void click(ActionEvent event) {
         System.out.println("Hola");
-        linkWebView.getEngine().load("https://github.com/");
+        linkWebView.getEngine().load(linkTextFieldUrl.getText());
         String userAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 14_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Mobile/15E148 Safari/604.1";
 
         linkWebView.getEngine().setUserAgent(userAgent);
@@ -836,5 +836,16 @@ public class SubirErrorController implements Initializable {
     private void cambiarCBX(ActionEvent event) {
         
         
+    }
+
+    @FXML
+    private void visualizarRepo(ActionEvent event) {
+        
+         linkWebView1.getEngine().load(textFieldRepositorio.getText());
+        String userAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 14_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Mobile/15E148 Safari/604.1";
+
+        linkWebView1.getEngine().setUserAgent(userAgent);
+        linkWebView1.getEngine().setJavaScriptEnabled​(true);
+        linkWebView1.setZoom(0.75);
     }
 }

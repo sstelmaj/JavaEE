@@ -367,6 +367,15 @@ public class DetalleErrorController implements Initializable {
             if (!Objects.equals(Sesion.getInstance().getUsuario().getId(), error.getUsuario().getId())) {
                 this.btnNotas.setDisable(true);
             }
+            
+            if(Sesion.getInstance().getUsuario().getPerfil().isSubir()== false){
+                btnAgregarSolucion.setDisable(true);
+            }
+            
+            if(Sesion.getInstance().getUsuario().getPerfil().isModificar()== false){
+                btnModificarError.setDisable(true);
+            
+            }
         }
     }
 

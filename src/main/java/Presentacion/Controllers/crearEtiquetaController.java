@@ -9,6 +9,7 @@ import Logica.Clases.Solucion;
 import Logica.Clases.Usuario;
 import Logica.Controladores.EtiquetaController;
 import Persistencia.Conexion;
+import Persistencia.Sesion;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
@@ -43,6 +44,7 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.AnchorPane;
 import me.davidthaler.draggablejfxtreeview.DraggableCellFactory;
 
 
@@ -70,6 +72,10 @@ public class crearEtiquetaController implements Initializable {
     ObservableList<String> items;
     @FXML
     private Label textTitulo;
+    @FXML
+    private AnchorPane container;
+    @FXML
+    private Button btnEliminar;
     
     public StringProperty tipoPantallaProperty() {
         return tipoPantallaProperty;
@@ -107,14 +113,14 @@ public class crearEtiquetaController implements Initializable {
     private Button botonQuitar;
     
     
-    @FXML
-    private Button botonEliminarEtiqueta;
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        
+        
         actualizarArbol();
         tipoPantallaProperty.addListener((observable, oldValue, newValue) -> {
             if (newValue == "Modificar Etiqueta") {
@@ -142,7 +148,33 @@ public class crearEtiquetaController implements Initializable {
             }
 
         });
+        
+        if(Sesion.getInstance().isIsFullHD()){
+            container.setLayoutX(400.0);
+            container.setLayoutY(200.0);
+        }
+        
+         if(Sesion.getInstance().getUsuario().getPerfil().isSubir()==false){
+            
+            ingresarEtiqueta.setDisable(true);
 
+            agregarSubEtiqueta.setDisable(true);
+
+            verificarEtiqueta.setDisable(true);
+             botonQuitar.setDisable(true);
+        }
+         
+         
+         if(Sesion.getInstance().getUsuario().getPerfil().isDesactivar()==false){
+            
+             btnEliminar.setDisable(true);
+
+          
+    
+        }
+         
+         
+         
         //botonEliminarEtiqueta.setOnAction(event -> eliminarEtiqueta());    
     }
     
