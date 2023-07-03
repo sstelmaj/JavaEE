@@ -75,6 +75,7 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
 import jdk.nashorn.api.scripting.JSObject;
 import org.fife.ui.autocomplete.AutoCompletion;
@@ -418,10 +419,16 @@ public class SubirSolucionController implements Initializable {
 
             // Accedemos al text area
             String contenido = textArea.getText();
-
+            
             System.out.print("codigo es" + contenido);
             //seteamos el contenido
             crear_solucion.setCodigo(contenido);
+            
+            JComboBox<String> cbxLeng = rsta.getLeng();
+            String lenguaje = (String )cbxLeng.getSelectedItem();
+            System.out.println(lenguaje);
+            crear_solucion.setLenguaje(lenguaje);
+            //crear_solucion.setLenguaje(ignoredText);
         } else {
 
         }
@@ -443,6 +450,8 @@ public class SubirSolucionController implements Initializable {
     
 
         crear_solucion.setDescripcion(textDescripcion.getText());
+        
+
 
         //    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", new Locale("es")); (util para despues o capaz el input fecha lo modifica)
         // Formatear LocalDate a String en español

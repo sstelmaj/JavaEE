@@ -77,6 +77,12 @@ public class ExportarDatosController implements Initializable {
         headerRow.createCell(6).setCellValue("Repositorio");
         headerRow.createCell(7).setCellValue("Titulo");
         headerRow.createCell(8).setCellValue("Usuario_Mail");
+        headerRow.createCell(9).setCellValue("LENGUAJE");
+        
+        int columnWidth = 15;
+         for (int i = 0; i < headerRow.getLastCellNum(); i++) {
+            sheet.setColumnWidth(i, columnWidth * 256); // 256 es el factor de escala para unidades de caracteres
+        }
         // Lleno las filas
         int rowNum = 1;   
         for (Logica.Clases.Error error : errores) {
@@ -90,6 +96,7 @@ public class ExportarDatosController implements Initializable {
             row.createCell(6).setCellValue(error.getRepositorio());
             row.createCell(7).setCellValue(error.getTitulo());
             row.createCell(8).setCellValue(error.getUsuario().getMail());
+            row.createCell(9).setCellValue(error.getLenguaje());
         }
         // Guardar archivo excel
             FileChooser fileChooser = new FileChooser();
@@ -148,52 +155,30 @@ public class ExportarDatosController implements Initializable {
         headerRow.createCell(7).setCellValue("Mail Usuario");
         headerRow.createCell(8).setCellValue("Error ID");
         headerRow.createCell(9).setCellValue("Error titulo");
-        // Lleno las filas
+        headerRow.createCell(10).setCellValue("LENGUAJE");
         
-        int rowNum = 1;
-        for (Solucion solucion : soluciones) {
+        int columnWidth = 15;
+        for (int i = 0; i < headerRow.getLastCellNum(); i++) {
+            sheet.setColumnWidth(i, columnWidth * 256); // 256 es el factor de escala para unidades de caracteres
+        }
+        
+        // Lleno las filas
+        int rowNum = 1;   
+        for (Logica.Clases.Solucion solucion : soluciones) {
             Row row = sheet.createRow(rowNum++);
-            
-            
             row.createCell(0).setCellValue(solucion.getId());
             row.createCell(1).setCellValue(solucion.getCodigo());
-            
-            if (solucion.getDescripcion() != null){
-                row.createCell(2).setCellValue(solucion.getDescripcion());
-            }
-            
-            if (solucion.getFechaSubida() != null){
-                row.createCell(3).setCellValue(formatter.format(solucion.getFechaSubida()));
-            }
-            
-            if (solucion.getLink() != null) {
-                row.createCell(4).setCellValue(solucion.getLink());
-            } else {
-                row.createCell(4).setCellValue(""); // Dejar la celda en blanco si el valor es nulo
-            }
-            
-            if (solucion.getPuntos() != 0) {
-                row.createCell(5).setCellValue(solucion.getPuntos());
-            } else {
-                row.createCell(5).setCellValue(""); // Dejar la celda en blanco si el valor es nulo
-            }
-            
-            if (solucion.getUsuario() != null) {
-                row.createCell(6).setCellValue(solucion.getUsuario().getId().intValue());
-                row.createCell(7).setCellValue(solucion.getUsuario().getMail());
-            } else {
-                row.createCell(6).setCellValue("");
-                row.createCell(7).setCellValue("");
-            }
-            
-            if (solucion.getError() != null) {
-                row.createCell(8).setCellValue(solucion.getError().getId().intValue());
-                row.createCell(9).setCellValue(solucion.getError().getTitulo());
-            } else {
-                row.createCell(8).setCellValue("");
-                row.createCell(9).setCellValue("");
-            }
+            row.createCell(2).setCellValue(solucion.getDescripcion());
+            row.createCell(3).setCellValue(formatter.format(solucion.getFechaSubida()));
+            row.createCell(4).setCellValue(solucion.getLink());
+            row.createCell(5).setCellValue(solucion.getPuntos());
+            row.createCell(6).setCellValue(solucion.getUsuario().getId());
+            row.createCell(7).setCellValue(solucion.getUsuario().getMail());
+            row.createCell(8).setCellValue(solucion.getError().getId());
+            row.createCell(9).setCellValue(solucion.getError().getTitulo());
+            row.createCell(10).setCellValue(solucion.getLenguaje());
         }
+        
         // Guardar archivo excel
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Guardar archivo Excel");
