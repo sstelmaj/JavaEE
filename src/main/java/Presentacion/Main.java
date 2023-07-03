@@ -4,10 +4,18 @@
  */
 package Presentacion;
 
+import Logica.Clases.AjustesUsuario;
+import Logica.Clases.Perfil;
+import Logica.Clases.Usuario;
+import Logica.Controladores.UsuarioController;
+import Logica.Controladores.PerfilController;
+import Persistencia.Conexion;
 import Presentacion.Controllers.DashboardController;
 import Presentacion.Controllers.LoginController;
 import Presentacion.Controllers.SubirErrorController;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
@@ -32,6 +40,51 @@ public class Main extends Application { //iniciador
             ex.printStackTrace();
         }
         try{
+            if (!UsuarioController.getInstance().existePerflAdmin()){
+                Perfil perfilAdmin = new Perfil();
+                perfilAdmin.setCrearUsuario(true);
+                perfilAdmin.setDesactivar(true);
+                perfilAdmin.setModificar(true);
+                perfilAdmin.setSubir(true);
+                perfilAdmin.setNombre("Administrador");
+                Conexion.getInstance().persist(perfilAdmin);
+            }
+            if (!UsuarioController.getInstance().existeUserAdmin()){
+                
+                if (!UsuarioController.getInstance().existePerflAdmin()) {
+                    Perfil perfilAdmin = new Perfil();
+                    perfilAdmin.setCrearUsuario(true);
+                    perfilAdmin.setDesactivar(true);
+                    perfilAdmin.setModificar(true);
+                    perfilAdmin.setSubir(true);
+                    perfilAdmin.setNombre("Administrador");
+                    Conexion.getInstance().persist(perfilAdmin);
+                }
+                if (UsuarioController.getInstance().obtenerAjustes() == null){
+                    AjustesUsuario ajustes = new AjustesUsuario();
+                    ajustes.setDarkMode(false);
+                    ajustes.setFullHD(true);
+                    ajustes.setEnglish(false);
+                    Conexion.getInstance().persist(ajustes);
+                } 
+                
+                AjustesUsuario ajustes = UsuarioController.getInstance().obtenerAjustes();
+                
+                Perfil perfilAdmin = PerfilController.getInstance().obtenerPerfil("Administrador");
+                
+                Usuario usuarioAdmin = new Usuario();
+                usuarioAdmin.setActive(true);
+                usuarioAdmin.setAjustes(ajustes);
+                usuarioAdmin.setApellido("Admin");
+                usuarioAdmin.setIsActive(true);
+                usuarioAdmin.setMail("admin@mail.com");
+                usuarioAdmin.setNombre("Admin");
+                usuarioAdmin.setPassword("admin");
+                usuarioAdmin.setPerfil(perfilAdmin);
+                
+                Conexion.getInstance().persist(usuarioAdmin);
+            }
+            
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Main.class.getResource("/fxml/Login.fxml"));
             AnchorPane ventana = (AnchorPane) loader.load();
