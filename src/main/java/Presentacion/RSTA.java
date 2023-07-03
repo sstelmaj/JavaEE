@@ -5,10 +5,7 @@
 package Presentacion;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Toolkit;
-import java.awt.*;
-import javax.swing.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
@@ -17,15 +14,10 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JOptionPane;
-import javax.swing.border.Border;
+import javax.swing.*;
 import org.fife.ui.autocomplete.*;
-
-
-import org.fife.ui.rtextarea.*;
 import org.fife.ui.rsyntaxtextarea.*;
+import org.fife.ui.rtextarea.*;
 
 
 /**
@@ -124,9 +116,9 @@ public class RSTA extends javax.swing.JInternalFrame  implements ActionListener 
         prevButton.setActionCommand("FindPrev");
         prevButton.addActionListener(this);
         toolBar.add(prevButton);
-        regexCB = new JCheckBox("WW");
+        regexCB = new JCheckBox("Palabra Completa");
         toolBar.add(regexCB);
-        matchCaseCB = new JCheckBox("Match Case");
+        matchCaseCB = new JCheckBox("Respetar Mayusculas");
         toolBar.add(matchCaseCB);
         jPanel_CP.add(toolBar, BorderLayout.NORTH);
         

@@ -7,21 +7,16 @@ package Presentacion;
 import Logica.Clases.AjustesUsuario;
 import Logica.Clases.Perfil;
 import Logica.Clases.Usuario;
-import Logica.Controladores.UsuarioController;
 import Logica.Controladores.PerfilController;
+import Logica.Controladores.UsuarioController;
 import Persistencia.Conexion;
-import Presentacion.Controllers.DashboardController;
 import Presentacion.Controllers.LoginController;
-import Presentacion.Controllers.SubirErrorController;
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -40,17 +35,7 @@ public class Main extends Application { //iniciador
             ex.printStackTrace();
         }
         try{
-            if (!UsuarioController.getInstance().existePerflAdmin()){
-                Perfil perfilAdmin = new Perfil();
-                perfilAdmin.setCrearUsuario(true);
-                perfilAdmin.setDesactivar(true);
-                perfilAdmin.setModificar(true);
-                perfilAdmin.setSubir(true);
-                perfilAdmin.setNombre("Administrador");
-                Conexion.getInstance().persist(perfilAdmin);
-            }
             if (!UsuarioController.getInstance().existeUserAdmin()){
-                
                 if (!UsuarioController.getInstance().existePerflAdmin()) {
                     Perfil perfilAdmin = new Perfil();
                     perfilAdmin.setCrearUsuario(true);

@@ -159,6 +159,7 @@ public class AdminDashboardController implements Initializable {
         lineRecord.setTitle("Publicaciones en 2023");
         graphsPane.getChildren().set(0, lineRecord);
         lineRecord.setLayoutX(580.0);
+        lineRecord.setPrefWidth(600.0);
        if (Sesion.getInstance().isIsFullHD()) {
             lineRecord.setLayoutX(760.0);
             lineRecord.setPrefWidth(700.0);
@@ -419,7 +420,7 @@ public class AdminDashboardController implements Initializable {
             pieRatio.setPrefHeight(400.0);
 
             lineRecord.setLayoutX(580.0);
-            lineRecord.setPrefWidth(500.0);
+            lineRecord.setPrefWidth(600.0);
             lineRecord.setPrefHeight(400.0);
 
             //anchorBotones.getStyleClass().remove("paneBotonesLarge");

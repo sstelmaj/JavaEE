@@ -42,7 +42,7 @@
       <Label layoutX="263.0" layoutY="405.0" text="Perfil" />
       <TextField fx:id="textPerfil" editable="false" layoutX="309.0" layoutY="401.0" prefHeight="25.0" prefWidth="183.0" />
       <Button fx:id="botonCancelar" layoutX="349.0" layoutY="457.0" mnemonicParsing="false" text="Cancelar" />
-      <Button fx:id="botonAceptar" layoutX="435.0" layoutY="457.0" mnemonicParsing="false" onAction="#crearUsuario" text="Aceptar" />
+      <Button fx:id="botonAceptar" layoutX="435.0" layoutY="457.0" mnemonicParsing="false" onAction="#handleAceptar" text="Aceptar" />
       <Label layoutX="747.0" layoutY="152.0" text="Perfiles">
          <font>
             <Font size="18.0" />

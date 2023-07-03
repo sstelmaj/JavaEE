@@ -165,7 +165,7 @@ public class UsuarioController {
          boolean resultado = false;
          em.getTransaction().begin();
          try {
-             usuario = em.createNativeQuery("SELECT * FROM usuario WHERE PERFIL_NOMBRE = 'Administrador'").getSingleResult();
+             usuario = em.createNativeQuery("SELECT * FROM usuario WHERE PERFIL_NOMBRE = 'Administrador' LIMIT 1").getSingleResult();
              em.getTransaction().commit();
          } catch (Exception e) {
              em.getTransaction().rollback();
