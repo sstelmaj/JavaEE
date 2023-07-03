@@ -7,11 +7,10 @@ package Presentacion.Controllers;
 import Logica.Controladores.ErrorController;
 import Logica.Controladores.SolucionController;
 import Logica.Controladores.UsuarioController;
-import Logica.DTOs.CantidadPorFecha;
+import Logica.DTOs.CantidadPorMes;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -163,9 +162,9 @@ public class AdminDashboardController implements Initializable {
         pieRatio.setTitle("Proporcion Error/Solucion");
     }
     private void loadLineChartData(){
-        List<CantidadPorFecha> erroresSemanales = ErrorController.getInstance().obtenerCantidadErroresSemanalesPorFecha("2023-06-28");
-        List<CantidadPorFecha> solucionesSemanales = SolucionController.getInstance().obtenerCantidadSolucionesSemanalesPorFecha("2023-06-28");
-        List<CantidadPorFecha> usuariosSemanales = UsuarioController.getInstance().obtenerCantidadUsuariosSemanalesPorFecha("2023-06-28");
+        List<CantidadPorMes> erroresSemanales = ErrorController.getInstance().obtenerCantidadErroresMensuales();
+        List<CantidadPorMes> solucionesSemanales = SolucionController.getInstance().obtenerCantidadSolucionesMensuales();
+        List<CantidadPorMes> usuariosSemanales = UsuarioController.getInstance().obtenerCantidadUsuariosMensuales();
         
         ObservableList<XYChart.Series> lineRecordData = FXCollections.observableArrayList(
             new XYChart.Series("Errores Publicados", parseListToObservableData(erroresSemanales)),
@@ -176,22 +175,20 @@ public class AdminDashboardController implements Initializable {
         sortCategoryAxis(erroresSemanales, solucionesSemanales, usuariosSemanales);
     }
     
-    private ObservableList<XYChart.Data> parseListToObservableData(List<CantidadPorFecha> lista){
+    private ObservableList<XYChart.Data> parseListToObservableData(List<CantidadPorMes> lista){
         ObservableList<XYChart.Data> ol = FXCollections.observableArrayList();
-        lista.forEach(item -> ol.add(new XYChart.Data(item.getStringFechaSubida(), item.getIntCantidad())));
+        lista.forEach(item -> ol.add(new XYChart.Data(item.getMes(), item.getCantidad())));
         return ol;
     }
-    private void sortCategoryAxis(List<CantidadPorFecha> ...listas){
+    private void sortCategoryAxis(List<CantidadPorMes> ...listas){
         ObservableList<String> categories = FXCollections.observableArrayList();
-        for (List<CantidadPorFecha> lista : listas) {
-            for (CantidadPorFecha item : lista) {
-                String fecha = item.getStringFechaSubida();
-                if (!categories.contains(fecha)) 
-                    categories.add(fecha);
+        for (List<CantidadPorMes> lista : listas) {
+            for (CantidadPorMes item : lista) {
+                if (!categories.contains(item.getMes())) 
+                    categories.add(item.getMes());
             }
         }
         
-        Collections.sort(categories);
         categories.forEach(System.out::println);
         var XAxis = (CategoryAxis) lineRecord.getXAxis();
         XAxis.setCategories(categories);
