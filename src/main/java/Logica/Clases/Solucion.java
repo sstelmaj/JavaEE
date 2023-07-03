@@ -60,7 +60,7 @@ public class Solucion implements Serializable {
     @OneToMany(cascade={CascadeType.ALL})
     private List<Archivo> archivos;
 
-   
+    private String lenguaje;
 
     private static final long serialVersionUID = 1L;
     @Id
