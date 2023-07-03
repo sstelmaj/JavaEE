@@ -95,7 +95,7 @@ public class ImportarDatosController implements Initializable {
 
                 // Obtener la hoja de trabajo deseada del libro (por ejemplo, la primera hoja)
                 Sheet sheet = workbook.getSheetAt(0);
-
+                
                 // Definir el mapeo de columnas esperado
                 Map<String, Integer> columnMapping = new HashMap<>();
                 columnMapping.put("ID", -1); // Asignar un valor negativo para las columnas no encontradas
@@ -106,7 +106,8 @@ public class ImportarDatosController implements Initializable {
                 columnMapping.put("Repositorio", -1);
                 columnMapping.put("Titulo", -1);
                 columnMapping.put("Usuario_Mail", -1);
-
+                columnMapping.put("LENGUAJE", -1);
+                
                 // Obtener la primera fila del archivo Excel
                 Row headerRow = sheet.getRow(0);
                 if (headerRow != null) {
@@ -121,7 +122,7 @@ public class ImportarDatosController implements Initializable {
                         }
                     }
                 }
-
+                
                 // Iterar sobre las filas restantes y procesar los datos
                 SimpleDateFormat formatoOriginal = new SimpleDateFormat("d/M/yyyy");
                 SimpleDateFormat formatoNuevo = new SimpleDateFormat("d-M-yyyy");
@@ -138,14 +139,24 @@ public class ImportarDatosController implements Initializable {
                     String repositorio = getStringCellValue(row, columnMapping.get("Repositorio"));
                     String titulo = getStringCellValue(row, columnMapping.get("Titulo"));
                     String usuarioMail = getStringCellValue(row, columnMapping.get("Usuario_Mail"));
+                    String lenguaje = getStringCellValue(row, columnMapping.get("LENGUAJE"));
                    
-                    if (usuarioMail == null){
-                        usuarioMail = "";
-                    }
+                    
+                    /*
                     if (id == null){
                         id = 0.0;
                     }
+                    */
                     
+                    
+                    /*
+                    if (codigo == null){
+                        codigo = "*SIN CODIGO*";
+                    }
+                    if (titulo == null){
+                        titulo = "*SIN TITULO*"
+                    }
+                    */
                     if (ErrorController.getInstance().obtenerError(id.longValue()) != null){
                         cadenaAviso = cadenaAviso + "El error de ID: "+id+" ya existe en la Base de Datos\n";
                         continue;
@@ -156,6 +167,14 @@ public class ImportarDatosController implements Initializable {
                     
                     Logica.Clases.Error error = new Logica.Clases.Error();
                     
+                    if (usuarioMail == null){
+                        usuarioMail = "";
+                    }
+                    
+                    if (lenguaje == null){
+                        lenguaje = "NONE";
+                    }
+                    
                     if (descripcion != null) {
                         error.setDescripcion(descripcion);
                     }
@@ -165,10 +184,17 @@ public class ImportarDatosController implements Initializable {
                     if (link != null){
                         error.setRepositorio(repositorio);
                     }
-
-                    error.setId(id.longValue());
-                    error.setCodigo(codigo);
-                    error.setTitulo(titulo);
+                    if (id != null){
+                        error.setId(id.longValue());
+                    }
+                    if (codigo != null){
+                        error.setCodigo(codigo);
+                    }
+                    if (titulo != null){
+                        error.setTitulo(titulo);
+                    }
+                    
+                    error.setLenguaje(lenguaje);
                     
                     error.setUsuario(UsuarioController.getInstance().obtenerUsuario(usuarioMail));
                     
@@ -245,6 +271,7 @@ public class ImportarDatosController implements Initializable {
                 columnMapping.put("Puntos", -1);
                 columnMapping.put("Mail Usuario", -1);
                 columnMapping.put("Error ID", -1);
+                columnMapping.put("LENGUAJE", -1);
 
                 // Obtener la primera fila del archivo Excel
                 Row headerRow = sheet.getRow(0);
@@ -277,6 +304,7 @@ public class ImportarDatosController implements Initializable {
                     Double puntos = getNumericCellValue(row, columnMapping.get("Puntos"));
                     String usuarioMail = getStringCellValue(row, columnMapping.get("Mail Usuario"));
                     Double errorId = getNumericCellValue(row, columnMapping.get("Error ID"));
+                    String lenguaje = getStringCellValue(row, columnMapping.get("LENGUAJE"));
                     //String errorTitulo = getStringCellValue(row, columnMapping.get("Error titulo"));
                     
                     if (id == null){
@@ -287,6 +315,8 @@ public class ImportarDatosController implements Initializable {
                     }
                     if (errorId == null){
                         errorId = 0.0;
+                    } if (lenguaje == null){
+                        lenguaje = "NONE";
                     }
                     
                     if (SolucionController.getInstance().obtenerSolucion(id.longValue()) != null){
@@ -303,6 +333,7 @@ public class ImportarDatosController implements Initializable {
                     Solucion solucion = new Solucion();
                     solucion.setId(id.longValue());
                     solucion.setCodigo(codigo);
+                    solucion.setLenguaje(lenguaje);
                     
                     if (descripcion != null) {
                         solucion.setDescripcion(descripcion);
@@ -422,6 +453,7 @@ public class ImportarDatosController implements Initializable {
         headerRow.createCell(6).setCellValue("Repositorio");
         headerRow.createCell(7).setCellValue("Titulo");
         headerRow.createCell(8).setCellValue("Usuario_Mail");
+        headerRow.createCell(9).setCellValue("LENGUAJE");
         
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Guardar archivo Excel");

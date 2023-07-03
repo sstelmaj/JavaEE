@@ -89,8 +89,14 @@ public class Solucion implements Serializable {
     public void setError(Error error) {
         this.error = error;
     }
-    
-    
+
+    public String getLenguaje() {
+        return lenguaje;
+    }
+
+    public void setLenguaje(String lenguaje) {
+        this.lenguaje = lenguaje;
+    }
     
     public Long getId() {
         return id;
